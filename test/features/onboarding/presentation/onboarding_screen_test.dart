@@ -143,6 +143,7 @@ void main() {
 
       await tester.pumpWidget(_TestApp(router: router));
       await _pumpUntilVisible(tester, find.text('Pakistan'));
+      expect(find.text('Choose a region'), findsOneWidget);
       await tester.tap(find.text('Pakistan'));
       await tester.pump(const Duration(milliseconds: 100));
 
@@ -174,6 +175,7 @@ void main() {
       expect(find.text('34.70 kg CO2/year'), findsOneWidget);
       expect(find.text('Currency: PKR'), findsOneWidget);
       expect(find.text('Comparison unavailable'), findsWidgets);
+      expect(find.textContaining('Contextual reference only'), findsWidgets);
 
       for (final reference in [
         '0.72 t CO2/person',

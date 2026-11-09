@@ -29,6 +29,21 @@ flutter analyze
 **Expected**: Flutter and Dart versions match the repository pin; dependencies
 resolve; generated sources are current; `flutter analyze` reports no issues.
 
+## Regional and Reference Data Validation
+
+Run the schema and source-link validation from the repository root:
+
+```powershell
+dart run tool/validate_region_data.dart
+```
+
+The command validates every regional pack listed in
+`assets/data/regions/index.json`, the shared foundation references, and the
+standalone test-data copies against their respective JSON schemas. It also
+checks that cited sources and referenced factors resolve. A nonzero exit code
+or printed error identifies a failed path and constraint. No transport or
+recipe factors are synthesized to satisfy validation.
+
 Phase 1 validation commands and outcomes:
 
 ```powershell
@@ -213,6 +228,59 @@ and privacy actions.
   and screen-reader navigation as applicable, and reduced-motion behavior.
 - Confirm each foundation screen remains usable in English and the localization
   test locale, including long and right-to-left strings.
+
+## Final Foundation Polish Checkpoint (2026-11-09)
+
+### Completed checks
+
+| Check | Command / evidence | Result |
+|---|---|---|
+| Static analysis | `flutter analyze` | Passed; no issues found. |
+| Unit/widget suite | `flutter test` | Passed; 102 tests. The device integration test is not part of this suite. |
+| Regional/reference schemas | `dart run tool/validate_region_data.dart` | Passed for bundled and standalone test-data fixtures, including source/factor links. |
+| Android release package | `flutter build apk --release` | Passed; `build/app/outputs/flutter-apk/app-release.apk` created (57.4 MB). |
+| Android debug package | `flutter build apk --debug` | Passed; `build/app/outputs/flutter-apk/app-debug.apk` created. |
+| Infinix USB launch | `flutter run --debug -d 1026825381000731 --no-resident` | Passed on Infinix X678B / Android 14. Flutter installed the debug APK as an update over the previously installed profile build and launched it. |
+| Region-heading regression | Onboarding widget regression test | Passed after removing the duplicate parent heading; the regional picker renders one “Choose a region” heading. |
+
+### Pending checks and release gates
+
+- **T061 Android motion profile**: No p95 value was produced, so there is no
+  numeric pass or fail against the unchanged 16.667 ms p95 assertion. The
+  requested `flutter test --profile` command is not supported by this Flutter
+  CLI (`Could not find an option named "--profile".`). The supported
+  `flutter drive --profile` run was attempted. On the prior attempt, the driver
+  failed with `DriverError: Failed to fulfill RequestData due to remote error;
+  Original error: ext.flutter.driver: (-32000) Service connection disposed`.
+  One clean retry was made after uninstalling the app and refreshing ADB. That
+  retry built and installed the profile APK and started the test, but stalled
+  without producing a timing report; ADB also reported `more than one
+  device/emulator` because both USB and adb-tls transports for the Infinix were
+  listed. No further retries were made. T061 remains pending as a tooling
+  blocker; do not infer a frame-budget result.
+- **T061 iOS motion profile**: Not run because iOS profile testing requires
+  macOS/Xcode or an iOS device. This is an environment limitation, not a pass
+  or a measured failure.
+- **T066 Android offline acceptance**: Release APK build succeeded, and the
+  debug app launch succeeded on the Infinix. The complete offline acceptance
+  flow on a physical Android device has not been run; T066 remains pending.
+- **T067 iOS release acceptance**: Not run; this Windows environment does not
+  provide macOS/Xcode or an iOS device.
+- **T071 usability study / SC-001**: Study script and results log are prepared
+  in `evidence/usability-study.md`. No real participants were recruited or
+  tested; the 9-of-10 under-60-second criterion remains unevaluated.
+- **T072 design review / SC-009**: Screen checklist is prepared in
+  `evidence/design-review.md`. The visual verdict and dispositions remain
+  pending the user's manual review; automated tests are not substituted.
+- **V1 data release gate**: The IGES List of Grid Emission Factors v11.6
+  reconciliation has not been completed. No replacement or unsourced
+  transport/recipe emission factors were added. Transport and recipe impact
+  values remain unavailable/demo-labelled.
+
+The final task count is **67/72 complete**. T061, T066, T067, T071, and T072
+remain unchecked for the reasons above. Do not mark the Foundation release
+checkpoint complete until those required validations and the IGES data gate
+have been resolved.
 
 ## References
 

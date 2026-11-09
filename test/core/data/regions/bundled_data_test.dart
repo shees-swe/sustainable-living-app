@@ -17,6 +17,14 @@ void main() {
       expect(pakistan.emissionFactors.single.value, 0.347);
       expect(pakistan.emissionFactors.single.sourceYear, 2025);
       expect(pakistan.emissionFactors.single.validFrom, '2025-01-01');
+      expect(
+        pakistan.sources[pakistan.emissionFactors.single.sourceId]!.title,
+        'Yearly Electricity Data',
+      );
+      expect(
+        pakistan.sources[pakistan.regionalAverage.sourceId]!.publicationYear,
+        2025,
+      );
       expect(pakistan.transportModes, isEmpty);
       expect(pakistan.recipes, isEmpty);
     },
@@ -42,6 +50,10 @@ void main() {
             .sources[references.temperatureBudget.reference.sourceId]!
             .publicationYear,
         2021,
+      );
+      expect(
+        references.globalAverage.accountingBoundary,
+        isNot(references.temperatureBudget.reference.accountingBoundary),
       );
     },
   );

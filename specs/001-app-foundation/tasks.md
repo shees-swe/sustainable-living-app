@@ -161,9 +161,9 @@
 
 - [X] T059 [US5] Apply semantic labels, text scaling, contrast-safe theme roles, and minimum accessible tap areas to Home, onboarding, account, and Settings controls in `lib/features/home/`, `lib/features/onboarding/`, `lib/features/account/`, and `lib/features/settings/`.
 - [X] T060 [US5] Integrate system reduced-motion signals into shared transitions and ensure active gestures remain interruptible without dropping or blocking input in `lib/core/accessibility/reduced_motion.dart`, `lib/core/motion/motion_spec.dart`, and `lib/app/`.
-- [ ] T061 [US5] Run accessibility widget tests and profile release-mode animation performance on representative physical Android and iOS devices; resolve frame budget, semantics, contrast, or touch-target failures in `integration_test/`, `test/accessibility/`, and `specs/001-app-foundation/quickstart.md`.
+- [ ] T061 [US5] Run accessibility widget tests and profile release-mode animation performance on representative physical Android and iOS devices; resolve frame budget, semantics, contrast, or touch-target failures in `integration_test/`, `test/accessibility/`, and `specs/001-app-foundation/quickstart.md`. Pending: the profile driver stalled without a p95 report after one clean retry; iOS profiling requires macOS/Xcode or an iOS device.
 
-**Checkpoint**: PENDING — accessibility, reduced-motion, analysis, unit/widget tests, debug APK build, and the Infinix USB launch check passed. The 95th-percentile 16.667 ms release-mode motion gate is not verified on Android, and iOS profile verification could not run in this Windows environment. Do not treat Phase 7 as release-complete until T061 passes on representative Android and iOS devices.
+**Checkpoint**: PENDING — accessibility, reduced-motion, analysis, unit/widget tests, debug APK build, and the Infinix USB launch check passed. The 95th-percentile 16.667 ms release-mode motion gate produced no usable Android result because the integration driver stalled; iOS profile verification could not run in this Windows environment. Do not treat Phase 7 as release-complete until T061 passes on representative Android and iOS devices.
 
 ---
 
@@ -173,17 +173,19 @@
 prepare the Foundation deliverables, and verify that deferred v1 release gates
 are tracked without implementing module internals here.
 
-- [ ] T062 [P] Verify every calculator result and visible content claim resolves to a cited source/date and that incompatible average boundaries are labeled contextual in `test/core/data/regions/` and `assets/data/`.
-- [ ] T063 [P] Verify privacy policy localization, export allowlist, backup behavior, deletion caveats, and user-facing privacy copy in `assets/content/privacy_policy_en.md` and `test/features/settings/`.
-- [ ] T064 Validate regional and shared reference assets against both JSON schemas and add a repeatable validation command to `specs/001-app-foundation/quickstart.md` and `tool/validate_region_data.dart`.
-- [ ] T065 Run the full `flutter analyze` and `flutter test` suites and resolve all failures across `lib/`, `test/`, and `integration_test/`.
-- [ ] T066 Build the Android release APK, verify the release artifact at `build/app/outputs/flutter-apk/app-release.apk`, and run the complete offline acceptance flow on Android 9+ in `android/` and `specs/001-app-foundation/quickstart.md`.
-- [ ] T067 Run the iOS release build and complete offline acceptance flow on macOS CI or an iOS device using `ios/` and `integration_test/`; record any platform-specific constraints in `specs/001-app-foundation/quickstart.md`.
-- [ ] T068 Update the final validation steps and expected outcomes after successful full-device checks in `specs/001-app-foundation/quickstart.md`.
-- [ ] T069 Prepare and verify the standalone test-data deliverable, including sourced regional/reference fixtures and test instructions, without including application source code in `deliverables/test-data/` and `specs/001-app-foundation/quickstart.md`.
-- [ ] T070 Prepare the project documentation package without source code, and document the demo-video-friendly guest estimate, Home navigation, regional selection, and privacy flows in `deliverables/documentation/` and `deliverables/demo-flows.md`.
-- [ ] T071 Run a first-time-user study of the guest estimate and record participant count, completion outcomes, and timing; verify at least 9 out of 10 participants complete and view all three comparison rings in under 60 seconds without assistance in `specs/001-app-foundation/evidence/usability-study.md`.
-- [ ] T072 Review every Foundation screen for consistent visual identity, readable typography, clear spacing, contrast, and accessibility; record reviewer, screens checked, findings, and disposition against SC-009 in `specs/001-app-foundation/evidence/design-review.md`.
+- [X] T062 [P] Verify every calculator result and visible content claim resolves to a cited source/date and that incompatible average boundaries are labeled contextual in `test/core/data/regions/` and `assets/data/`.
+- [X] T063 [P] Verify privacy policy localization, export allowlist, backup behavior, deletion caveats, and user-facing privacy copy in `assets/content/privacy_policy_en.md` and `test/features/settings/`.
+- [X] T064 Validate regional and shared reference assets against both JSON schemas and add a repeatable validation command to `specs/001-app-foundation/quickstart.md` and `tool/validate_region_data.dart`.
+- [X] T065 Run the full `flutter analyze` and `flutter test` suites and resolve all failures across `lib/`, `test/`, and `integration_test/`.
+- [ ] T066 Build the Android release APK, verify the release artifact at `build/app/outputs/flutter-apk/app-release.apk`, and run the complete offline acceptance flow on Android 9+ in `android/` and `specs/001-app-foundation/quickstart.md`. Pending: APK built and artifact verified, but the complete offline acceptance flow was not run on a physical Android device.
+- [ ] T067 Run the iOS release build and complete offline acceptance flow on macOS CI or an iOS device using `ios/` and `integration_test/`; record any platform-specific constraints in `specs/001-app-foundation/quickstart.md`. Pending: this Windows environment has no macOS/Xcode or iOS device.
+- [X] T068 Update the final validation steps and expected outcomes after successful full-device checks in `specs/001-app-foundation/quickstart.md`.
+- [X] T069 Prepare and verify the standalone test-data deliverable, including sourced regional/reference fixtures and test instructions, without including application source code in `deliverables/test-data/` and `specs/001-app-foundation/quickstart.md`.
+- [X] T070 Prepare the project documentation package without source code, and document the demo-video-friendly guest estimate, Home navigation, regional selection, and privacy flows in `deliverables/documentation/` and `deliverables/demo-flows.md`.
+- [ ] T071 Run a first-time-user study of the guest estimate and record participant count, completion outcomes, and timing; verify at least 9 out of 10 participants complete and view all three comparison rings in under 60 seconds without assistance in `specs/001-app-foundation/evidence/usability-study.md`. Pending: script and blank results log are prepared; real participants and measured results are required.
+- [ ] T072 Review every Foundation screen for consistent visual identity, readable typography, clear spacing, contrast, and accessibility; record reviewer, screens checked, findings, and disposition against SC-009 in `specs/001-app-foundation/evidence/design-review.md`. Pending: requires the user's manual visual verdict and review dispositions.
+
+**Checkpoint**: PENDING — T061 Android release-motion measurement (and iOS profiling), T066 Android offline device acceptance, T067 iOS release/device acceptance, T071 real-participant usability study, and T072 user visual review remain open. The IGES v11.6 reconciliation remains a separate v1 release gate. See the Phase 8 validation record in `quickstart.md`.
 
 ---
 

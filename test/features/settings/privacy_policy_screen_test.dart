@@ -24,6 +24,14 @@ void main() {
       ),
       findsOneWidget,
     );
+    expect(
+      find.textContaining('It cannot guarantee forensic erasure'),
+      findsOneWidget,
+    );
+    expect(
+      find.textContaining('You are responsible for deleting any copies'),
+      findsOneWidget,
+    );
   });
 }
 

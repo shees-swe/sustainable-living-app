@@ -12,7 +12,7 @@ Keep your device and its screen lock secure. Anyone with access to an unlocked d
 
 ## Export and deletion
 
-You can request an export of the app data included in its documented export format. Credential verifiers and secret keys are excluded. You can also choose to delete local app data; the app asks for confirmation before deletion. Deletion removes the app's local data from this device and cannot be undone.
+You can request an export of the app data included in its documented export format. Credential verifiers and secret keys are excluded. You can also choose to delete local app data; the app asks for confirmation before deletion. Deletion removes the app's local data from this device and cannot be undone. It cannot guarantee forensic erasure from flash storage. You are responsible for deleting any copies you exported.
 
 ## Demo information
 

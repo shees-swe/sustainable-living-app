@@ -95,10 +95,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             style: Theme.of(context).textTheme.bodyLarge,
           ),
           const SizedBox(height: DesignTokens.space3),
-          Text(
-            l10n.chooseRegion,
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
+          if (!_hasRegionalData)
+            Text(
+              l10n.chooseRegion,
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
           if (_hasRegionalData)
             RegionPicker(
               preferences: widget.preferences!,
