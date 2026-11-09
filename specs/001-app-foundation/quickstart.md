@@ -247,6 +247,27 @@ and privacy actions.
 | Infinix USB launch | `flutter run --debug -d 1026825381000731 --no-resident` | Passed on Infinix X678B / Android 14. Flutter installed the debug APK as an update over the previously installed profile build and launched it. |
 | Region-heading regression | Onboarding widget regression test | Passed after removing the duplicate parent heading; the regional picker renders one “Choose a region” heading. |
 
+### Infinix offline acceptance (T066; 2026-11-09)
+
+The existing release APK at `build/app/outputs/flutter-apk/app-release.apk`
+was verified and installed with `adb install -r` on the Infinix X678B
+(Android 14, USB transport only; wireless debugging off). Airplane mode was
+enabled before the flow; Wi-Fi was disabled and `dumpsys connectivity` reported
+`Active default network: none`.
+
+| Quickstart step | Actual result |
+|---|---|
+| 1. Launch on Android API 28+ / iOS | Android launch passed on the Infinix X678B running Android 14. iOS was not part of this device run; see T067. |
+| 2. Disable network and cold-launch | Passed: airplane mode on, Wi-Fi off, no active default network; the app opened offline after the device was unlocked. |
+| 3. Complete regional estimate and verify three comparable labeled rings | **Failed acceptance criterion.** Pakistan estimate was `34.70 kg CO2/year`, currency PKR, with source/date/methodology details. All three comparisons were “Comparison unavailable” / “Contextual reference only,” with no rings: regional `0.72 t CO2/person` (2024), global `4.70 t CO2/person` (2024), and 1.5°C `2.50 t CO2e/person/year` (2030). Their units, periods, and/or accounting boundaries do not match the estimate, so the app did not present them as comparable. Transport and recipe factors were unavailable. |
+| 4. Skip onboarding and browse as guest | Passed: “Skip and continue as guest” opened Home without an account wall. |
+| 5. Visit Home modules and secondary destinations | Passed: all 11 module destinations opened their foundation destination pages; About Us opened from Home; Gallery and Contact Us opened through More navigation. |
+| 6. Register and log in locally; check credential exclusion | Registration succeeded and the account screen confirmed local sign-in after credentials were entered into fresh fields. An initial login attempt failed while values were retained after switching modes; the clean-field retry succeeded. Browsing remained available as guest. Credential exclusion from app-private storage, logs, and export was **not verified**: the release package reported `package not debuggable` for `run-as`, and the generated export was not inspected or sent externally. |
+| 7. Privacy policy, export, cancel deletion, confirm deletion | Passed for the observed UI flow: the policy opened offline; export generated a JSON file and opened Android’s share sheet, which was dismissed without sending the export; cancel displayed “Deletion cancelled. Your data was not changed”; confirming deletion displayed “Local data deleted. Returning to guest Home” and returned to Home. |
+| 8. Change display language and region independently | Region selection changed independently of the displayed language: Pakistan showed PKR and unavailable transport/recipe factors; the demo region showed USD and “DEMO ONLY — not a verified estimate,” while the display-language readout stayed English. **Language-change portion not completed:** no language-selection control was exposed on the onboarding or Settings screen, so independent language switching could not be exercised. |
+| 9. Missing and invalid regional data | Missing-factor behavior passed the visible check: Pakistan explicitly reported transport and recipe data unavailable, without substituting a numeric factor; the demo region was explicitly labeled demo-only. No silent cross-region fallback was observed. An invalid saved region/pack could not be injected through the release UI, so that case remains unverified. |
+| 10. Enable reduced motion and repeat navigation/gesture interactions | **Not verified.** The Infinix Accessibility settings exposed motion speed choices “Normal” and “Fast,” but no reduced-motion/“remove animations” preference. No developer animation-scale setting was substituted for the documented OS preference; navigation/gesture behavior with reduced motion enabled remains pending. |
+
 ### Pending checks and release gates
 
 - **T061 Android motion profile — measured and not met**: On 2026-11-09, with
@@ -262,9 +283,13 @@ and privacy actions.
 - **T061 iOS motion profile**: Not run because iOS profile testing requires
   macOS/Xcode or an iOS device. This is an environment limitation, not a pass
   or a measured failure.
-- **T066 Android offline acceptance**: Release APK build succeeded, and the
-  debug app launch succeeded on the Infinix. The complete offline acceptance
-  flow on a physical Android device has not been run; T066 remains pending.
+- **T066 Android offline acceptance**: The release APK was installed over the
+  existing app package on the Infinix via USB with airplane mode on. The
+  step-by-step outcomes above include a failed Step 3 comparable-rings
+  criterion, an unavailable language-change control, an untestable invalid-pack
+  state, unverified credential exclusion, and unavailable reduced-motion
+  controls. T066 remains pending; no application code or factors were changed
+  to force the acceptance flow to pass.
 - **T067 iOS release acceptance**: Not run; this Windows environment does not
   provide macOS/Xcode or an iOS device.
 - **T071 usability study / SC-001**: Study script and results log are prepared
@@ -278,10 +303,10 @@ and privacy actions.
   transport/recipe emission factors were added. Transport and recipe impact
   values remain unavailable/demo-labelled.
 
-The final task count is **67/72 complete**. T061, T066, T067, T071, and T072
-remain unchecked for the reasons above. Android motion measurement is complete
-for this pass but fails its frame budget; re-measure after the screens are
-rebuilt in the design phase. Do not mark the Foundation release checkpoint
+The final task count remains **67/72 complete**. T061, T066, T067, T071, and
+T072 remain unchecked for the reasons above. Android motion measurement is
+complete for this pass but fails its frame budget; re-measure after the screens
+are rebuilt in the design phase. Do not mark the Foundation release checkpoint
 complete until the pending validations and the IGES data gate have been
 resolved.
 
