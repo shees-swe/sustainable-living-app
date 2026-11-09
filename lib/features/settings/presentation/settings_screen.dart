@@ -1,0 +1,209 @@
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
+import 'package:share_plus/share_plus.dart';
+
+import '../../../app/router.dart';
+import '../../../core/accessibility/motion_aware_progress_indicator.dart';
+import '../../../core/data/regions/region_catalog.dart';
+import '../../../core/theme/design_tokens.dart';
+import '../../../l10n/generated/app_localizations.dart';
+import '../data/user_data_deleter.dart';
+import '../data/user_data_exporter.dart';
+import '../data/user_data_file_sharer.dart';
+import '../data/user_preferences_repository.dart';
+import 'region_picker.dart';
+
+class SettingsScreen extends StatefulWidget {
+  const SettingsScreen({
+    required this.exporter,
+    required this.deleter,
+    required this.onGuestReturn,
+    this.shareExport,
+    this.preferences,
+    this.regionCatalog,
+    super.key,
+  });
+
+  final UserDataExporter exporter;
+  final UserDataDeleter deleter;
+  final Future<void> Function() onGuestReturn;
+  final Future<ShareResult> Function(Map<String, Object?> export)? shareExport;
+  final UserPreferencesRepository? preferences;
+  final RegionCatalog? regionCatalog;
+
+  @override
+  State<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
+  bool _isExporting = false;
+  bool _isDeleting = false;
+  String? _status;
+  bool _statusIsError = false;
+
+  Future<void> _exportData() async {
+    if (_isExporting || _isDeleting) return;
+    setState(() {
+      _isExporting = true;
+      _status = null;
+    });
+
+    final l10n = AppLocalizations.of(context)!;
+    try {
+      final export = await widget.exporter.exportData();
+      final share =
+          widget.shareExport ?? const UserDataFileSharer().shareExport;
+      final result = await share(export);
+      if (!mounted) return;
+      switch (result.status) {
+        case ShareResultStatus.success:
+          _setStatus(l10n.userDataExportShared);
+        case ShareResultStatus.dismissed:
+          _setStatus(l10n.userDataExportDismissed);
+        case ShareResultStatus.unavailable:
+          _setStatus(l10n.userDataExportUnavailable, isError: true);
+      }
+    } on FileSystemException {
+      _setStatus(l10n.userDataExportFailure, isError: true);
+    } on PlatformException {
+      _setStatus(l10n.userDataExportFailure, isError: true);
+    } on FormatException {
+      _setStatus(l10n.userDataExportFailure, isError: true);
+    } finally {
+      if (mounted) setState(() => _isExporting = false);
+    }
+  }
+
+  Future<void> _requestDeletion() async {
+    if (_isExporting || _isDeleting) return;
+    final l10n = AppLocalizations.of(context)!;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.deleteLocalData),
+        content: Text(l10n.deleteLocalDataConfirmation),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(l10n.cancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(l10n.confirmDeletion),
+          ),
+        ],
+      ),
+    );
+    if (!mounted || confirmed != true) {
+      if (mounted) _setStatus(l10n.deletionCancelled);
+      return;
+    }
+
+    setState(() {
+      _isDeleting = true;
+      _status = null;
+    });
+    try {
+      final result = await widget.deleter.deleteAllUserData(confirmed: true);
+      if (!mounted) return;
+      if (result != UserDataDeletionResult.deleted) {
+        _setStatus(l10n.deletionCancelled);
+        return;
+      }
+      _setStatus(l10n.userDataDeleted);
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(l10n.userDataDeleted)));
+      await widget.onGuestReturn();
+    } on FileSystemException {
+      _setStatus(l10n.userDataDeletionFailure, isError: true);
+    } on PlatformException {
+      _setStatus(l10n.userDataDeletionFailure, isError: true);
+    } finally {
+      if (mounted) setState(() => _isDeleting = false);
+    }
+  }
+
+  void _setStatus(String message, {bool isError = false}) {
+    if (!mounted) return;
+    setState(() {
+      _status = message;
+      _statusIsError = isError;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final busy = _isExporting || _isDeleting;
+
+    return Scaffold(
+      appBar: AppBar(title: Text(l10n.settings)),
+      body: ListView(
+        padding: const EdgeInsets.all(DesignTokens.space4),
+        children: [
+          if (widget.preferences != null && widget.regionCatalog != null) ...[
+            RegionPicker(
+              preferences: widget.preferences!,
+              catalog: widget.regionCatalog!,
+            ),
+            const SizedBox(height: DesignTokens.space4),
+          ],
+          Text(
+            l10n.privacyControls,
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+          const SizedBox(height: DesignTokens.space2),
+          ListTile(
+            leading: const Icon(Icons.policy_outlined),
+            title: Text(l10n.privacyPolicy),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: busy ? null : () => context.push(AppRoutes.privacyPolicy),
+          ),
+          ListTile(
+            leading: const Icon(Icons.file_upload_outlined),
+            title: Text(l10n.exportMyData),
+            subtitle: Text(l10n.exportDataDescription),
+            trailing: _isExporting
+                ? MotionAwareProgressIndicator(
+                    semanticsLabel: l10n.loading,
+                    size: 24,
+                    strokeWidth: 2,
+                  )
+                : const Icon(Icons.chevron_right),
+            onTap: busy ? null : _exportData,
+          ),
+          ListTile(
+            leading: const Icon(Icons.delete_outline),
+            title: Text(l10n.deleteLocalData),
+            subtitle: Text(l10n.deleteDataDescription),
+            trailing: _isDeleting
+                ? MotionAwareProgressIndicator(
+                    semanticsLabel: l10n.loading,
+                    size: 24,
+                    strokeWidth: 2,
+                  )
+                : const Icon(Icons.chevron_right),
+            onTap: busy ? null : _requestDeletion,
+          ),
+          if (_status case final status?) ...[
+            const SizedBox(height: DesignTokens.space2),
+            Semantics(
+              liveRegion: true,
+              child: Text(
+                status,
+                style: TextStyle(
+                  color: _statusIsError
+                      ? Theme.of(context).colorScheme.error
+                      : Theme.of(context).colorScheme.primary,
+                ),
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}

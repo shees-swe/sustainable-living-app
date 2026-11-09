@@ -1,0 +1,110 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:sustainable_living_app/app/router.dart';
+import 'package:sustainable_living_app/core/theme/app_theme.dart';
+import 'package:sustainable_living_app/features/home/domain/module_destination.dart';
+import 'package:sustainable_living_app/l10n/generated/app_localizations.dart';
+
+void main() {
+  testWidgets('guest can open Home without an account redirect', (
+    tester,
+  ) async {
+    final router = createAppRouter(initialLocation: AppRoutes.home);
+    addTearDown(router.dispose);
+
+    await tester.pumpWidget(_TestApp(router: router));
+    await tester.pumpAndSettle();
+
+    expect(router.routeInformationProvider.value.uri.path, AppRoutes.home);
+    expect(find.text('Sustainable Living Guide'), findsOneWidget);
+  });
+
+  testWidgets('all 11 module routes are registered for guest navigation', (
+    tester,
+  ) async {
+    for (final destination in ModuleDestination.modules) {
+      final router = createAppRouter(initialLocation: destination.path);
+      addTearDown(router.dispose);
+
+      await tester.pumpWidget(_TestApp(router: router));
+      await tester.pumpAndSettle();
+
+      expect(
+        router.routeInformationProvider.value.uri.path,
+        destination.path,
+        reason: '${destination.path} should be available without login',
+      );
+      expect(find.text('Foundation destination'), findsOneWidget);
+      expect(
+        find.text('Detailed features will be available in a future update.'),
+        findsOneWidget,
+      );
+      await tester.pumpWidget(const SizedBox.shrink());
+    }
+  });
+
+  testWidgets('About Us and secondary destinations have stable routes', (
+    tester,
+  ) async {
+    for (final path in [
+      AppRoutes.about,
+      AppRoutes.gallery,
+      AppRoutes.contact,
+      AppRoutes.account,
+      AppRoutes.settings,
+      AppRoutes.onboarding,
+    ]) {
+      final router = createAppRouter(initialLocation: path);
+      addTearDown(router.dispose);
+
+      await tester.pumpWidget(_TestApp(router: router));
+      await tester.pumpAndSettle();
+
+      expect(router.routeInformationProvider.value.uri.path, path);
+      if (path == AppRoutes.about) {
+        expect(
+          find.textContaining('Sustainable Living Guide helps'),
+          findsOneWidget,
+        );
+      } else if (path == AppRoutes.gallery) {
+        expect(
+          find.text('No gallery images are available yet.'),
+          findsOneWidget,
+        );
+      } else if (path == AppRoutes.contact) {
+        expect(
+          find.text(
+            'Contact information is not available in this foundation version.',
+          ),
+          findsOneWidget,
+        );
+      }
+      await tester.pumpWidget(const SizedBox.shrink());
+    }
+  });
+}
+
+class _TestApp extends StatelessWidget {
+  const _TestApp({required this.router});
+
+  final RouterConfig<Object> router;
+
+  @override
+  Widget build(BuildContext context) {
+    return ProviderScope(
+      child: MaterialApp.router(
+        theme: AppTheme.light,
+        routerConfig: router,
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: AppLocalizations.supportedLocales,
+      ),
+    );
+  }
+}

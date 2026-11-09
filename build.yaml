@@ -1,0 +1,9 @@
+targets:
+  $default:
+    builders:
+      drift_dev:
+        options:
+          databases:
+            app_database: lib/core/data/database/app_database.dart
+          schema_dir: lib/core/data/database/migrations
+          test_dir: test/core/data/database

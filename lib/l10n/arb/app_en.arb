@@ -1,0 +1,243 @@
+{
+  "@@locale": "en",
+  "appTitle": "Sustainable Living Guide",
+  "@appTitle": {
+    "description": "The application title shown in app metadata."
+  },
+  "loading": "Loading",
+  "foundationDestination": "Foundation destination",
+  "onboarding": "Get started",
+  "chooseRegion": "Choose a region",
+  "regionDemoOnly": "Demo region (demo only)",
+  "regionPakistan": "Pakistan",
+  "displayLanguage": "Display language: {languageTag}",
+  "@displayLanguage": {
+    "placeholders": {
+      "languageTag": {
+        "type": "String"
+      }
+    }
+  },
+  "noRegionSelected": "No region selected",
+  "savedRegionUnavailable": "The saved region ({regionId}) is unavailable. Select a region explicitly.",
+  "@savedRegionUnavailable": {
+    "placeholders": {
+      "regionId": {
+        "type": "String"
+      }
+    }
+  },
+  "regionSelectionUnavailable": "That region is not available in this app version.",
+  "regionPreferencesFailure": "Region preferences could not be loaded or saved.",
+  "regionCurrency": "Currency: {currencyCode}",
+  "@regionCurrency": {
+    "placeholders": {
+      "currencyCode": {
+        "type": "String"
+      }
+    }
+  },
+  "transportDataUnavailable": "Transport data unavailable — no cited factor is included in this pack.",
+  "recipeImpactDataUnavailable": "Recipe impact data unavailable — no cited impact factors are included in this pack.",
+  "onboardingIntro": "Choose a region with available sourced data, or use the clearly labelled demo fixture.",
+  "assumptionAnnualizedPerPerson": "Annualized per-person activity inputs.",
+  "annualElectricityUse": "Annual electricity use (kWh)",
+  "annualTravel": "Annual travel (km)",
+  "calculateDemoEstimate": "Calculate demo estimate",
+  "calculateSourcedEstimate": "Calculate estimate",
+  "skipAndContinueAsGuest": "Skip and continue as guest",
+  "incompleteEstimateAnswers": "Please answer each question to see an estimate.",
+  "invalidEstimateAnswer": "Enter a valid nonnegative number for each answer.",
+  "estimateDataUnavailable": "Demo estimate data is unavailable.",
+  "sourcedEstimateDataUnavailable": "Sourced estimate data is unavailable.",
+  "regionalEstimateContext": "This estimate uses only factors available in the selected regional pack. Missing activity data is not estimated.",
+  "estimateResult": "Your estimated footprint",
+  "estimateAnnualValue": "{value} {unit}",
+  "@estimateAnnualValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "estimateLoadFailure": "The estimate could not be loaded or saved.",
+  "continueToHome": "Continue to Home",
+  "viewEstimate": "View your saved estimate",
+  "startupFailure": "The app could not load local data.",
+  "demoOnlyWarning": "DEMO ONLY — not a verified estimate",
+  "regionalAverage": "Regional average",
+  "globalAverage": "Global average",
+  "temperatureBudget": "1.5°C-aligned budget",
+  "factorsUsedInEstimate": "Factors used in this estimate",
+  "electricityFactor": "Electricity",
+  "transportFactor": "Transport",
+  "factorApplication": "{category}: {rate} {numerator} per {denominator}",
+  "@factorApplication": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      },
+      "rate": {
+        "type": "String"
+      },
+      "numerator": {
+        "type": "String"
+      },
+      "denominator": {
+        "type": "String"
+      }
+    }
+  },
+  "factorSourceDetails": "Source: {title} — {publisher}",
+  "@factorSourceDetails": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "publisher": {
+        "type": "String"
+      }
+    }
+  },
+  "factorValidFrom": "Factor valid from: {date}",
+  "@factorValidFrom": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "referenceUnavailable": "Comparison unavailable",
+  "contextualReferenceOnly": "Contextual reference only — methods, units, periods, or boundaries differ, so no comparison ring is shown.",
+  "referenceMethodology": "Methodology: {methodology}",
+  "@referenceMethodology": {
+    "placeholders": {
+      "methodology": {
+        "type": "String"
+      }
+    }
+  },
+  "zeroReferenceCannotBeCharted": "A zero reference cannot be shown as a comparison ring.",
+  "estimateComparisonValue": "Your estimate: {value} {unit}",
+  "@estimateComparisonValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "referenceComparisonValue": "Reference: {value} {unit}",
+  "@referenceComparisonValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "comparisonPeriod": "Period: {period}",
+  "@comparisonPeriod": {
+    "placeholders": {
+      "period": {
+        "type": "String"
+      }
+    }
+  },
+  "comparisonSource": "Source: {title} — {publisher}",
+  "@comparisonSource": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "publisher": {
+        "type": "String"
+      }
+    }
+  },
+  "referenceShare": "{percent}% of reference",
+  "@referenceShare": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "publicationYear": "Publication year: {year}",
+  "@publicationYear": {
+    "description": "Publication year of an estimate factor source.",
+    "placeholders": {
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "account": "Account",
+  "accountOptionalGuest": "Account is optional. You can browse as a guest.",
+  "accountLoginIdentifier": "Email or username",
+  "accountPassword": "Password",
+  "createLocalAccount": "Create local account",
+  "logIn": "Log in",
+  "register": "Register",
+  "accountPleaseWait": "Please wait...",
+  "accountCreatedOnDevice": "Account created on this device.",
+  "accountAlreadyExists": "An account with this identifier already exists.",
+  "accountInvalidCredentials": "Identifier or password is incorrect.",
+  "accountLoginThrottled": "Too many failed attempts. Try again later.",
+  "accountInvalidIdentifier": "Enter a valid email or username.",
+  "accountInvalidPassword": "Use a password with at least 8 characters.",
+  "accountSignedIn": "Signed in locally as {identifier}.",
+  "@accountSignedIn": {
+    "placeholders": {
+      "identifier": {
+        "type": "String"
+      }
+    }
+  },
+  "privacyPolicy": "Privacy policy",
+  "privacyPolicyLoadFailure": "The privacy policy could not be loaded.",
+  "loadingPrivacyPolicy": "Loading privacy policy...",
+  "settings": "Settings",
+  "privacyControls": "Privacy and personal data",
+  "exportMyData": "Export my data",
+  "exportDataDescription": "Create a copy of your app data to share or save.",
+  "deleteLocalData": "Delete local data",
+  "deleteDataDescription": "Permanently remove personal data stored by this app.",
+  "deleteLocalDataConfirmation": "This removes your local account, saved estimates, and preferences from this device. This cannot be undone. Continue?",
+  "cancel": "Cancel",
+  "confirmDeletion": "Delete my data",
+  "deletionCancelled": "Deletion cancelled. Your data was not changed.",
+  "userDataDeleted": "Local data deleted. Returning to guest Home.",
+  "userDataDeletionFailure": "Local data could not be fully deleted. Check available storage and try again.",
+  "userDataExportShared": "The data export was shared.",
+  "userDataExportDismissed": "The share sheet was closed. No export was sent.",
+  "userDataExportUnavailable": "Sharing is unavailable on this device.",
+  "userDataExportFailure": "The data export could not be prepared or shared.",
+  "aboutUs": "About Us",
+  "imageGallery": "Image Gallery",
+  "contactUs": "Contact Us",
+  "exploreModules": "Explore sustainable living",
+  "moreNavigation": "More navigation",
+  "carbonFootprintTracker": "Carbon Footprint Tracker",
+  "ecoFriendlyProductSuggestions": "Eco-Friendly Product Suggestions",
+  "sustainableLivingChallenges": "Sustainable Living Challenges",
+  "certificationsGuide": "Green Certifications & Labels Guide",
+  "wasteReductionTracker": "Waste Reduction Tracker",
+  "recipesMealPlanning": "Sustainable Recipes & Meal Planning",
+  "energyConservationTips": "Energy Conservation Tips",
+  "ecoTravelSuggestions": "Eco-Travel Suggestions",
+  "communityJournal": "Community Journal",
+  "progressDashboard": "Sustainability Progress Dashboard",
+  "educationalContent": "Educational Content",
+  "moduleDetailsComingSoon": "Detailed features will be available in a future update.",
+  "aboutDescription": "Sustainable Living Guide helps people explore practical sustainability topics. This foundation version provides offline navigation to each module.",
+  "galleryEmpty": "No gallery images are available yet.",
+  "contactUnavailable": "Contact information is not available in this foundation version."
+}

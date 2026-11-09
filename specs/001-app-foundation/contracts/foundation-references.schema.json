@@ -1,0 +1,195 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Sustainable Living Guide foundation references",
+  "description": "Cited global and methodology-qualified climate references bundled with the app.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "referenceSetVersion",
+    "sources",
+    "globalAverage",
+    "temperatureBudget"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "referenceSetVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    },
+    "globalAverage": {
+      "$ref": "#/$defs/globalAverage"
+    },
+    "temperatureBudget": {
+      "$ref": "#/$defs/temperatureBudget"
+    }
+  },
+  "$defs": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceId",
+        "title",
+        "publisher",
+        "publicationYear"
+      ],
+      "properties": {
+        "sourceId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "publisher": {
+          "type": "string",
+          "minLength": 1
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "publicationYear": {
+          "type": "integer",
+          "minimum": 1900
+        },
+        "reportVersion": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "globalAverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "referenceId",
+        "value",
+        "unit",
+        "period",
+        "sourceId",
+        "methodology",
+        "accountingBoundary"
+      ],
+      "properties": {
+        "referenceId": {
+          "const": "global-average"
+        },
+        "value": {
+          "type": "number",
+          "minimum": 0
+        },
+        "unit": {
+          "type": "string",
+          "minLength": 1
+        },
+        "period": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "methodology": {
+          "type": "string",
+          "minLength": 1
+        },
+        "accountingBoundary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "uncertainty": {
+          "type": "string"
+        }
+      }
+    },
+    "temperatureBudget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "referenceId",
+        "value",
+        "unit",
+        "period",
+        "sourceId",
+        "methodology",
+        "accountingBoundary",
+        "targetYear",
+        "baselineYear",
+        "allocationRule",
+        "gases",
+        "exclusions"
+      ],
+      "properties": {
+        "referenceId": {
+          "const": "temperature-budget-1-5c"
+        },
+        "value": {
+          "type": "number",
+          "minimum": 0
+        },
+        "unit": {
+          "type": "string",
+          "minLength": 1
+        },
+        "period": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "methodology": {
+          "type": "string",
+          "minLength": 1
+        },
+        "accountingBoundary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "targetYear": {
+          "type": "integer",
+          "minimum": 1900
+        },
+        "baselineYear": {
+          "type": "integer",
+          "minimum": 1900
+        },
+        "allocationRule": {
+          "type": "string",
+          "minLength": 1
+        },
+        "gases": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "exclusions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "uncertainty": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

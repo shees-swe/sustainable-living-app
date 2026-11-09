@@ -1,0 +1,299 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Sustainable Living Guide regional data pack",
+  "description": "Bundled, versioned regional data using the shared factor-table contract.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "packId",
+    "packVersion",
+    "factorCatalogVersion",
+    "region",
+    "contentAsOf",
+    "sources",
+    "regionalAverage",
+    "emissionFactors",
+    "transportModes",
+    "recipes"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "packId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "packVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "factorCatalogVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "region": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "regionId",
+        "nameKey",
+        "currencyCode"
+      ],
+      "properties": {
+        "regionId": {
+          "type": "string",
+          "minLength": 2
+        },
+        "nameKey": {
+          "type": "string",
+          "minLength": 1
+        },
+        "currencyCode": {
+          "type": "string",
+          "pattern": "^[A-Z]{3}$"
+        }
+      }
+    },
+    "contentAsOf": {
+      "type": "string",
+      "format": "date"
+    },
+    "regionalAverage": {
+      "$ref": "#/$defs/referenceValue"
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    },
+    "emissionFactors": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/factor"
+      }
+    },
+    "transportModes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/transportMode"
+      }
+    },
+    "recipes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/recipe"
+      }
+    }
+  },
+  "$defs": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceId",
+        "title",
+        "publisher",
+        "publicationYear",
+        "attribution"
+      ],
+      "properties": {
+        "sourceId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "publisher": {
+          "type": "string",
+          "minLength": 1
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "publicationYear": {
+          "type": "integer",
+          "minimum": 1900
+        },
+        "attribution": {
+          "type": "string",
+          "minLength": 1
+        },
+        "license": {
+          "type": "string"
+        }
+      }
+    },
+    "factor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "factorId",
+        "category",
+        "activityId",
+        "value",
+        "numeratorUnit",
+        "denominatorUnit",
+        "sourceId",
+        "sourceYear",
+        "validFrom",
+        "methodology"
+      ],
+      "properties": {
+        "factorId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "electricity",
+            "transport",
+            "food",
+            "waste",
+            "other"
+          ]
+        },
+        "activityId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "value": {
+          "type": "number",
+          "minimum": 0
+        },
+        "numeratorUnit": {
+          "type": "string",
+          "minLength": 1
+        },
+        "denominatorUnit": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceYear": {
+          "type": "integer",
+          "minimum": 1900
+        },
+        "validFrom": {
+          "type": "string",
+          "format": "date"
+        },
+        "validTo": {
+          "type": "string",
+          "format": "date"
+        },
+        "methodology": {
+          "type": "string",
+          "minLength": 1
+        },
+        "geographyId": {
+          "type": "string"
+        }
+      }
+    },
+    "referenceValue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "value",
+        "unit",
+        "period",
+        "sourceId",
+        "methodology",
+        "accountingBoundary"
+      ],
+      "properties": {
+        "value": {
+          "type": "number",
+          "minimum": 0
+        },
+        "unit": {
+          "type": "string",
+          "minLength": 1
+        },
+        "period": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "methodology": {
+          "type": "string",
+          "minLength": 1
+        },
+        "accountingBoundary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "uncertainty": {
+          "type": "string"
+        }
+      }
+    },
+    "transportMode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "modeId",
+        "labelKey",
+        "factorId"
+      ],
+      "properties": {
+        "modeId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "labelKey": {
+          "type": "string",
+          "minLength": 1
+        },
+        "factorId": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "recipe": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "recipeId",
+        "nameKey",
+        "sourceIds"
+      ],
+      "properties": {
+        "recipeId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "nameKey": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        },
+        "emissionFactorId": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}

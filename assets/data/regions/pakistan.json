@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "packId": "pakistan",
+  "packVersion": "1.0.0",
+  "factorCatalogVersion": "1.0.0",
+  "region": {
+    "regionId": "PK",
+    "nameKey": "regionPakistan",
+    "currencyCode": "PKR"
+  },
+  "contentAsOf": "2026-11-07",
+  "sources": [
+    {
+      "sourceId": "ember-yearly-electricity-2025",
+      "title": "Yearly Electricity Data",
+      "publisher": "Ember",
+      "publicationYear": 2025,
+      "url": "https://ember-energy.org/data/yearly-electricity-data/",
+      "attribution": "Ember Yearly Electricity Data, 2025 release; cited Pakistan value and 2025 validity period supplied for this feature."
+    },
+    {
+      "sourceId": "global-carbon-budget-2025",
+      "title": "Per capita consumption-based CO2 emissions",
+      "publisher": "Our World in Data / Global Carbon Project",
+      "publicationYear": 2025,
+      "url": "https://ourworldindata.org/grapher/consumption-co2-per-capita",
+      "attribution": "Global Carbon Budget 2025; Our World in Data processing. Consumption-based fossil CO2 per capita, 2024 series."
+    }
+  ],
+  "regionalAverage": {
+    "value": 0.72,
+    "unit": "t CO2/person",
+    "period": "2024",
+    "sourceId": "global-carbon-budget-2025",
+    "methodology": "Consumption-based fossil-fuel and industrial CO2 emissions per capita, adjusted for trade; excludes land-use change and international aviation/shipping from country totals.",
+    "accountingBoundary": "National consumption-based fossil CO2 per person; not a household all-gas CO2e lifestyle footprint."
+  },
+  "emissionFactors": [
+    {
+      "factorId": "electricity-grid",
+      "category": "electricity",
+      "activityId": "electricity",
+      "value": 0.347,
+      "numeratorUnit": "kg CO2",
+      "denominatorUnit": "kWh",
+      "sourceId": "ember-yearly-electricity-2025",
+      "sourceYear": 2025,
+      "validFrom": "2025-01-01",
+      "methodology": "Pakistan grid electricity factor. The supplied source describes the 2025 release and validity year; the IGES List of Grid Emission Factors v11.6 cross-check remains a v1 release gate.",
+      "geographyId": "PK"
+    }
+  ],
+  "transportModes": [],
+  "recipes": []
+}

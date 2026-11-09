@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "referenceSetVersion": "1.0.0",
+  "sources": [
+    {
+      "sourceId": "global-carbon-budget-2025",
+      "title": "Per capita consumption-based CO2 emissions",
+      "publisher": "Our World in Data / Global Carbon Project",
+      "publicationYear": 2025,
+      "url": "https://ourworldindata.org/grapher/consumption-co2-per-capita",
+      "reportVersion": "Global Carbon Budget 2025"
+    },
+    {
+      "sourceId": "akenji-1-5-degree-lifestyles-2021",
+      "title": "1.5-Degree Lifestyles",
+      "publisher": "International Institute for Global Environmental Strategies (IGES)",
+      "publicationYear": 2021,
+      "reportVersion": "Akenji et al., 2021"
+    }
+  ],
+  "globalAverage": {
+    "referenceId": "global-average",
+    "value": 4.7,
+    "unit": "t CO2/person",
+    "period": "2024",
+    "sourceId": "global-carbon-budget-2025",
+    "methodology": "Consumption-based fossil-fuel and industrial CO2 emissions per capita, adjusted for trade; excludes land-use change and international aviation/shipping from country totals.",
+    "accountingBoundary": "Global consumption-based fossil CO2 per person; not a household all-gas CO2e lifestyle footprint."
+  },
+  "temperatureBudget": {
+    "referenceId": "temperature-budget-1-5c",
+    "value": 2.5,
+    "unit": "t CO2e/person/year",
+    "period": "2030",
+    "sourceId": "akenji-1-5-degree-lifestyles-2021",
+    "methodology": "Equity-based per-capita lifestyle target for 2030 from Akenji et al. (2021).",
+    "accountingBoundary": "Consumption-based household lifestyle footprint; excludes public-sector emissions and capital investment. Treat as methodology-specific, not a universal personal carbon budget.",
+    "targetYear": 2030,
+    "baselineYear": 2020,
+    "allocationRule": "Equity-based allocation of the remaining global carbon budget across the global population, as described by the source.",
+    "gases": [
+      "Greenhouse gases expressed as CO2e; gas-by-gas scope must be confirmed from the cited report."
+    ],
+    "exclusions": [
+      "Public-sector emissions",
+      "Capital investment"
+    ]
+  }
+}
