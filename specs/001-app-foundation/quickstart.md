@@ -193,7 +193,11 @@ and privacy actions.
 
 ## Release Performance and Accessibility
 
-- Run the navigation frame-timing scenario on a connected device:
+- Run the navigation frame-timing scenario on a connected Android device.
+  Connect the Infinix over USB only and turn wireless debugging off before
+  starting `flutter drive`; do not leave the same phone listed on an adb-tls
+  transport as well as USB, because duplicate transports caused prior driver
+  stalls and VM-service disposals.
 
   ```powershell
   flutter drive `
@@ -245,19 +249,16 @@ and privacy actions.
 
 ### Pending checks and release gates
 
-- **T061 Android motion profile**: No p95 value was produced, so there is no
-  numeric pass or fail against the unchanged 16.667 ms p95 assertion. The
-  requested `flutter test --profile` command is not supported by this Flutter
-  CLI (`Could not find an option named "--profile".`). The supported
-  `flutter drive --profile` run was attempted. On the prior attempt, the driver
-  failed with `DriverError: Failed to fulfill RequestData due to remote error;
-  Original error: ext.flutter.driver: (-32000) Service connection disposed`.
-  One clean retry was made after uninstalling the app and refreshing ADB. That
-  retry built and installed the profile APK and started the test, but stalled
-  without producing a timing report; ADB also reported `more than one
-  device/emulator` because both USB and adb-tls transports for the Infinix were
-  listed. No further retries were made. T061 remains pending as a tooling
-  blocker; do not infer a frame-budget result.
+- **T061 Android motion profile — measured and not met**: On 2026-11-09, with
+  the Infinix connected over USB only and wireless debugging off,
+  `flutter drive --profile` completed twice. Run 1 reported
+  `frames=5, p95FrameSpanUs=136023`; Run 2 reported
+  `frames=5, p95FrameSpanUs=111894`. The budget remains 16667 µs; both runs
+  fail the gate. Each result is based on a 5-frame sample. The earlier driver
+  stalls and VM-service disposals occurred while the phone appeared on both
+  USB and adb-tls transports; the duplicate transport was the root cause.
+  T061 remains pending, not complete. Re-measure during the design phase after
+  the screens are rebuilt.
 - **T061 iOS motion profile**: Not run because iOS profile testing requires
   macOS/Xcode or an iOS device. This is an environment limitation, not a pass
   or a measured failure.
@@ -278,9 +279,11 @@ and privacy actions.
   values remain unavailable/demo-labelled.
 
 The final task count is **67/72 complete**. T061, T066, T067, T071, and T072
-remain unchecked for the reasons above. Do not mark the Foundation release
-checkpoint complete until those required validations and the IGES data gate
-have been resolved.
+remain unchecked for the reasons above. Android motion measurement is complete
+for this pass but fails its frame budget; re-measure after the screens are
+rebuilt in the design phase. Do not mark the Foundation release checkpoint
+complete until the pending validations and the IGES data gate have been
+resolved.
 
 ## References
 
