@@ -117,7 +117,7 @@ GoRouter createAppRouter({
         path: AppRoutes.home,
         builder: (context, state) => HomeScreen(
           onViewEstimate: hasSavedEstimate && estimateRepository != null
-              ? () => context.go(AppRoutes.estimateResult)
+              ? () => context.push(AppRoutes.estimateResult)
               : null,
         ),
       ),

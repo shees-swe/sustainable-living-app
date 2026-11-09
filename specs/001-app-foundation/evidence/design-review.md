@@ -7,6 +7,25 @@ claimed from automated accessibility tests or source inspection.
 **Review date**: Pending  
 **SC-009 outcome**: Pending
 
+### Interim navigation finding (2026-11-09)
+
+- **Finding**: The user reported on-device that one Android system Back press
+  from inner screens exited the app instead of returning to the previous
+  screen.
+- **Root cause**: Home navigation to modules and secondary destinations used
+  `context.go`, which replaced the current route rather than adding a back-stack
+  entry. The estimate-result transitions also used replacement navigation.
+  New router widget tests reproduced the failure for both a module destination
+  and Settings before the fix: after system Back, the active route remained the
+  destination rather than returning Home.
+- **Fix applied**: Changed inner-screen transitions to `context.push` while
+  retaining replacement navigation for onboarding skip and the estimate
+  result's explicit return-to-Home action. Added regression coverage for Back
+  from a module, Settings, and estimate result.
+- **Disposition**: Awaiting the user's Infinix re-verification of one Back press
+  from a module and Settings. T072 remains pending; this interim finding is not
+  a visual-review verdict or completion of the design review.
+
 Review each screen on a supported device at the default and enlarged text
 settings. Record findings and disposition before marking any row complete.
 

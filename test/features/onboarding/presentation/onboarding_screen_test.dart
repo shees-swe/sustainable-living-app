@@ -84,10 +84,6 @@ void main() {
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 400));
 
-      expect(
-        router.routeInformationProvider.value.uri.path,
-        '/estimate-result',
-      );
       expect(find.text('DEMO ONLY — not a verified estimate'), findsOneWidget);
       expect(find.text('Your estimated footprint'), findsOneWidget);
       for (final label in [
@@ -167,10 +163,7 @@ void main() {
       await tester.tap(find.text('Calculate estimate'));
       await tester.pumpAndSettle();
 
-      expect(
-        router.routeInformationProvider.value.uri.path,
-        AppRoutes.estimateResult,
-      );
+      expect(find.text('Your estimated footprint'), findsOneWidget);
       expect(find.text('Pakistan'), findsOneWidget);
       expect(find.text('34.70 kg CO2/year'), findsOneWidget);
       expect(find.text('Currency: PKR'), findsOneWidget);
@@ -200,6 +193,10 @@ void main() {
       final settings = await preferences.load();
       expect(settings.selectedRegionId, 'PK');
       expect(settings.displayLanguageTag, 'en');
+
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+      expect(find.text('Choose a region'), findsOneWidget);
     },
   );
 

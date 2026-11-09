@@ -22,7 +22,7 @@ class HomeScreen extends StatelessWidget {
         actions: [
           PopupMenuButton<String>(
             tooltip: l10n.moreNavigation,
-            onSelected: (path) => context.go(path),
+            onSelected: (path) => context.push(path),
             itemBuilder: (context) => [
               PopupMenuItem(
                 value: AppRoutes.settings,
@@ -75,7 +75,7 @@ class HomeScreen extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: OutlinedButton.icon(
-                onPressed: () => context.go(destination.path),
+                onPressed: () => context.push(destination.path),
                 icon: Icon(_moduleIcon(destination.id)),
                 label: Text(_moduleTitle(l10n, destination.titleKey)),
                 style: OutlinedButton.styleFrom(
@@ -98,7 +98,7 @@ class HomeScreen extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: TextButton.icon(
-              onPressed: () => context.go(AppRoutes.about),
+              onPressed: () => context.push(AppRoutes.about),
               icon: const Icon(AppIcons.info),
               label: Text(l10n.aboutUs),
               style: TextButton.styleFrom(

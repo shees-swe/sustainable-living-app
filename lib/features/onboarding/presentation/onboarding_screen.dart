@@ -249,7 +249,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           foundationEstimateDemoRegions.singleWhere(
             (item) => item.regionId == _selectedRegionId,
           );
-      context.go(
+      context.push(
         AppRoutes.estimateResult,
         extra: OnboardingRouteData(region: demoRegion, answers: answers),
       );
@@ -263,7 +263,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       });
       return;
     }
-    context.go(
+    context.push(
       AppRoutes.estimateResult,
       extra: RegionalOnboardingRouteData(
         region: pack!,

@@ -42,7 +42,6 @@ void main() {
 
     await tester.tap(find.text('About Us'));
     await tester.pumpAndSettle();
-    expect(router.routeInformationProvider.value.uri.path, AppRoutes.about);
     expect(
       find.textContaining('Sustainable Living Guide helps'),
       findsOneWidget,
@@ -72,8 +71,11 @@ void main() {
     await tester.tap(carbonEntry);
     await tester.pumpAndSettle();
 
-    expect(router.routeInformationProvider.value.uri.path, '/carbon-footprint');
-    expect(find.text('Carbon Footprint Tracker'), findsWidgets);
+    expect(find.text('Foundation destination'), findsOneWidget);
+    expect(
+      find.text('Detailed features will be available in a future update.'),
+      findsOneWidget,
+    );
   });
 
   testWidgets('Gallery and Contact Us are available only in secondary nav', (
@@ -95,8 +97,7 @@ void main() {
 
     await tester.tap(find.text('Image Gallery'));
     await tester.pumpAndSettle();
-    expect(router.routeInformationProvider.value.uri.path, AppRoutes.gallery);
-    expect(find.text('Image Gallery'), findsWidgets);
+    expect(find.text('No gallery images are available yet.'), findsOneWidget);
   });
 }
 

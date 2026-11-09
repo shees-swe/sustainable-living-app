@@ -21,6 +21,44 @@ void main() {
     expect(find.text('Sustainable Living Guide'), findsOneWidget);
   });
 
+  testWidgets('system Back from a module destination returns to Home', (
+    tester,
+  ) async {
+    final router = createAppRouter(initialLocation: AppRoutes.home);
+    addTearDown(router.dispose);
+
+    await tester.pumpWidget(_TestApp(router: router));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Carbon Footprint Tracker'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Foundation destination'), findsOneWidget);
+    await tester.binding.handlePopRoute();
+    await tester.pumpAndSettle();
+
+    expect(router.routeInformationProvider.value.uri.path, AppRoutes.home);
+    expect(find.text('Sustainable Living Guide'), findsOneWidget);
+  });
+
+  testWidgets('system Back from Settings returns to Home', (tester) async {
+    final router = createAppRouter(initialLocation: AppRoutes.home);
+    addTearDown(router.dispose);
+
+    await tester.pumpWidget(_TestApp(router: router));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('More navigation'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Settings'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Settings'), findsNWidgets(2));
+    await tester.binding.handlePopRoute();
+    await tester.pumpAndSettle();
+
+    expect(router.routeInformationProvider.value.uri.path, AppRoutes.home);
+    expect(find.text('Sustainable Living Guide'), findsOneWidget);
+  });
+
   testWidgets('all 11 module routes are registered for guest navigation', (
     tester,
   ) async {
