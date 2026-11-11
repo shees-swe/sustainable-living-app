@@ -103,3 +103,44 @@ Pass: Batch 3 retains existing account, settings, privacy, and secondary
 destination behavior while applying the shared Climate Instrument visual
 tokens. All reviewed screens pass their Very Large text/no-clipping and
 no-overlap checks.
+
+## Phase 4 — Estimate Result
+
+### Scope
+
+Review target: `lib/features/onboarding/presentation/estimate_result_screen.dart`.
+
+### Review check
+
+- Confirmed the estimate total remains visible with its unit in IBM Plex Mono.
+- Confirmed the compatible demo estimate shows the cited lower-bound budget
+  share; its displayed percentage remains uncapped while the bar fill caps at
+  100%.
+- Confirmed unsupported unit combinations show no budget bar or numeric share.
+- Confirmed each included category displays a horizontal bar, kg amount, and
+  share; displayed category amounts reconcile to the total.
+- Confirmed the coverage panel derives included and omitted categories from
+  estimate category contributions and the selected region's available factor
+  data, and does not infer categories absent from that data.
+- Confirmed demo labeling is repeated on each result panel, and the factor and
+  benchmark citation disclosures remain present.
+- Confirmed there are no average-person comparisons, comparison rings, or EPA
+  equivalency cards.
+- Confirmed the AppBar, budget panel, breakdown, coverage, and factor
+  disclosures have no text clipping or overlap at 200% text scaling.
+
+### Validation evidence
+
+- `flutter test test/features/onboarding`: passed (28 tests), including the
+  result-screen Very Large text test and the regional-picker regression.
+- `flutter test test/accessibility/foundation_accessibility_test.dart`: passed
+  (5 tests).
+- `flutter analyze`: no issues.
+- No device tests or full-suite run were performed.
+
+### Result
+
+Pass: the estimate result now provides the cited lower-bound budget share
+when units are compatible, data-derived category breakdown and coverage, and
+preserved estimate/factor disclosures. The existing estimate total,
+calculation value, factors, and navigation remain unchanged.

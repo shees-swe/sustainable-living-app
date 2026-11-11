@@ -357,6 +357,102 @@ abstract class AppLocalizations {
   /// **'Factor valid from: {date}'**
   String factorValidFrom(String date);
 
+  /// No description provided for @budgetShareTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Lifestyle budget share'**
+  String get budgetShareTitle;
+
+  /// No description provided for @budgetSharePrefix.
+  ///
+  /// In en, this message translates to:
+  /// **'at least'**
+  String get budgetSharePrefix;
+
+  /// No description provided for @budgetShareSuffix.
+  ///
+  /// In en, this message translates to:
+  /// **'of the'**
+  String get budgetShareSuffix;
+
+  /// No description provided for @budgetBenchmarkByYear.
+  ///
+  /// In en, this message translates to:
+  /// **'by'**
+  String get budgetBenchmarkByYear;
+
+  /// No description provided for @budgetShareUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'A budget share is not shown because this estimate cannot be compared with the cited benchmark.'**
+  String get budgetShareUnavailable;
+
+  /// No description provided for @categoryBreakdownTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Category breakdown'**
+  String get categoryBreakdownTitle;
+
+  /// No description provided for @estimateCoverageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimate coverage'**
+  String get estimateCoverageTitle;
+
+  /// No description provided for @coverageIncludedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Included categories'**
+  String get coverageIncludedTitle;
+
+  /// No description provided for @coverageExcludedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Not included from available factors'**
+  String get coverageExcludedTitle;
+
+  /// No description provided for @coverageNoIncludedCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'No included categories are recorded in this estimate.'**
+  String get coverageNoIncludedCategories;
+
+  /// No description provided for @coverageNoExcludedCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'No other categories are listed in this estimate\'s available factor data.'**
+  String get coverageNoExcludedCategories;
+
+  /// No description provided for @coverageFactorScopeNote.
+  ///
+  /// In en, this message translates to:
+  /// **'This coverage list reflects categories present in the selected estimate factors; it does not infer categories absent from that data.'**
+  String get coverageFactorScopeNote;
+
+  /// No description provided for @demoOnlyTag.
+  ///
+  /// In en, this message translates to:
+  /// **'DEMO ONLY'**
+  String get demoOnlyTag;
+
+  /// No description provided for @foodFactor.
+  ///
+  /// In en, this message translates to:
+  /// **'Food'**
+  String get foodFactor;
+
+  /// No description provided for @wasteFactor.
+  ///
+  /// In en, this message translates to:
+  /// **'Waste'**
+  String get wasteFactor;
+
+  /// No description provided for @otherFactor.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get otherFactor;
+
   /// No description provided for @referenceUnavailable.
   ///
   /// In en, this message translates to:

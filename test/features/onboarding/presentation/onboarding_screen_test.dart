@@ -13,7 +13,17 @@ import 'package:sustainable_living_app/features/onboarding/data/footprint_estima
 import 'package:sustainable_living_app/features/settings/data/user_preferences_repository.dart';
 import 'package:sustainable_living_app/l10n/generated/app_localizations.dart';
 
+import '../../../support/text_layout_expectations.dart';
+
 void main() {
+  late FoundationReferences foundationReferences;
+  late RegionRepository regions;
+
+  setUpAll(() async {
+    foundationReferences = await FoundationReferences.loadBundled();
+    regions = await RegionRepository.loadBundled();
+  });
+
   testWidgets('selects a demo region before showing estimate questions', (
     tester,
   ) async {
@@ -77,13 +87,24 @@ void main() {
   });
 
   testWidgets(
-    'shows demo-only result, all references, and actual factor sources',
+    'shows the demo budget share, category context, and cited factor sources',
     (tester) async {
       final database = AppDatabase.forTesting(NativeDatabase.memory());
       addTearDown(database.close);
+      final catalog = RegionCatalog.fromRepository(regions);
+      final preferences = UserPreferencesRepository(
+        database: database,
+        supportedRegionIds: catalog.regions
+            .map((region) => region.regionId)
+            .toSet(),
+      );
       final router = createAppRouter(
         initialLocation: AppRoutes.onboarding,
         estimateRepository: FootprintEstimateRepository(database: database),
+        userPreferencesRepository: preferences,
+        regionCatalog: catalog,
+        regionRepository: regions,
+        foundationReferences: foundationReferences,
       );
       addTearDown(() async {
         await tester.pumpWidget(const SizedBox.shrink());
@@ -100,32 +121,53 @@ void main() {
         '100',
       );
       await tester.enterText(find.byKey(const ValueKey('travelInput')), '200');
+      tester.testTextInput.hide();
       await tester.tap(find.text('Calculate demo estimate'));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 400));
 
-      expect(find.text('DEMO ONLY — not a verified estimate'), findsOneWidget);
+      await _pumpUntilVisible(tester, findTextContaining('DEMO ONLY'));
+      expect(findTextContaining('DEMO ONLY'), findsWidgets);
       expect(find.text('Your estimated footprint'), findsOneWidget);
-      for (final label in [
-        'Regional average',
-        'Global average',
-        '1.5°C-aligned budget',
-      ]) {
-        await tester.scrollUntilVisible(
-          find.text(label),
-          250,
-          scrollable: find.byType(Scrollable).first,
-        );
-        expect(find.text(label), findsOneWidget);
-      }
+      final resultScrollable = find
+          .descendant(
+            of: find.byKey(const ValueKey('estimateResultList')),
+            matching: find.byType(Scrollable),
+          )
+          .first;
+      await tester.scrollUntilVisible(
+        findTextContaining('at least 1.8% of the 1.5° budget'),
+        250,
+        scrollable: resultScrollable,
+      );
+      expect(
+        findTextContaining('at least 1.8% of the 1.5° budget'),
+        findsOneWidget,
+      );
+      await tester.scrollUntilVisible(
+        find.text('Category breakdown'),
+        250,
+        scrollable: resultScrollable,
+      );
+      expect(find.text('Category breakdown'), findsOneWidget);
+      expect(findTextContaining('Electricity'), findsWidgets);
+      expect(findTextContaining('Transport'), findsWidgets);
+      await tester.scrollUntilVisible(
+        find.text('Estimate coverage'),
+        250,
+        scrollable: resultScrollable,
+      );
+      expect(find.text('Estimate coverage'), findsOneWidget);
       await tester.scrollUntilVisible(
         find.text('Factors used in this estimate'),
         250,
-        scrollable: find.byType(Scrollable).first,
+        scrollable: resultScrollable,
       );
       expect(find.text('Factors used in this estimate'), findsOneWidget);
-      expect(find.textContaining('Demonstration fixture only'), findsWidgets);
-      expect(find.textContaining('Publication year: 2026'), findsWidgets);
+      expect(findTextContaining('Demonstration fixture only'), findsWidgets);
+      expect(findTextContaining('Publication year: 2026'), findsWidgets);
+      expect(find.text('Regional average'), findsNothing);
+      expect(find.text('Global average'), findsNothing);
       expect(find.text('Sign in'), findsNothing);
     },
   );
@@ -135,9 +177,7 @@ void main() {
     (tester) async {
       final database = AppDatabase.forTesting(NativeDatabase.memory());
       addTearDown(database.close);
-      final regions = await RegionRepository.loadBundled();
       final catalog = RegionCatalog.fromRepository(regions);
-      final references = await FoundationReferences.loadBundled();
       final preferences = UserPreferencesRepository(
         database: database,
         supportedRegionIds: catalog.regions
@@ -150,7 +190,7 @@ void main() {
         userPreferencesRepository: preferences,
         regionCatalog: catalog,
         regionRepository: regions,
-        foundationReferences: references,
+        foundationReferences: foundationReferences,
       );
       addTearDown(() async {
         await tester.pumpWidget(const SizedBox.shrink());
@@ -168,6 +208,7 @@ void main() {
         '100',
       );
       await tester.enterText(find.byKey(const ValueKey('travelInput')), '200');
+      tester.testTextInput.hide();
       final calculateButton = find.text('Calculate demo estimate');
       await tester.ensureVisible(calculateButton);
       await tester.tap(calculateButton);
@@ -179,13 +220,11 @@ void main() {
   );
 
   testWidgets(
-    'uses the selected Pakistan pack and shows references without false rings',
+    'uses the selected Pakistan pack without an incompatible budget share',
     (tester) async {
       final database = AppDatabase.forTesting(NativeDatabase.memory());
       addTearDown(database.close);
-      final regions = await RegionRepository.loadBundled();
       final catalog = RegionCatalog.fromRepository(regions);
-      final references = await FoundationReferences.loadBundled();
       final preferences = UserPreferencesRepository(
         database: database,
         supportedRegionIds: catalog.regions
@@ -198,7 +237,7 @@ void main() {
         userPreferencesRepository: preferences,
         regionCatalog: catalog,
         regionRepository: regions,
-        foundationReferences: references,
+        foundationReferences: foundationReferences,
       );
       addTearDown(() async {
         await tester.pumpWidget(const SizedBox.shrink());
@@ -223,6 +262,7 @@ void main() {
         find.byKey(const ValueKey('electricityInput')),
         '100',
       );
+      tester.testTextInput.hide();
       final button = find.text('Calculate estimate');
       await tester.drag(find.byType(Scrollable).first, const Offset(0, -250));
       await tester.pump();
@@ -231,33 +271,46 @@ void main() {
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 300));
 
+      await _pumpUntilVisible(
+        tester,
+        find.byKey(const ValueKey('estimateRegionLabel')),
+      );
       expect(find.text('Your estimated footprint'), findsOneWidget);
-      expect(find.text('Pakistan'), findsOneWidget);
-      expect(find.text('34.70 kg CO2/year'), findsOneWidget);
-      expect(find.text('Currency: PKR'), findsOneWidget);
-      expect(find.text('Comparison unavailable'), findsWidgets);
-      expect(find.textContaining('Contextual reference only'), findsWidgets);
-
-      for (final reference in [
-        '0.72 t CO2/person',
-        '4.70 t CO2/person',
-        '2.50 t CO2e/person/year',
-      ]) {
-        await tester.scrollUntilVisible(
-          find.textContaining(reference),
-          250,
-          scrollable: find.byType(Scrollable).first,
-        );
-        expect(find.textContaining(reference), findsOneWidget);
-      }
+      expect(
+        tester
+            .widget<Text>(find.byKey(const ValueKey('estimateRegionLabel')))
+            .data,
+        'Pakistan',
+      );
+      expect(
+        tester
+            .widget<Text>(find.byKey(const ValueKey('estimateTotal')))
+            .textSpan!
+            .toPlainText(),
+        '34.70 kg CO2/year',
+      );
+      expect(find.text('Currency: PKR'), findsWidgets);
+      expect(
+        find.text(
+          'A budget share is not shown because this estimate cannot be compared with the cited benchmark.',
+        ),
+        findsOneWidget,
+      );
+      expect(find.byKey(const ValueKey('budgetShareBar')), findsNothing);
+      expect(find.text('Regional average'), findsNothing);
+      expect(find.text('Global average'), findsNothing);
+      expect(
+        findTextContaining('2.5 t CO2e/person/year by 2030'),
+        findsOneWidget,
+      );
 
       await tester.scrollUntilVisible(
-        find.textContaining('Yearly Electricity Data'),
+        findTextContaining('Yearly Electricity Data'),
         250,
         scrollable: find.byType(Scrollable).first,
       );
-      expect(find.textContaining('Ember'), findsOneWidget);
-      expect(find.textContaining('Publication year: 2025'), findsWidgets);
+      expect(findTextContaining('Ember'), findsOneWidget);
+      expect(findTextContaining('Publication year: 2025'), findsWidgets);
       final settings = await preferences.load();
       expect(settings.selectedRegionId, 'PK');
       expect(settings.displayLanguageTag, 'en');
@@ -325,9 +378,8 @@ class _TestApp extends StatelessWidget {
         theme: AppTheme.light,
         routerConfig: router,
         builder: (context, child) => MediaQuery(
-          data: MediaQuery.of(context).copyWith(
-            textScaler: TextScaler.linear(textScale),
-          ),
+          data: MediaQuery.of(context)
+              .copyWith(textScaler: TextScaler.linear(textScale)),
           child: child!,
         ),
         localizationsDelegates: const [

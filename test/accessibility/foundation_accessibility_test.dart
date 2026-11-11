@@ -8,12 +8,6 @@ import 'package:sustainable_living_app/features/account/data/account_repository.
 import 'package:sustainable_living_app/features/account/data/password_hasher.dart';
 import 'package:sustainable_living_app/features/account/presentation/account_screen.dart';
 import 'package:sustainable_living_app/features/home/presentation/home_screen.dart';
-import 'package:sustainable_living_app/features/onboarding/data/estimate_demo_fixtures.dart';
-import 'package:sustainable_living_app/features/onboarding/domain/footprint_calculator.dart';
-import 'package:sustainable_living_app/features/onboarding/domain/footprint_estimate.dart';
-import 'package:sustainable_living_app/features/onboarding/domain/reference_comparison.dart';
-import 'package:sustainable_living_app/features/onboarding/domain/reference_value.dart';
-import 'package:sustainable_living_app/features/onboarding/presentation/comparison_rings.dart';
 import 'package:sustainable_living_app/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:sustainable_living_app/features/settings/data/user_data_deleter.dart';
 import 'package:sustainable_living_app/features/settings/data/user_data_exporter.dart';
@@ -109,49 +103,6 @@ void main() {
     expect(firstFocus.nextFocus(), isTrue);
     await tester.pump();
     expect(secondFocus.hasFocus, isTrue);
-  });
-
-  testWidgets('comparison ring retains a complete semantic description', (
-    tester,
-  ) async {
-    final region = foundationEstimateDemoRegions.single;
-    final estimate = FootprintCalculator().calculate(
-      answers: const FootprintAnswers(
-        questionnaireVersion: '1',
-        periodYear: 2026,
-        activities: [
-          ActivityInput(activityId: 'electricity', amount: 100, unit: 'kWh'),
-        ],
-      ),
-      factors: [region.factors.first],
-    ) as CompleteEstimate;
-    final comparison = const ReferenceComparisonService().compare(
-      estimate: EstimateComparisonBasis(
-        value: 25,
-        unit: 'kg CO2e/year',
-        period: '2026',
-        accountingBoundary: 'annual consumption footprint per person',
-      ),
-      reference: region.references.first,
-      sources: {region.source.sourceId: region.source},
-    );
-
-    await tester.pumpWidget(
-      _TestApp(
-        child: ComparisonRing(
-          label: 'Regional average',
-          estimate: estimate,
-          comparison: comparison,
-        ),
-      ),
-    );
-
-    expect(
-      find.bySemanticsLabel(
-        RegExp('Regional average\\. 25\\.00 kg CO2e/year; reference'),
-      ),
-      findsOneWidget,
-    );
   });
 }
 

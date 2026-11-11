@@ -169,6 +169,58 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get budgetShareTitle => 'Lifestyle budget share';
+
+  @override
+  String get budgetSharePrefix => 'at least';
+
+  @override
+  String get budgetShareSuffix => 'of the';
+
+  @override
+  String get budgetBenchmarkByYear => 'by';
+
+  @override
+  String get budgetShareUnavailable =>
+      'A budget share is not shown because this estimate cannot be compared with the cited benchmark.';
+
+  @override
+  String get categoryBreakdownTitle => 'Category breakdown';
+
+  @override
+  String get estimateCoverageTitle => 'Estimate coverage';
+
+  @override
+  String get coverageIncludedTitle => 'Included categories';
+
+  @override
+  String get coverageExcludedTitle => 'Not included from available factors';
+
+  @override
+  String get coverageNoIncludedCategories =>
+      'No included categories are recorded in this estimate.';
+
+  @override
+  String get coverageNoExcludedCategories =>
+      'No other categories are listed in this estimate\'s available factor data.';
+
+  @override
+  String get coverageFactorScopeNote =>
+      'This coverage list reflects categories present in the selected estimate factors; it does not infer categories absent from that data.';
+
+  @override
+  String get demoOnlyTag => 'DEMO ONLY';
+
+  @override
+  String get foodFactor => 'Food';
+
+  @override
+  String get wasteFactor => 'Waste';
+
+  @override
+  String get otherFactor => 'Other';
+
+  @override
   String get referenceUnavailable => 'Comparison unavailable';
 
   @override

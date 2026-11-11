@@ -5,15 +5,13 @@ import '../../../app/router.dart';
 import '../../../core/accessibility/motion_aware_progress_indicator.dart';
 import '../../../core/data/regions/foundation_references.dart';
 import '../../../core/data/regions/region_pack_parser.dart';
-import '../../../core/theme/design_tokens.dart';
+import '../../../core/theme/app_theme.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../data/estimate_demo_fixtures.dart';
 import '../data/footprint_estimate_repository.dart';
 import '../domain/footprint_calculator.dart';
 import '../domain/footprint_estimate.dart';
-import '../domain/reference_comparison.dart';
-import '../domain/reference_value.dart';
-import 'comparison_rings.dart';
+import 'estimate_factor_disclosure.dart';
 
 class EstimateResultScreen extends StatefulWidget {
   const EstimateResultScreen({
@@ -41,6 +39,8 @@ class _EstimateResultScreenState extends State<EstimateResultScreen> {
   late final Future<_EstimateResultData> _result = _loadResult();
 
   Future<_EstimateResultData> _loadResult() async {
+    final references =
+        widget.foundationReferences ?? await FoundationReferences.loadBundled();
     final region = _resolveRegion();
     final repository = widget.repository;
     final CompleteEstimate estimate;
@@ -84,31 +84,16 @@ class _EstimateResultScreenState extends State<EstimateResultScreen> {
       estimate = restored;
     }
 
-    final basis = EstimateComparisonBasis(
-      value: estimate.value,
-      unit: estimate.unit,
-      period: estimate.periodYear.toString(),
-      accountingBoundary: region.accountingBoundary,
-    );
-    final comparisonService = const ReferenceComparisonService();
+    final benchmark = references.temperatureBudget;
+    final benchmarkSource = references.sources[benchmark.reference.sourceId];
+    if (benchmarkSource == null) {
+      throw StateError('The cited lifestyle budget source is unavailable.');
+    }
     return _EstimateResultData(
       region: region,
       estimate: estimate,
-      comparisons: region.references
-          .map(
-            (reference) => _NamedComparison(
-              reference: reference,
-              source: reference.sourceId == null
-                  ? null
-                  : region.sources[reference.sourceId],
-              comparison: comparisonService.compare(
-                estimate: basis,
-                reference: reference,
-                sources: region.sources,
-              ),
-            ),
-          )
-          .toList(growable: false),
+      benchmark: benchmark,
+      benchmarkSource: benchmarkSource,
     );
   }
 
@@ -117,14 +102,10 @@ class _EstimateResultScreenState extends State<EstimateResultScreen> {
       return _EstimateRegion.fromDemo(routeData.region);
     }
     if (widget.regionalOnboardingData case final routeData?) {
-      return _EstimateRegion.fromPack(routeData.region, routeData.references);
+      return _EstimateRegion.fromPack(routeData.region);
     }
     if (widget.selectedRegionPack case final pack?) {
-      final references = widget.foundationReferences;
-      if (references == null) {
-        throw StateError('Foundation references are unavailable.');
-      }
-      return _EstimateRegion.fromPack(pack, references);
+      return _EstimateRegion.fromPack(pack);
     }
     return _EstimateRegion.fromDemo(
       widget.demoRegion ?? foundationEstimateDemoRegions.single,
@@ -135,14 +116,18 @@ class _EstimateResultScreenState extends State<EstimateResultScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.estimateResult)),
+      appBar: AppBar(
+        toolbarHeight:
+            kToolbarHeight * MediaQuery.textScalerOf(context).scale(1),
+        title: Text(l10n.estimateResult, maxLines: 2),
+      ),
       body: FutureBuilder<_EstimateResultData>(
         future: _result,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Center(
               child: Padding(
-                padding: const EdgeInsets.all(DesignTokens.space4),
+                padding: const EdgeInsets.all(ClimateSpacing.space16),
                 child: Text(
                   '${l10n.estimateLoadFailure}\n${snapshot.error}',
                   textAlign: TextAlign.center,
@@ -157,8 +142,14 @@ class _EstimateResultScreenState extends State<EstimateResultScreen> {
             );
           }
 
+          final budgetShare = _budgetShare(data);
+          final categoryTotals = _displayCategoryTotals(data.estimate);
           return ListView(
-            padding: const EdgeInsets.all(DesignTokens.space4),
+            key: const ValueKey('estimateResultList'),
+            padding: const EdgeInsets.symmetric(
+              horizontal: ClimateSpacing.space16,
+              vertical: ClimateSpacing.space8,
+            ),
             children: [
               if (data.region.demoOnly)
                 Semantics(
@@ -171,36 +162,47 @@ class _EstimateResultScreenState extends State<EstimateResultScreen> {
                 )
               else
                 Text(l10n.regionalEstimateContext),
-              const SizedBox(height: DesignTokens.space2),
+              const SizedBox(height: ClimateSpacing.space8),
               Text(
                 _regionLabel(l10n, data.region.labelKey),
+                key: const ValueKey('estimateRegionLabel'),
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               if (data.region.currencyCode != null)
                 Text(l10n.regionCurrency(data.region.currencyCode!)),
-              const SizedBox(height: DesignTokens.space2),
-              Text(
-                l10n.estimateAnnualValue(
-                  data.estimate.displayValue,
-                  data.estimate.unit,
-                ),
-                style: Theme.of(context).textTheme.headlineSmall,
+              const SizedBox(height: ClimateSpacing.space16),
+              _buildTotal(context, l10n, data.estimate),
+              const Divider(height: ClimateSpacing.space24),
+              _BudgetSharePanel(
+                data: data,
+                share: budgetShare,
+                demoOnly: data.region.demoOnly,
               ),
-              const SizedBox(height: DesignTokens.space3),
-              for (final item in data.comparisons)
-                ComparisonRing(
-                  label: _referenceLabel(l10n, item.reference.referenceId),
-                  estimate: data.estimate,
-                  comparison: item.comparison,
-                  contextualReference: item.reference,
-                  contextualSource: item.source,
-                ),
-              const SizedBox(height: DesignTokens.space3),
-              CalculationFactorDisclosure(factors: data.estimate.factorsUsed),
-              const SizedBox(height: DesignTokens.space2),
+              const Divider(height: ClimateSpacing.space24),
+              _CategoryBreakdownPanel(
+                categories: categoryTotals,
+                estimate: data.estimate,
+                demoOnly: data.region.demoOnly,
+              ),
+              const Divider(height: ClimateSpacing.space24),
+              _CoveragePanel(
+                included: data.estimate.categoryTotals
+                    .map((item) => item.category)
+                    .toSet(),
+                available: data.region.factors
+                    .map((factor) => factor.category)
+                    .toSet(),
+                demoOnly: data.region.demoOnly,
+              ),
+              const Divider(height: ClimateSpacing.space24),
+              EstimateFactorDisclosure(
+                factors: data.estimate.factorsUsed,
+                demoOnly: data.region.demoOnly,
+              ),
+              const SizedBox(height: ClimateSpacing.space24),
               for (final assumption in data.estimate.assumptions)
                 Text(_assumptionLabel(l10n, assumption)),
-              const SizedBox(height: DesignTokens.space3),
+              const SizedBox(height: ClimateSpacing.space24),
               FilledButton(
                 onPressed: () => context.go(AppRoutes.home),
                 child: Text(l10n.continueToHome),
@@ -212,17 +214,82 @@ class _EstimateResultScreenState extends State<EstimateResultScreen> {
     );
   }
 
-  String _referenceLabel(AppLocalizations l10n, String referenceId) =>
-      switch (referenceId) {
-        'regional-average' => l10n.regionalAverage,
-        'global-average' => l10n.globalAverage,
-        'temperature-budget-1-5c' => l10n.temperatureBudget,
-        _ => throw ArgumentError.value(
-          referenceId,
-          'referenceId',
-          'Unknown estimate reference',
+  Widget _buildTotal(
+    BuildContext context,
+    AppLocalizations l10n,
+    CompleteEstimate estimate,
+  ) {
+    final numberStyle = Theme.of(context)
+        .extension<ClimateTypography>()!
+        .number;
+    final unitStyle = Theme.of(context).extension<ClimateTypography>()!.unit;
+    return Semantics(
+      label:
+          '${l10n.estimateResult}: ${estimate.displayValue} ${estimate.unit}',
+      child: Text.rich(
+        key: const ValueKey('estimateTotal'),
+        TextSpan(
+          children: [
+            TextSpan(
+              text: estimate.displayValue,
+              style: Theme.of(context).textTheme.headlineSmall
+                  ?.merge(numberStyle),
+            ),
+            TextSpan(
+              text: ' ${estimate.unit}',
+              style: Theme.of(context).textTheme.headlineSmall
+                  ?.merge(unitStyle),
+            ),
+          ],
         ),
-      };
+      ),
+    );
+  }
+
+  double? _budgetShare(_EstimateResultData data) {
+    final estimate = data.estimate;
+    final benchmark = data.benchmark;
+    final reference = benchmark.reference;
+    if (reference.referenceId != 'temperature-budget-1-5c' ||
+        reference.unit != 't CO2e/person/year' ||
+        reference.period != benchmark.targetYear.toString() ||
+        estimate.unit != 'kg CO2e/year' ||
+        !estimate.assumptions.contains('annualizedPerPerson') ||
+        reference.value <= 0) {
+      return null;
+    }
+    return estimate.value / (reference.value * 1000);
+  }
+
+  List<_DisplayCategoryTotal> _displayCategoryTotals(
+    CompleteEstimate estimate,
+  ) {
+    final totalCents = (estimate.value * 100).round();
+    final cents = estimate.categoryTotals
+        .map((category) => (category.value * 100).round())
+        .toList();
+    if (cents.isNotEmpty) {
+      final difference = totalCents - cents.fold<int>(0, (a, b) => a + b);
+      var largestIndex = 0;
+      for (var index = 1; index < estimate.categoryTotals.length; index++) {
+        if (estimate.categoryTotals[index].value >
+            estimate.categoryTotals[largestIndex].value) {
+          largestIndex = index;
+        }
+      }
+      cents[largestIndex] += difference;
+    }
+    return [
+      for (var index = 0; index < estimate.categoryTotals.length; index++)
+        _DisplayCategoryTotal(
+          category: estimate.categoryTotals[index].category,
+          value: cents[index] / 100,
+          share: estimate.value == 0
+              ? 0
+              : estimate.categoryTotals[index].value / estimate.value,
+        ),
+    ];
+  }
 
   String _regionLabel(AppLocalizations l10n, String labelKey) =>
       switch (labelKey) {
@@ -246,26 +313,273 @@ class _EstimateResultScreenState extends State<EstimateResultScreen> {
       };
 }
 
+class _BudgetSharePanel extends StatelessWidget {
+  const _BudgetSharePanel({
+    required this.data,
+    required this.share,
+    required this.demoOnly,
+  });
+
+  final _EstimateResultData data;
+  final double? share;
+  final bool demoOnly;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final numberStyle = Theme.of(context)
+        .extension<ClimateTypography>()!
+        .number;
+    final unitStyle = Theme.of(context).extension<ClimateTypography>()!.unit;
+    final reference = data.benchmark.reference;
+    final shareText = share == null ? null : (share! * 100).toStringAsFixed(1);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _SectionHeading(title: l10n.budgetShareTitle, demoOnly: demoOnly),
+        const SizedBox(height: ClimateSpacing.space8),
+        if (shareText case final percent?)
+          Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(text: '${l10n.budgetSharePrefix} '),
+                TextSpan(text: percent, style: numberStyle),
+                TextSpan(text: '% ${l10n.budgetShareSuffix} '),
+                TextSpan(text: '1.5°', style: numberStyle),
+                const TextSpan(text: ' budget'),
+              ],
+            ),
+          )
+        else
+          Text(l10n.budgetShareUnavailable),
+        const SizedBox(height: ClimateSpacing.space8),
+        if (share case final availableShare?) ...[
+          Semantics(
+            label: l10n.budgetShareTitle,
+            value: '$shareText%',
+            child: LinearProgressIndicator(
+              key: const ValueKey('budgetShareBar'),
+              value: availableShare.clamp(0, 1).toDouble(),
+              minHeight: 8,
+              backgroundColor: ClimateColors.surfaceSecondary,
+              color: ClimateColors.emissions,
+            ),
+          ),
+          const SizedBox(height: ClimateSpacing.space8),
+        ],
+        Text.rich(
+          TextSpan(
+            children: [
+              TextSpan(
+                text: '${reference.value.toStringAsFixed(1)} ',
+                style: numberStyle,
+              ),
+              TextSpan(text: reference.unit, style: unitStyle),
+              TextSpan(text: ' ${l10n.budgetBenchmarkByYear} '),
+              TextSpan(
+                text: data.benchmark.targetYear.toString(),
+                style: numberStyle,
+              ),
+            ],
+          ),
+        ),
+        MonoNumericText(
+          text: l10n.factorSourceDetails(
+            data.benchmarkSource.title,
+            data.benchmarkSource.publisher,
+          ),
+        ),
+        MonoNumericText(
+          text: l10n.publicationYear(data.benchmarkSource.publicationYear),
+        ),
+        MonoNumericText(text: data.benchmark.reference.methodology),
+        MonoNumericText(text: data.benchmark.reference.accountingBoundary),
+      ],
+    );
+  }
+}
+
+class _CategoryBreakdownPanel extends StatelessWidget {
+  const _CategoryBreakdownPanel({
+    required this.categories,
+    required this.estimate,
+    required this.demoOnly,
+  });
+
+  final List<_DisplayCategoryTotal> categories;
+  final CompleteEstimate estimate;
+  final bool demoOnly;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final numberStyle = Theme.of(context)
+        .extension<ClimateTypography>()!
+        .number;
+    final unitStyle = Theme.of(context).extension<ClimateTypography>()!.unit;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _SectionHeading(title: l10n.categoryBreakdownTitle, demoOnly: demoOnly),
+        const SizedBox(height: ClimateSpacing.space8),
+        for (final item in categories) ...[
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: ClimateSpacing.space8,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(child: Text(_categoryLabel(l10n, item.category))),
+                    Text.rich(
+                      key: ValueKey('categoryAmount-${item.category}'),
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: item.value.toStringAsFixed(2),
+                            style: numberStyle,
+                          ),
+                          TextSpan(text: ' ${estimate.unit}', style: unitStyle),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: ClimateSpacing.space8),
+                LinearProgressIndicator(
+                  key: ValueKey('categoryShareBar-${item.category}'),
+                  value: item.share.clamp(0, 1).toDouble(),
+                  minHeight: 8,
+                  backgroundColor: ClimateColors.surfaceSecondary,
+                  color: ClimateColors.emissions,
+                  semanticsLabel: _categoryLabel(l10n, item.category),
+                  semanticsValue: '${(item.share * 100).toStringAsFixed(1)}%',
+                ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                          text: (item.share * 100).toStringAsFixed(1),
+                          style: numberStyle,
+                        ),
+                        TextSpan(text: '%', style: unitStyle),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          if (item != categories.last) const Divider(height: 1),
+        ],
+      ],
+    );
+  }
+}
+
+class _CoveragePanel extends StatelessWidget {
+  const _CoveragePanel({
+    required this.included,
+    required this.available,
+    required this.demoOnly,
+  });
+
+  final Set<String> included;
+  final Set<String> available;
+  final bool demoOnly;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final excluded = available.difference(included);
+    return Container(
+      key: const ValueKey('estimateCoveragePanel'),
+      decoration: BoxDecoration(
+        color: ClimateColors.surfaceSecondary,
+        border: Border.all(color: ClimateColors.divider),
+        borderRadius: BorderRadius.circular(ClimateSpacing.radiusSmall),
+      ),
+      padding: const EdgeInsets.all(ClimateSpacing.space16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _SectionHeading(
+            title: l10n.estimateCoverageTitle,
+            demoOnly: demoOnly,
+          ),
+          const SizedBox(height: ClimateSpacing.space16),
+          Text(
+            l10n.coverageIncludedTitle,
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          Text(
+            included.isEmpty
+                ? l10n.coverageNoIncludedCategories
+                : included
+                      .map((category) => _categoryLabel(l10n, category))
+                      .join(', '),
+          ),
+          const SizedBox(height: ClimateSpacing.space16),
+          Text(
+            l10n.coverageExcludedTitle,
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          Text(
+            excluded.isEmpty
+                ? l10n.coverageNoExcludedCategories
+                : excluded
+                      .map((category) => _categoryLabel(l10n, category))
+                      .join(', '),
+          ),
+          const SizedBox(height: ClimateSpacing.space8),
+          Text(l10n.coverageFactorScopeNote),
+        ],
+      ),
+    );
+  }
+}
+
+class _SectionHeading extends StatelessWidget {
+  const _SectionHeading({required this.title, required this.demoOnly});
+
+  final String title;
+  final bool demoOnly;
+
+  @override
+  Widget build(BuildContext context) => Row(
+    children: [
+      Expanded(
+        child: Text(title, style: Theme.of(context).textTheme.titleMedium),
+      ),
+      if (demoOnly)
+        DemoOnlyTag(label: AppLocalizations.of(context)!.demoOnlyTag),
+    ],
+  );
+}
+
 class _EstimateResultData {
   const _EstimateResultData({
     required this.region,
     required this.estimate,
-    required this.comparisons,
+    required this.benchmark,
+    required this.benchmarkSource,
   });
 
   final _EstimateRegion region;
   final CompleteEstimate estimate;
-  final List<_NamedComparison> comparisons;
+  final FoundationTemperatureBudget benchmark;
+  final FoundationReferenceSource benchmarkSource;
 }
 
 class _EstimateRegion {
   const _EstimateRegion({
     required this.regionId,
     required this.labelKey,
-    required this.accountingBoundary,
     required this.factors,
-    required this.references,
-    required this.sources,
     required this.demoOnly,
     this.currencyCode,
   });
@@ -274,101 +588,47 @@ class _EstimateRegion {
       _EstimateRegion(
         regionId: region.regionId,
         labelKey: region.labelKey,
-        accountingBoundary: region.accountingBoundary,
         factors: region.factors,
-        references: region.references,
-        sources: {region.source.sourceId: region.source},
         demoOnly: region.demoOnly,
       );
 
-  factory _EstimateRegion.fromPack(
-    RegionDataPack pack,
-    FoundationReferences foundationReferences,
-  ) {
-    final sources = <String, ReferenceSource>{
-      for (final source in pack.sources.values)
-        source.sourceId: ReferenceSource(
-          sourceId: source.sourceId,
-          title: source.title,
-          publisher: source.publisher,
-          publicationYear: source.publicationYear,
-          url: source.url,
-        ),
-      for (final source in foundationReferences.sources.values)
-        source.sourceId: ReferenceSource(
-          sourceId: source.sourceId,
-          title: source.title,
-          publisher: source.publisher,
-          publicationYear: source.publicationYear,
-          url: source.url,
-          reportVersion: source.reportVersion,
-        ),
-    };
-    final regionalAverage = pack.regionalAverage;
-    final globalAverage = foundationReferences.globalAverage;
-    final target = foundationReferences.temperatureBudget.reference;
-    return _EstimateRegion(
-      regionId: pack.region.regionId,
-      labelKey: pack.region.nameKey,
-      accountingBoundary:
-          'Annual household footprint per person using ${pack.region.regionId} regional pack factors.',
-      factors: emissionFactorsFromRegionPack(pack),
-      references: [
-        ReferenceValue(
-          referenceId: 'regional-average',
-          value: regionalAverage.value,
-          unit: regionalAverage.unit,
-          period: regionalAverage.period,
-          sourceId: regionalAverage.sourceId,
-          methodology: regionalAverage.methodology,
-          accountingBoundary: regionalAverage.accountingBoundary,
-          uncertainty: regionalAverage.uncertainty,
-        ),
-        ReferenceValue(
-          referenceId: globalAverage.referenceId,
-          value: globalAverage.value,
-          unit: globalAverage.unit,
-          period: globalAverage.period,
-          sourceId: globalAverage.sourceId,
-          methodology: globalAverage.methodology,
-          accountingBoundary: globalAverage.accountingBoundary,
-          uncertainty: globalAverage.uncertainty,
-        ),
-        ReferenceValue(
-          referenceId: target.referenceId,
-          value: target.value,
-          unit: target.unit,
-          period: target.period,
-          sourceId: target.sourceId,
-          methodology: target.methodology,
-          accountingBoundary: target.accountingBoundary,
-          uncertainty: target.uncertainty,
-        ),
-      ],
-      sources: sources,
-      demoOnly: false,
-      currencyCode: pack.region.currencyCode,
-    );
-  }
+  factory _EstimateRegion.fromPack(RegionDataPack pack) => _EstimateRegion(
+    regionId: pack.region.regionId,
+    labelKey: pack.region.nameKey,
+    factors: emissionFactorsFromRegionPack(pack),
+    demoOnly: false,
+    currencyCode: pack.region.currencyCode,
+  );
 
   final String regionId;
   final String labelKey;
-  final String accountingBoundary;
   final List<EmissionFactor> factors;
-  final List<ReferenceValue> references;
-  final Map<String, ReferenceSource> sources;
   final bool demoOnly;
   final String? currencyCode;
 }
 
-class _NamedComparison {
-  const _NamedComparison({
-    required this.reference,
-    required this.comparison,
-    required this.source,
+class _DisplayCategoryTotal {
+  const _DisplayCategoryTotal({
+    required this.category,
+    required this.value,
+    required this.share,
   });
 
-  final ReferenceValue reference;
-  final ReferenceComparisonResult comparison;
-  final ReferenceSource? source;
+  final String category;
+  final double value;
+  final double share;
 }
+
+String _categoryLabel(AppLocalizations l10n, String category) =>
+    switch (category) {
+      'electricity' => l10n.electricityFactor,
+      'transport' => l10n.transportFactor,
+      'food' => l10n.foodFactor,
+      'waste' => l10n.wasteFactor,
+      'other' => l10n.otherFactor,
+      _ => throw ArgumentError.value(
+        category,
+        'category',
+        'Unknown estimate factor category',
+      ),
+    };

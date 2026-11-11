@@ -60,6 +60,19 @@ void main() {
       expect(estimate.unit, 'kg CO2e/year');
       expect(estimate.value, closeTo(45.15, 1e-10));
       expect(estimate.factorsUsed, [electricityFactor, transportFactor]);
+      expect(estimate.categoryTotals.map((item) => item.category).toList(), [
+        'electricity',
+        'transport',
+      ]);
+      expect(estimate.categoryTotals[0].value, 25.125);
+      expect(estimate.categoryTotals[1].value, closeTo(20.025, 1e-10));
+      expect(
+        estimate.categoryTotals.fold<double>(
+          0,
+          (sum, category) => sum + category.value,
+        ),
+        closeTo(estimate.value, 1e-10),
+      );
       expect(estimate.displayValue, '45.15');
     },
   );

@@ -100,17 +100,26 @@ class CompleteEstimate extends EstimateResult {
     required this.value,
     required this.unit,
     required this.factorsUsed,
+    required this.categoryTotals,
     required this.displayValue,
   });
 
   final double value;
   final String unit;
   final List<EmissionFactor> factorsUsed;
+  final List<EstimateCategoryTotal> categoryTotals;
   final String displayValue;
 
   @override
   EstimateCompletionState get completionState =>
       EstimateCompletionState.complete;
+}
+
+class EstimateCategoryTotal {
+  const EstimateCategoryTotal({required this.category, required this.value});
+
+  final String category;
+  final double value;
 }
 
 class IncompleteEstimate extends EstimateResult {

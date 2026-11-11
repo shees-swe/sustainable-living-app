@@ -114,6 +114,19 @@ rate/unit, and estimate coverage.
   review is recorded in
   `specs/002-visual-design-motion/evidence/very-large-text-review.md`.
 
+### Phase 4 result-screen validation
+
+- `flutter test test/features/onboarding`: passed (28 tests), including the
+  lower-bound budget share, share-bar cap, category total reconciliation,
+  data-derived included/excluded coverage, demo labels, no-comparison checks,
+  and the demo region-picker regression.
+- `flutter test test/accessibility/foundation_accessibility_test.dart`: passed
+  (5 tests), including the 200% onboarding accessibility check.
+- `flutter analyze`: no issues.
+- The result screen displays a budget bar only when the cited benchmark and
+  estimate use compatible annual per-person CO2e units. No full-suite or
+  device run was performed in this phase.
+
 ## Final profile comparison
 
 Repeat the Phase 1 profile command with identical device, renderer, refresh

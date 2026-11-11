@@ -23,6 +23,7 @@ class FootprintCalculator {
     }
 
     final usedFactors = <EmissionFactor>[];
+    final categoryTotals = <String, double>{};
     var total = 0.0;
     String? numeratorUnit;
     for (final activity in answers.activities) {
@@ -46,7 +47,13 @@ class FootprintCalculator {
       }
       numeratorUnit = factor.numeratorUnit;
       final amount = activity.amount!;
-      total += amount * factor.value;
+      final contribution = amount * factor.value;
+      total += contribution;
+      categoryTotals.update(
+        factor.category,
+        (value) => value + contribution,
+        ifAbsent: () => contribution,
+      );
       usedFactors.add(factor);
     }
 
@@ -63,6 +70,10 @@ class FootprintCalculator {
       value: total,
       unit: '$numeratorUnit/year',
       factorsUsed: List.unmodifiable(usedFactors),
+      categoryTotals: List.unmodifiable([
+        for (final entry in categoryTotals.entries)
+          EstimateCategoryTotal(category: entry.key, value: entry.value),
+      ]),
       displayValue: total.toStringAsFixed(2),
     );
   }
