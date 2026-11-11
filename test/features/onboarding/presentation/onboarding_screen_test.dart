@@ -111,6 +111,54 @@ void main() {
   );
 
   testWidgets(
+    'demo region selected through the regional picker produces a result',
+    (tester) async {
+      final database = AppDatabase.forTesting(NativeDatabase.memory());
+      addTearDown(database.close);
+      final regions = await RegionRepository.loadBundled();
+      final catalog = RegionCatalog.fromRepository(regions);
+      final references = await FoundationReferences.loadBundled();
+      final preferences = UserPreferencesRepository(
+        database: database,
+        supportedRegionIds: catalog.regions
+            .map((region) => region.regionId)
+            .toSet(),
+      );
+      final router = createAppRouter(
+        initialLocation: AppRoutes.onboarding,
+        estimateRepository: FootprintEstimateRepository(database: database),
+        userPreferencesRepository: preferences,
+        regionCatalog: catalog,
+        regionRepository: regions,
+        foundationReferences: references,
+      );
+      addTearDown(() async {
+        await tester.pumpWidget(const SizedBox.shrink());
+        router.dispose();
+      });
+
+      await tester.pumpWidget(_TestApp(router: router));
+      await _pumpUntilVisible(tester, find.text('Demo region (demo only)'));
+
+      await tester.tap(find.text('Demo region (demo only)'));
+      await tester.pump(const Duration(milliseconds: 100));
+
+      await tester.enterText(
+        find.byKey(const ValueKey('electricityInput')),
+        '100',
+      );
+      await tester.enterText(find.byKey(const ValueKey('travelInput')), '200');
+      final calculateButton = find.text('Calculate demo estimate');
+      await tester.ensureVisible(calculateButton);
+      await tester.tap(calculateButton);
+      await tester.pump();
+      await _pumpUntilVisible(tester, find.text('Your estimated footprint'));
+
+      expect(find.text('Your estimated footprint'), findsOneWidget);
+    },
+  );
+
+  testWidgets(
     'uses the selected Pakistan pack and shows references without false rings',
     (tester) async {
       final database = AppDatabase.forTesting(NativeDatabase.memory());

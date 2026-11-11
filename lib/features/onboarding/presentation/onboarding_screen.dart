@@ -62,7 +62,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Future<void> _loadSelectedRegion() async {
     final settings = await widget.preferences!.load();
     if (!mounted) return;
-    setState(() => _selectedRegionId = settings.selectedRegionId);
+    setState(() {
+      _selectedRegionId = settings.selectedRegionId;
+      _selectedRegion = _demoRegionForCatalogSelection(
+        settings.selectedRegionId,
+      );
+    });
   }
 
   @override
@@ -107,6 +112,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               onSelectionChanged: (regionId) {
                 setState(() {
                   _selectedRegionId = regionId;
+                  _selectedRegion = _demoRegionForCatalogSelection(regionId);
                   _answerError = null;
                 });
               },
@@ -216,12 +222,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       return;
     }
 
-    final period = isDemo
-        ? region?.period
-        : pack!.emissionFactors.first.validFrom;
-    final periodYear = isDemo
-        ? int.tryParse(period!)
-        : int.tryParse(period!.substring(0, 4));
+    final period = isDemo ? region?.period : _firstFactorValidFrom(pack);
+    final periodYear = period == null
+        ? null
+        : isDemo
+        ? int.tryParse(period)
+        : period.length >= 4
+        ? int.tryParse(period.substring(0, 4))
+        : null;
     if (periodYear == null) {
       setState(() {
         _answerError = AppLocalizations.of(context)!.estimateDataUnavailable;
@@ -244,11 +252,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       activities: activities,
     );
     if (isDemo) {
-      final demoRegion =
-          region ??
-          foundationEstimateDemoRegions.singleWhere(
-            (item) => item.regionId == _selectedRegionId,
-          );
+      final demoRegion = region;
+      if (demoRegion == null) {
+        setState(() {
+          _answerError = AppLocalizations.of(context)!.estimateDataUnavailable;
+        });
+        return;
+      }
       context.push(
         AppRoutes.estimateResult,
         extra: OnboardingRouteData(region: demoRegion, answers: answers),
@@ -271,6 +281,21 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         answers: answers,
       ),
     );
+  }
+
+  EstimateDemoRegion? _demoRegionForCatalogSelection(String? regionId) {
+    if (regionId == null) return null;
+    final catalogRegion = widget.regionCatalog!.regionById(regionId);
+    if (catalogRegion == null || !catalogRegion.demoOnly) return null;
+    for (final region in foundationEstimateDemoRegions) {
+      if (region.regionId == catalogRegion.regionId) return region;
+    }
+    return null;
+  }
+
+  String? _firstFactorValidFrom(RegionDataPack? pack) {
+    if (pack == null || pack.emissionFactors.isEmpty) return null;
+    return pack.emissionFactors.first.validFrom;
   }
 
   RegionDataPack? get _selectedPack {
