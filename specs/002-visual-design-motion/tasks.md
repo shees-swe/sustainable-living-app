@@ -146,10 +146,10 @@ Back works from a module, Settings, and estimate result; reduced motion and
 Very Large text checks pass; debug app launches on the Infinix. No new
 features/routes, navigation changes, or data/factor changes.
 
-- [ ] T043 Run the complete `flutter test` suite exactly once from the repository root and confirm all 104 foundation tests pass; record the command and result in `specs/002-visual-design-motion/quickstart.md`.
-- [ ] T044 Run `flutter analyze` from the repository root and resolve all findings; record the clean result in `specs/002-visual-design-motion/quickstart.md`.
-- [ ] T045 Run `test/app/router_test.dart` and verify Android system Back from a module, Settings, and estimate result returns to the expected Home/destination behavior; confirm the fix from commit `8a64545` is intact and record the device check in `specs/002-visual-design-motion/quickstart.md`.
-- [ ] T046 Run `test/core/accessibility/reduced_motion_test.dart`, `test/core/motion/motion_spec_test.dart`, and `test/accessibility/foundation_accessibility_test.dart`; confirm reduced-motion behavior, contrast/touch-target checks, and the complete Very Large text review recorded in `specs/002-visual-design-motion/evidence/very-large-text-review.md` have no failures.
+- [X] T043 Run the complete `flutter test` suite exactly once from the repository root and confirm all 104 foundation tests pass; record the command and result in `specs/002-visual-design-motion/quickstart.md`.
+- [X] T044 Run `flutter analyze` from the repository root and resolve all findings; record the clean result in `specs/002-visual-design-motion/quickstart.md`.
+- [X] T045 Run `test/app/router_test.dart` and verify Android system Back from a module, Settings, and estimate result returns to the expected Home/destination behavior; confirm the fix from commit `8a64545` is intact and record the device check in `specs/002-visual-design-motion/quickstart.md`.
+- [X] T046 Run `test/core/accessibility/reduced_motion_test.dart`, `test/core/motion/motion_spec_test.dart`, and `test/accessibility/foundation_accessibility_test.dart`; confirm reduced-motion behavior, contrast/touch-target checks, and the complete Very Large text review recorded in `specs/002-visual-design-motion/evidence/very-large-text-review.md` have no failures.
 - [ ] T047 Build the debug APK with `flutter build apk --debug`, install and launch it on the physical Infinix X678B, walk the existing onboarding/result, Home/module, Settings, and secondary-screen flows without network access, and record build artifact path and launch outcome in `specs/002-visual-design-motion/quickstart.md`.
 
 ---

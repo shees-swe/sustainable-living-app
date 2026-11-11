@@ -156,6 +156,34 @@ rate/unit, and estimate coverage.
 - There was no gate-breaking regression, so no performance fix or `motor`
   dependency was introduced.
 
+### Phase 6 final verification
+
+- `flutter test` ran once from the repository root: 126 tests passed, 0
+  failed. This includes the 104 foundation tests plus the motion/result tests
+  added in later phases.
+- `flutter analyze`: no issues.
+- Focused final checks passed (27 tests):
+  `flutter test test/app/router_test.dart
+  test/core/accessibility/reduced_motion_test.dart
+  test/core/motion/motion_spec_test.dart
+  test/accessibility/foundation_accessibility_test.dart`.
+- Back behavior passed: router tests cover system Back from a module and
+  Settings; the onboarding result-flow test covers Back from the estimate
+  result to region selection. No navigation changes were introduced, and the
+  regression checks for the fix from commit `8a64545` remain green.
+- Reduced-motion checks passed, including immediate route transitions and
+  final numeric values with `MediaQuery.disableAnimations`; the full Very
+  Large text review remains recorded in
+  `specs/002-visual-design-motion/evidence/very-large-text-review.md`.
+- `flutter build apk --debug` succeeded. APK:
+  `build/app/outputs/flutter-apk/app-debug.apk`.
+- The APK installed successfully over USB on Infinix X678B serial
+  `1026825381000731`. The MainActivity was started while Wi-Fi and mobile data
+  were temporarily disabled, then those settings were restored; the app
+  activity remains resumed. The startup log reported Impeller OpenGLES.
+- T047 remains pending for the user's visual launch/design confirmation and
+  on-device walkthrough; no visual acceptance is claimed.
+
 ## Final profile comparison
 
 Repeat the Phase 1 profile command with identical device, renderer, refresh
