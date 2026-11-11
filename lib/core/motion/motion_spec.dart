@@ -4,15 +4,18 @@ import 'package:flutter/physics.dart';
 import 'package:flutter/widgets.dart';
 
 abstract final class MotionSpec {
-  static const Duration medium = Duration(milliseconds: 300);
+  static const Duration instant = Duration.zero;
+  static const Duration optionalFade = Duration(milliseconds: 120);
+  static const Curve optionalFadeCurve = Curves.linear;
+  static const Curve numberTickCurve = Curves.linear;
 
   static Duration duration(bool reducedMotion, Duration duration) =>
-      reducedMotion ? Duration.zero : duration;
+      reducedMotion ? instant : duration;
 
   static final SpringDescription standardSpring = SpringDescription(
     mass: 1,
     stiffness: 220,
-    damping: 24,
+    damping: 32,
   );
 
   static SpringSimulation spring({

@@ -2,6 +2,7 @@ import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:sustainable_living_app/core/data/database/app_database.dart';
 import 'package:sustainable_living_app/core/data/regions/foundation_references.dart';
 import 'package:sustainable_living_app/core/theme/app_theme.dart';
@@ -153,7 +154,7 @@ void main() {
     expect(find.text('Regional average'), findsNothing);
     expect(find.text('Global average'), findsNothing);
     expect(find.textContaining('EPA'), findsNothing);
-    expect(find.byType(CircularProgressIndicator), findsNothing);
+    expect(find.byType(Skeletonizer), findsNothing);
   });
 
   testWidgets('result remains readable at Very Large text', (tester) async {
@@ -217,6 +218,7 @@ Future<void> _pumpResult(
   for (var attempt = 0; attempt < 20; attempt++) {
     await tester.pump(const Duration(milliseconds: 100));
     if (find.text('Your estimated footprint').evaluate().isNotEmpty) {
+      await tester.pump(const Duration(milliseconds: 120));
       return;
     }
   }

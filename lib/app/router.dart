@@ -41,6 +41,7 @@ import '../features/settings/presentation/privacy_policy_screen.dart';
 import '../features/settings/presentation/settings_screen.dart';
 import '../core/data/regions/region_catalog.dart';
 import '../core/accessibility/reduced_motion.dart';
+import '../core/motion/motion_spec.dart';
 import '../features/sustainable_living_challenges/presentation/module_destination_screen.dart'
     as challenges;
 import '../features/waste_reduction_tracker/presentation/module_destination_screen.dart'
@@ -182,7 +183,19 @@ GoRoute _appRoute({
       if (ReducedMotion.isEnabled(context)) {
         return NoTransitionPage<void>(key: state.pageKey, child: child);
       }
-      return MaterialPage<void>(key: state.pageKey, child: child);
+      return CustomTransitionPage<void>(
+        key: state.pageKey,
+        child: child,
+        transitionDuration: MotionSpec.optionalFade,
+        reverseTransitionDuration: MotionSpec.optionalFade,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+            FadeTransition(
+              opacity: animation.drive(
+                CurveTween(curve: MotionSpec.optionalFadeCurve),
+              ),
+              child: child,
+            ),
+      );
     },
   );
 }

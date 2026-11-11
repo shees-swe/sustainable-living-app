@@ -117,10 +117,10 @@ reduced motion on and off; verify instant final state under reduced motion, no
 bounce or overshoot, no blocked input, and correct loading completion/error
 behavior.
 
-- [ ] T037 [US2] Update `lib/core/motion/motion_spec.dart` and `lib/core/accessibility/reduced_motion.dart` so existing state changes are immediate, optional fades are approximately 120 ms, and applicable animations use interruptible `SpringSimulation`/`animateWith` with no bounce or overshoot while preserving the platform reduced-motion preference.
-- [ ] T038 [US2] Add a reusable numeric count/tick motion helper at `lib/core/motion/numeric_tick.dart` and focused tests at `test/core/motion/numeric_tick_test.dart`; use Plex Mono-ready numeric values, settle exactly at the destination, and bypass the count animation when reduced motion is enabled.
-- [ ] T039 [US2] Add `skeletonizer` to `pubspec.yaml`, implement a reusable loading placeholder in `lib/core/widgets/app_skeleton.dart`, and replace existing loading content in `lib/features/onboarding/presentation/estimate_result_screen.dart` without changing its existing success/error flow.
-- [ ] T040 [US2] Extend `test/core/accessibility/reduced_motion_test.dart`, `test/core/motion/motion_spec_test.dart`, and `test/accessibility/foundation_accessibility_test.dart` to verify changed spring/fade/count behavior, reduced-motion completion, input responsiveness, and loading placeholder semantics; run these focused tests and `flutter analyze`.
+- [X] T037 [US2] Update `lib/core/motion/motion_spec.dart` and `lib/core/accessibility/reduced_motion.dart` so existing state changes are immediate, optional fades are approximately 120 ms, and applicable animations use interruptible `SpringSimulation`/`animateWith` with no bounce or overshoot while preserving the platform reduced-motion preference.
+- [X] T038 [US2] Add a reusable numeric count/tick motion helper at `lib/core/motion/numeric_tick.dart` and focused tests at `test/core/motion/numeric_tick_test.dart`; use Plex Mono-ready numeric values, settle exactly at the destination, and bypass the count animation when reduced motion is enabled.
+- [X] T039 [US2] Add `skeletonizer` to `pubspec.yaml`, implement a reusable loading placeholder in `lib/core/widgets/app_skeleton.dart`, and replace existing loading content in `lib/features/onboarding/presentation/estimate_result_screen.dart` without changing its existing success/error flow.
+- [X] T040 [US2] Extend `test/core/accessibility/reduced_motion_test.dart`, `test/core/motion/motion_spec_test.dart`, and `test/accessibility/foundation_accessibility_test.dart` to verify changed spring/fade/count behavior, reduced-motion completion, input responsiveness, and loading placeholder semantics; run these focused tests and `flutter analyze`.
 
 ### US4 — Measured Performance Follow-Up (Priority: P2)
 

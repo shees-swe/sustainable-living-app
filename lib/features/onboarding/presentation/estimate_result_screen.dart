@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app/router.dart';
-import '../../../core/accessibility/motion_aware_progress_indicator.dart';
 import '../../../core/data/regions/foundation_references.dart';
 import '../../../core/data/regions/region_pack_parser.dart';
+import '../../../core/motion/numeric_tick.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/widgets/app_skeleton.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../data/estimate_demo_fixtures.dart';
 import '../data/footprint_estimate_repository.dart';
@@ -137,9 +138,7 @@ class _EstimateResultScreenState extends State<EstimateResultScreen> {
           }
           final data = snapshot.data;
           if (data == null) {
-            return Center(
-              child: MotionAwareProgressIndicator(semanticsLabel: l10n.loading),
-            );
+            return Center(child: AppSkeleton(semanticsLabel: l10n.loading));
           }
 
           final budgetShare = _budgetShare(data);
@@ -226,22 +225,15 @@ class _EstimateResultScreenState extends State<EstimateResultScreen> {
     return Semantics(
       label:
           '${l10n.estimateResult}: ${estimate.displayValue} ${estimate.unit}',
-      child: Text.rich(
-        key: const ValueKey('estimateTotal'),
-        TextSpan(
-          children: [
-            TextSpan(
-              text: estimate.displayValue,
-              style: Theme.of(context).textTheme.headlineSmall
-                  ?.merge(numberStyle),
-            ),
-            TextSpan(
-              text: ' ${estimate.unit}',
-              style: Theme.of(context).textTheme.headlineSmall
-                  ?.merge(unitStyle),
-            ),
-          ],
-        ),
+      child: NumericTick(
+        key: const ValueKey('estimateTotalNumericTick'),
+        textKey: const ValueKey('estimateTotal'),
+        value: estimate.value,
+        decimalPlaces: 2,
+        style: Theme.of(context).textTheme.headlineSmall!.merge(numberStyle),
+        suffix: ' ${estimate.unit}',
+        suffixStyle: Theme.of(context).textTheme.headlineSmall
+            ?.merge(unitStyle),
       ),
     );
   }

@@ -127,6 +127,32 @@ rate/unit, and estimate coverage.
   estimate use compatible annual per-person CO2e units. No full-suite or
   device run was performed in this phase.
 
+### Phase 5 motion pass (Part A)
+
+- Centralized state-change duration (`0 ms`) and optional fade duration
+  (`120 ms`) in `lib/core/motion/motion_spec.dart`. App route transitions use a
+  linear 120 ms fade; `MediaQuery.disableAnimations` selects `NoTransitionPage`.
+- Increased spring damping to an overdamped setting and tested monotonic
+  settling without overshoot. Reduced-motion durations resolve to zero.
+- Added `NumericTick` for the estimate total, using linear 120 ms interpolation
+  and the shared IBM Plex Mono styles; it reaches its exact destination and
+  displays it immediately when reduced motion is enabled.
+- Added `AppSkeleton` to the estimate result loading state. Its solid-color
+  effect and disabled switch animation are static, with a single accessible
+  loading label. Existing success and error states are unchanged.
+- `flutter test test/core/motion/motion_spec_test.dart
+  test/core/motion/numeric_tick_test.dart
+  test/core/accessibility/reduced_motion_test.dart test/app/router_test.dart`:
+  passed (24 tests), including actions remaining responsive during a number
+  tick and route transitions collapsing under reduced motion.
+- `flutter test test/features/onboarding`: passed (28 tests).
+- `flutter test test/accessibility/foundation_accessibility_test.dart`: passed
+  (6 tests), including the result-loading placeholder's accessible status
+  semantics.
+- `flutter analyze`: no issues. The full suite was not run.
+- Part B profile remeasurement is intentionally scheduled after the Part A
+  commit; T041–T042 remain pending until measurement evidence is available.
+
 ## Final profile comparison
 
 Repeat the Phase 1 profile command with identical device, renderer, refresh

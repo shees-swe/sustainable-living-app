@@ -276,6 +276,7 @@ void main() {
         find.byKey(const ValueKey('estimateRegionLabel')),
       );
       expect(find.text('Your estimated footprint'), findsOneWidget);
+      await tester.pump(const Duration(milliseconds: 120));
       expect(
         tester
             .widget<Text>(find.byKey(const ValueKey('estimateRegionLabel')))

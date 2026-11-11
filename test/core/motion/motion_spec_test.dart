@@ -1,15 +1,24 @@
 import 'package:flutter/physics.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sustainable_living_app/core/motion/motion_spec.dart';
 
 void main() {
+  test('centralizes instant changes and optional 120 ms fades', () {
+    expect(MotionSpec.instant, Duration.zero);
+    expect(MotionSpec.optionalFade, const Duration(milliseconds: 120));
+    expect(MotionSpec.optionalFadeCurve, Curves.linear);
+    expect(MotionSpec.numberTickCurve, Curves.linear);
+    expect(
+      MotionSpec.duration(false, MotionSpec.optionalFade),
+      MotionSpec.optionalFade,
+    );
+    expect(MotionSpec.duration(true, MotionSpec.optionalFade), Duration.zero);
+  });
+
   group('MotionSpec.spring', () {
     test('retargets from the requested current position', () {
-      final simulation = MotionSpec.spring(
-        start: 0.25,
-        end: 1,
-        velocity: 0,
-      );
+      final simulation = MotionSpec.spring(start: 0.25, end: 1, velocity: 0);
 
       expect(simulation.x(0), closeTo(0.25, 1e-9));
       expect(simulation.x(0.1), isNot(closeTo(0.25, 1e-3)));
@@ -54,6 +63,18 @@ void main() {
 
       expect(simulation.x(0), 1);
       expect(simulation.dx(0), 0);
+    });
+
+    test('settles without overshoot for a state change', () {
+      final simulation = MotionSpec.spring(start: 0, end: 1, velocity: 0);
+      var previous = simulation.x(0);
+
+      for (var milliseconds = 10; milliseconds <= 2000; milliseconds += 10) {
+        final value = simulation.x(milliseconds / 1000);
+        expect(value, greaterThanOrEqualTo(previous));
+        expect(value, lessThanOrEqualTo(1));
+        previous = value;
+      }
     });
   });
 }

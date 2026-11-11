@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sustainable_living_app/core/data/database/app_database.dart';
 import 'package:sustainable_living_app/core/theme/app_theme.dart';
+import 'package:sustainable_living_app/core/widgets/app_skeleton.dart';
 import 'package:sustainable_living_app/features/account/data/account_repository.dart';
 import 'package:sustainable_living_app/features/account/data/password_hasher.dart';
 import 'package:sustainable_living_app/features/account/presentation/account_screen.dart';
@@ -103,6 +104,23 @@ void main() {
     expect(firstFocus.nextFocus(), isTrue);
     await tester.pump();
     expect(secondFocus.hasFocus, isTrue);
+  });
+
+  testWidgets('loading placeholder exposes one accessible status label', (
+    tester,
+  ) async {
+    final semantics = tester.ensureSemantics();
+    await tester.pumpWidget(
+      const _TestApp(
+        textScale: 2,
+        child: Center(child: AppSkeleton(semanticsLabel: 'Loading estimate')),
+      ),
+    );
+
+    expect(find.bySemanticsLabel('Loading estimate'), findsOneWidget);
+    expect(find.bySemanticsLabel('Estimate result'), findsNothing);
+    expect(tester.takeException(), isNull);
+    semantics.dispose();
   });
 }
 

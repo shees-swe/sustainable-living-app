@@ -5,8 +5,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:sustainable_living_app/app/router.dart';
 import 'package:sustainable_living_app/core/accessibility/motion_aware_progress_indicator.dart';
 import 'package:sustainable_living_app/core/accessibility/reduced_motion.dart';
+import 'package:sustainable_living_app/core/motion/motion_spec.dart';
 import 'package:sustainable_living_app/core/theme/app_theme.dart';
+import 'package:sustainable_living_app/core/widgets/app_skeleton.dart';
 import 'package:sustainable_living_app/l10n/generated/app_localizations.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 void main() {
   for (final platform in [TargetPlatform.android, TargetPlatform.iOS]) {
@@ -55,6 +58,47 @@ void main() {
     );
 
     expect(reducedMotion, isTrue);
+  });
+
+  testWidgets('reduced motion makes the shared fade duration instant', (
+    tester,
+  ) async {
+    Duration? duration;
+    await tester.pumpWidget(
+      MediaQuery(
+        data: const MediaQueryData(disableAnimations: true),
+        child: Builder(
+          builder: (context) {
+            duration = ReducedMotion.duration(context, MotionSpec.optionalFade);
+            return const SizedBox.shrink();
+          },
+        ),
+      ),
+    );
+
+    expect(duration, Duration.zero);
+  });
+
+  testWidgets('skeleton loading keeps an accessible label without animation', (
+    tester,
+  ) async {
+    final semantics = tester.ensureSemantics();
+    await tester.pumpWidget(
+      const MediaQuery(
+        data: MediaQueryData(disableAnimations: true),
+        child: MaterialApp(
+          home: Scaffold(body: AppSkeleton(semanticsLabel: 'Loading estimate')),
+        ),
+      ),
+    );
+
+    expect(
+      find.byWidgetPredicate((widget) => widget is Skeletonizer),
+      findsOneWidget,
+    );
+    expect(find.bySemanticsLabel('Loading estimate'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+    semantics.dispose();
   });
 
   testWidgets('reduced motion replaces the animated progress indicator', (
@@ -110,5 +154,34 @@ void main() {
       router.dispose();
       debugDefaultTargetPlatformOverride = null;
     }
+  });
+
+  testWidgets('reduced motion skips route fades', (tester) async {
+    final router = createAppRouter(initialLocation: AppRoutes.home);
+    addTearDown(router.dispose);
+
+    await tester.pumpWidget(
+      MaterialApp.router(
+        theme: AppTheme.light,
+        routerConfig: router,
+        builder: (context, child) => MediaQuery(
+          data: MediaQuery.of(context).copyWith(disableAnimations: true),
+          child: child!,
+        ),
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: AppLocalizations.supportedLocales,
+      ),
+    );
+    await tester.pumpAndSettle();
+    router.go(AppRoutes.about);
+    await tester.pumpAndSettle();
+
+    expect(router.routeInformationProvider.value.uri.path, AppRoutes.about);
+    expect(find.byType(FadeTransition), findsNothing);
   });
 }

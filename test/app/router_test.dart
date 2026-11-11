@@ -23,6 +23,29 @@ void main() {
     expect(find.text('Sustainable Living Guide'), findsOneWidget);
   });
 
+  testWidgets('route changes use the shared 120 ms fade', (tester) async {
+    final router = createAppRouter(initialLocation: AppRoutes.home);
+    addTearDown(router.dispose);
+
+    await tester.pumpWidget(_TestApp(router: router));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Carbon Footprint Tracker'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 60));
+
+    var transition = tester.widget<FadeTransition>(
+      find.byType(FadeTransition).last,
+    );
+    expect(transition.opacity.value, greaterThan(0));
+    expect(transition.opacity.value, lessThan(1));
+
+    await tester.pump(const Duration(milliseconds: 60));
+    transition = tester.widget<FadeTransition>(
+      find.byType(FadeTransition).last,
+    );
+    expect(transition.opacity.value, 1);
+  });
+
   testWidgets('system Back from a module destination returns to Home', (
     tester,
   ) async {
