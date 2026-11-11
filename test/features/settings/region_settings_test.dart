@@ -9,6 +9,8 @@ import 'package:sustainable_living_app/features/settings/data/user_preferences_r
 import 'package:sustainable_living_app/features/settings/presentation/region_picker.dart';
 import 'package:sustainable_living_app/l10n/generated/app_localizations.dart';
 
+import '../../support/text_layout_expectations.dart';
+
 void main() {
   late AppDatabase database;
   late UserPreferencesRepository preferences;
@@ -98,19 +100,46 @@ void main() {
     expect(find.text('Demo region (demo only)'), findsOneWidget);
     expect(find.textContaining('DEMO ONLY'), findsNWidgets(2));
   });
+
+  testWidgets('region picker remains readable at Very Large text', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      _TestApp(preferences: preferences, catalog: catalog, textScale: 2),
+    );
+    await tester.pumpAndSettle();
+
+    expectNoTextOverlapOrClipping(tester, 'Region picker');
+    expect(tester.takeException(), isNull);
+
+    await tester.ensureVisible(find.text('Pakistan'));
+    await tester.tap(find.text('Pakistan'));
+    await tester.pumpAndSettle();
+    expectNoTextOverlapOrClipping(tester, 'Selected region picker');
+    expect(find.text('Currency: PKR'), findsWidgets);
+    expect(tester.takeException(), isNull);
+  });
 }
 
 class _TestApp extends StatelessWidget {
-  const _TestApp({required this.preferences, required this.catalog});
+  const _TestApp({
+    required this.preferences,
+    required this.catalog,
+    this.textScale = 1,
+  });
 
   final UserPreferencesRepository preferences;
   final RegionCatalog catalog;
+  final double textScale;
 
   @override
   Widget build(BuildContext context) => MaterialApp(
     theme: AppTheme.light,
     home: Scaffold(
-      body: RegionPicker(preferences: preferences, catalog: catalog),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [RegionPicker(preferences: preferences, catalog: catalog)],
+      ),
     ),
     localizationsDelegates: const [
       AppLocalizations.delegate,
@@ -119,5 +148,10 @@ class _TestApp extends StatelessWidget {
       GlobalCupertinoLocalizations.delegate,
     ],
     supportedLocales: AppLocalizations.supportedLocales,
+    builder: (context, child) => MediaQuery(
+      data: MediaQuery.of(context)
+          .copyWith(textScaler: TextScaler.linear(textScale)),
+      child: child!,
+    ),
   );
 }

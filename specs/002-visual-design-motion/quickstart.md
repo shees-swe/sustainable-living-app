@@ -101,6 +101,19 @@ interactions. Result has no comparison rings or former three-reference
 percentages; it has only the supported lower-bound benchmark, category bars,
 rate/unit, and estimate coverage.
 
+### Phase 3 Batch 3 validation
+
+- Focused account, Settings, region picker, privacy policy, and privacy action
+  widget tests passed, including their 200% text-scale layout checks.
+- `test/app/router_test.dart` passed its About, Gallery, and Contact 200%
+  text-scale coverage and system Back checks. The Home and module-destination
+  tests also passed after moving their shared text-layout assertions to
+  `test/support/text_layout_expectations.dart`.
+- `flutter analyze` completed with no issues.
+- Batch 3 did not run the full suite or any device tests. The Very Large text
+  review is recorded in
+  `specs/002-visual-design-motion/evidence/very-large-text-review.md`.
+
 ## Final profile comparison
 
 Repeat the Phase 1 profile command with identical device, renderer, refresh

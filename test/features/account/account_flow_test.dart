@@ -13,6 +13,8 @@ import 'package:sustainable_living_app/features/account/data/password_hasher.dar
 import 'package:sustainable_living_app/features/account/presentation/account_screen.dart';
 import 'package:sustainable_living_app/l10n/generated/app_localizations.dart';
 
+import '../../support/text_layout_expectations.dart';
+
 void main() {
   late AppDatabase database;
   late AccountRepository repository;
@@ -119,6 +121,22 @@ void main() {
     },
   );
 
+  testWidgets('account remains readable at Very Large text', (tester) async {
+    await tester.pumpWidget(
+      _TestApp(textScale: 2, child: AccountScreen(repository: repository)),
+    );
+
+    expect(
+      find.text('Account is optional. You can browse as a guest.'),
+      findsOneWidget,
+    );
+    expect(find.byKey(const ValueKey('accountIdentifier')), findsOneWidget);
+    expect(find.byKey(const ValueKey('accountPassword')), findsOneWidget);
+    expect(find.byKey(const ValueKey('accountSubmit')), findsOneWidget);
+    expectNoTextOverlapOrClipping(tester, 'Account');
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('account form reports registration and login errors locally', (
     tester,
   ) async {
@@ -175,10 +193,11 @@ class _FakePasswordHasher implements CredentialHasher {
 }
 
 class _TestApp extends StatelessWidget {
-  const _TestApp({this.child, this.router});
+  const _TestApp({this.child, this.router, this.textScale = 1});
 
   final Widget? child;
   final RouterConfig<Object>? router;
+  final double textScale;
 
   @override
   Widget build(BuildContext context) {
@@ -193,6 +212,11 @@ class _TestApp extends StatelessWidget {
               GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: AppLocalizations.supportedLocales,
+            builder: (context, child) => MediaQuery(
+              data: MediaQuery.of(context)
+                  .copyWith(textScaler: TextScaler.linear(textScale)),
+              child: child!,
+            ),
           )
         : MaterialApp.router(
             theme: AppTheme.light,
@@ -204,6 +228,11 @@ class _TestApp extends StatelessWidget {
               GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: AppLocalizations.supportedLocales,
+            builder: (context, child) => MediaQuery(
+              data: MediaQuery.of(context)
+                  .copyWith(textScaler: TextScaler.linear(textScale)),
+              child: child!,
+            ),
           );
     return ProviderScope(child: app);
   }

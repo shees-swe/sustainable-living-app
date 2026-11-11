@@ -55,3 +55,51 @@ screen.
 
 Pass: Home and all 11 module destinations use the shared Climate Instrument
 list-row and hairline-divider treatment and remain readable at Very Large text.
+
+## Batch 3 — Account, Settings, Privacy, and Secondary Destinations
+
+### Scope
+
+Review targets: `lib/features/account/presentation/account_screen.dart`,
+`lib/features/settings/presentation/settings_screen.dart`,
+`lib/features/settings/presentation/region_picker.dart`,
+`lib/features/settings/presentation/privacy_policy_screen.dart`,
+`lib/features/about/presentation/about_screen.dart`,
+`lib/features/gallery/presentation/gallery_screen.dart`, and
+`lib/features/contact/presentation/contact_screen.dart`.
+
+### Review check
+
+- Confirmed Account form labels, fields, actions, and feedback remain visible
+  and non-overlapping at 200% text scaling.
+- Confirmed Settings controls and region choices remain readable and
+  operable at 200% text scaling.
+- Confirmed the long-form privacy policy remains scrollable and readable at
+  200% text scaling, including its later sections; numeric glyphs use the
+  shared mono number style.
+- Confirmed the privacy deletion dialog remains readable at 200% text scaling.
+- Confirmed About, Gallery, and Contact content remains readable at 200%
+  text scaling. AppBar titles wrap onto multiple lines rather than
+  ellipsizing or overlapping content.
+- Confirmed no test-reported text overflow or overlap in these screens.
+
+### Validation evidence
+
+- Focused tests passed: `test/features/account/account_flow_test.dart`
+  (5 tests), `test/features/settings/settings_screen_test.dart` (4),
+  `test/features/settings/region_settings_test.dart` (4),
+  `test/features/settings/privacy_policy_screen_test.dart` (1),
+  `test/features/settings/privacy_actions_test.dart` (6), and
+  `test/app/router_test.dart` (6).
+- The shared helper dependents also passed:
+  `test/features/home/home_screen_test.dart` (4) and
+  `test/features/home/module_destination_test.dart` (4).
+- `flutter analyze`: no issues.
+- No device tests or full-suite run were performed in this batch.
+
+### Result
+
+Pass: Batch 3 retains existing account, settings, privacy, and secondary
+destination behavior while applying the shared Climate Instrument visual
+tokens. All reviewed screens pass their Very Large text/no-clipping and
+no-overlap checks.

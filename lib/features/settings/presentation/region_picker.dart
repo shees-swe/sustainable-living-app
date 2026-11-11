@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/accessibility/motion_aware_progress_indicator.dart';
 import '../../../core/data/regions/region_catalog.dart';
-import '../../../core/theme/design_tokens.dart';
+import '../../../core/theme/app_theme.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../data/user_preferences_repository.dart';
 
@@ -73,9 +73,9 @@ class _RegionPickerState extends State<RegionPicker> {
           children: [
             Text(
               l10n.chooseRegion,
-              style: Theme.of(context).textTheme.titleLarge,
+              style: Theme.of(context).textTheme.titleMedium,
             ),
-            const SizedBox(height: DesignTokens.space2),
+            const SizedBox(height: ClimateSpacing.space8),
             Text(
               l10n.displayLanguage(
                 settings.displayLanguageTag == 'en'
@@ -84,7 +84,7 @@ class _RegionPickerState extends State<RegionPicker> {
               ),
             ),
             if (selected != null && entry == null) ...[
-              const SizedBox(height: DesignTokens.space2),
+              const SizedBox(height: ClimateSpacing.space8),
               Text(
                 l10n.savedRegionUnavailable(selected),
                 style: TextStyle(color: Theme.of(context).colorScheme.error),
@@ -95,7 +95,7 @@ class _RegionPickerState extends State<RegionPicker> {
               onChanged: _selectRegion,
               child: Column(
                 children: [
-                  for (final region in widget.catalog.regions)
+                  for (final region in widget.catalog.regions) ...[
                     RadioListTile<String>(
                       contentPadding: EdgeInsets.zero,
                       title: Text(_regionName(l10n, region.nameKey)),
@@ -104,6 +104,8 @@ class _RegionPickerState extends State<RegionPicker> {
                           : Text(l10n.regionCurrency(region.currencyCode)),
                       value: region.regionId,
                     ),
+                    const Divider(height: 1),
+                  ],
                 ],
               ),
             ),
@@ -116,14 +118,14 @@ class _RegionPickerState extends State<RegionPicker> {
                   style: TextStyle(color: Theme.of(context).colorScheme.error),
                 )
               else ...[
-                const SizedBox(height: DesignTokens.space2),
+                const SizedBox(height: ClimateSpacing.space8),
                 Text(l10n.transportDataUnavailable),
                 Text(l10n.recipeImpactDataUnavailable),
               ],
             ],
             if (_errorMessage case final message?)
               Padding(
-                padding: const EdgeInsets.only(top: DesignTokens.space2),
+                padding: const EdgeInsets.only(top: ClimateSpacing.space8),
                 child: Text(
                   message,
                   style: TextStyle(color: Theme.of(context).colorScheme.error),

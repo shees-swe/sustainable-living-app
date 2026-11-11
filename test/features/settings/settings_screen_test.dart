@@ -10,6 +10,8 @@ import 'package:sustainable_living_app/features/settings/data/user_data_exporter
 import 'package:sustainable_living_app/features/settings/presentation/settings_screen.dart';
 import 'package:sustainable_living_app/l10n/generated/app_localizations.dart';
 
+import '../../support/text_layout_expectations.dart';
+
 void main() {
   late AppDatabase database;
   late int guestResetCalls;
@@ -23,6 +25,24 @@ void main() {
 
   tearDown(() async {
     await database.close();
+  });
+
+  testWidgets('settings remains readable at Very Large text', (tester) async {
+    await tester.pumpWidget(
+      _TestApp(
+        settings: _settings(
+          database: database,
+          onGuestReset: () async => guestResetCalls++,
+          onGuestReturn: () async => guestReturnCalls++,
+        ),
+        textScale: 2,
+      ),
+    );
+
+    expect(find.text('Privacy and personal data'), findsOneWidget);
+    expect(find.text('Privacy policy'), findsOneWidget);
+    expectNoTextOverlapOrClipping(tester, 'Settings');
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('shares the allowlisted export and reports the share result', (
@@ -145,9 +165,10 @@ SettingsScreen _settings({
 }
 
 class _TestApp extends StatelessWidget {
-  const _TestApp({required this.settings});
+  const _TestApp({required this.settings, this.textScale = 1});
 
   final SettingsScreen settings;
+  final double textScale;
 
   @override
   Widget build(BuildContext context) => MaterialApp(
@@ -160,5 +181,10 @@ class _TestApp extends StatelessWidget {
       GlobalCupertinoLocalizations.delegate,
     ],
     supportedLocales: AppLocalizations.supportedLocales,
+    builder: (context, child) => MediaQuery(
+      data: MediaQuery.of(context)
+          .copyWith(textScaler: TextScaler.linear(textScale)),
+      child: child!,
+    ),
   );
 }

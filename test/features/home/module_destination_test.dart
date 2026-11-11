@@ -7,7 +7,7 @@ import 'package:sustainable_living_app/core/theme/app_theme.dart';
 import 'package:sustainable_living_app/features/home/domain/module_destination.dart';
 import 'package:sustainable_living_app/l10n/generated/app_localizations.dart';
 
-import 'text_layout_expectations.dart';
+import '../../support/text_layout_expectations.dart';
 
 void main() {
   testWidgets('all module destinations remain readable at Very Large text', (

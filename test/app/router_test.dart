@@ -7,6 +7,8 @@ import 'package:sustainable_living_app/core/theme/app_theme.dart';
 import 'package:sustainable_living_app/features/home/domain/module_destination.dart';
 import 'package:sustainable_living_app/l10n/generated/app_localizations.dart';
 
+import '../support/text_layout_expectations.dart';
+
 void main() {
   testWidgets('guest can open Home without an account redirect', (
     tester,
@@ -122,12 +124,52 @@ void main() {
       await tester.pumpWidget(const SizedBox.shrink());
     }
   });
+
+  testWidgets('About, Gallery, and Contact remain readable at Very Large text', (
+    tester,
+  ) async {
+    for (final route in [
+      AppRoutes.about,
+      AppRoutes.gallery,
+      AppRoutes.contact,
+    ]) {
+      final router = createAppRouter(initialLocation: route);
+      await tester.pumpWidget(_TestApp(router: router, textScale: 2));
+      await tester.pumpAndSettle();
+
+      expect(router.routeInformationProvider.value.uri.path, route);
+      expectNoTextOverlapOrClipping(tester, route);
+      expect(tester.takeException(), isNull);
+      if (route == AppRoutes.about) {
+        expect(
+          find.textContaining('Sustainable Living Guide helps'),
+          findsOneWidget,
+        );
+      } else if (route == AppRoutes.gallery) {
+        expect(
+          find.text('No gallery images are available yet.'),
+          findsOneWidget,
+        );
+      } else {
+        expect(
+          find.text(
+            'Contact information is not available in this foundation version.',
+          ),
+          findsOneWidget,
+        );
+      }
+
+      await tester.pumpWidget(const SizedBox.shrink());
+      router.dispose();
+    }
+  });
 }
 
 class _TestApp extends StatelessWidget {
-  const _TestApp({required this.router});
+  const _TestApp({required this.router, this.textScale = 1});
 
   final RouterConfig<Object> router;
+  final double textScale;
 
   @override
   Widget build(BuildContext context) {
@@ -142,6 +184,11 @@ class _TestApp extends StatelessWidget {
           GlobalCupertinoLocalizations.delegate,
         ],
         supportedLocales: AppLocalizations.supportedLocales,
+        builder: (context, child) => MediaQuery(
+          data: MediaQuery.of(context)
+              .copyWith(textScaler: TextScaler.linear(textScale)),
+          child: child!,
+        ),
       ),
     );
   }

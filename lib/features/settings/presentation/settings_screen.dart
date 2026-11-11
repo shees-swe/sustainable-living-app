@@ -8,7 +8,7 @@ import 'package:share_plus/share_plus.dart';
 import '../../../app/router.dart';
 import '../../../core/accessibility/motion_aware_progress_indicator.dart';
 import '../../../core/data/regions/region_catalog.dart';
-import '../../../core/theme/design_tokens.dart';
+import '../../../core/theme/app_theme.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../data/user_data_deleter.dart';
 import '../data/user_data_exporter.dart';
@@ -140,29 +140,47 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final busy = _isExporting || _isDeleting;
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.settings)),
+      appBar: AppBar(
+        toolbarHeight:
+            kToolbarHeight * MediaQuery.textScalerOf(context).scale(1),
+        title: Text(l10n.settings, maxLines: 2),
+      ),
       body: ListView(
-        padding: const EdgeInsets.all(DesignTokens.space4),
+        padding: const EdgeInsets.symmetric(
+          horizontal: ClimateSpacing.space16,
+          vertical: ClimateSpacing.space8,
+        ),
         children: [
           if (widget.preferences != null && widget.regionCatalog != null) ...[
             RegionPicker(
               preferences: widget.preferences!,
               catalog: widget.regionCatalog!,
             ),
-            const SizedBox(height: DesignTokens.space4),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: ClimateSpacing.space16),
+              child: Divider(height: 1),
+            ),
           ],
-          Text(
-            l10n.privacyControls,
-            style: Theme.of(context).textTheme.titleLarge,
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: ClimateSpacing.space16,
+            ),
+            child: Text(
+              l10n.privacyControls,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
           ),
-          const SizedBox(height: DesignTokens.space2),
+          const Divider(height: 1),
           ListTile(
+            contentPadding: EdgeInsets.zero,
             leading: const Icon(Icons.policy_outlined),
             title: Text(l10n.privacyPolicy),
             trailing: const Icon(Icons.chevron_right),
             onTap: busy ? null : () => context.push(AppRoutes.privacyPolicy),
           ),
+          const Divider(height: 1),
           ListTile(
+            contentPadding: EdgeInsets.zero,
             leading: const Icon(Icons.file_upload_outlined),
             title: Text(l10n.exportMyData),
             subtitle: Text(l10n.exportDataDescription),
@@ -175,7 +193,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 : const Icon(Icons.chevron_right),
             onTap: busy ? null : _exportData,
           ),
+          const Divider(height: 1),
           ListTile(
+            contentPadding: EdgeInsets.zero,
             leading: const Icon(Icons.delete_outline),
             title: Text(l10n.deleteLocalData),
             subtitle: Text(l10n.deleteDataDescription),
@@ -189,7 +209,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             onTap: busy ? null : _requestDeletion,
           ),
           if (_status case final status?) ...[
-            const SizedBox(height: DesignTokens.space2),
+            const SizedBox(height: ClimateSpacing.space16),
             Semantics(
               liveRegion: true,
               child: Text(

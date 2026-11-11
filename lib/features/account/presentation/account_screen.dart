@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/theme/design_tokens.dart';
+import '../../../core/theme/app_theme.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../data/account_repository.dart';
 
@@ -87,22 +87,30 @@ class _AccountScreenState extends State<AccountScreen> {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.account)),
+      appBar: AppBar(
+        toolbarHeight:
+            kToolbarHeight * MediaQuery.textScalerOf(context).scale(1),
+        title: Text(l10n.account, maxLines: 2),
+      ),
       body: ListView(
-        padding: const EdgeInsets.all(DesignTokens.space4),
+        padding: const EdgeInsets.symmetric(
+          horizontal: ClimateSpacing.space16,
+          vertical: ClimateSpacing.space8,
+        ),
         children: [
           Text(
             l10n.accountOptionalGuest,
             style: Theme.of(context).textTheme.bodyLarge,
           ),
-          const SizedBox(height: DesignTokens.space3),
-          Padding(
-            padding: const EdgeInsets.only(bottom: DesignTokens.space2),
-            child: Text(
-              _isRegistering ? l10n.register : l10n.logIn,
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: ClimateSpacing.space16),
+            child: Divider(height: 1),
           ),
+          Text(
+            _isRegistering ? l10n.register : l10n.logIn,
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          const SizedBox(height: ClimateSpacing.space8),
           Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -117,7 +125,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   border: const OutlineInputBorder(),
                 ),
               ),
-              const SizedBox(height: DesignTokens.space3),
+              const SizedBox(height: ClimateSpacing.space16),
               TextField(
                 key: const ValueKey('accountPassword'),
                 controller: _passwordController,
@@ -132,7 +140,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   border: const OutlineInputBorder(),
                 ),
               ),
-              const SizedBox(height: DesignTokens.space3),
+              const SizedBox(height: ClimateSpacing.space16),
               FilledButton(
                 key: const ValueKey('accountSubmit'),
                 onPressed: _isSubmitting ? null : _submit,
@@ -151,7 +159,7 @@ class _AccountScreenState extends State<AccountScreen> {
             ],
           ),
           if (_message case final message?) ...[
-            const SizedBox(height: DesignTokens.space2),
+            const SizedBox(height: ClimateSpacing.space16),
             Semantics(
               liveRegion: true,
               child: Text(

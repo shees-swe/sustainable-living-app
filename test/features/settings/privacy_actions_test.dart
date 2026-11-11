@@ -12,7 +12,10 @@ import 'package:sustainable_living_app/core/theme/app_theme.dart';
 import 'package:sustainable_living_app/features/settings/data/user_data_deleter.dart';
 import 'package:sustainable_living_app/features/settings/data/user_data_exporter.dart';
 import 'package:sustainable_living_app/features/settings/presentation/privacy_policy_screen.dart';
+import 'package:sustainable_living_app/features/settings/presentation/settings_screen.dart';
 import 'package:sustainable_living_app/l10n/generated/app_localizations.dart';
+
+import '../../support/text_layout_expectations.dart';
 
 void main() {
   late AppDatabase database;
@@ -70,10 +73,43 @@ void main() {
 
     expect(find.text('Privacy policy'), findsOneWidget);
     expect(
-      find.textContaining('Your data stays on this device'),
+      findTextContaining('Your data stays on this device'),
       findsOneWidget,
     );
+    await tester.scrollUntilVisible(
+      findTextContaining('Export and deletion'),
+      250,
+      scrollable: find.byType(Scrollable).first,
+    );
     expect(find.textContaining('Export and deletion'), findsOneWidget);
+  });
+
+  testWidgets('deletion confirmation remains readable at Very Large text', (
+    tester,
+  ) async {
+    final settings = SettingsScreen(
+      exporter: UserDataExporter(database: database),
+      deleter: UserDataDeleter(
+        database: database,
+        closeDatabase: () async {},
+        deleteDatabaseFiles: () async {},
+        onGuestReset: () async {},
+      ),
+      onGuestReturn: () async {},
+    );
+    await tester.pumpWidget(_TestApp(textScale: 2, child: settings));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Delete local data'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Delete my data'), findsOneWidget);
+    expectNoTextOverlapOrClipping(
+      tester,
+      'Deletion confirmation',
+      within: find.byType(AlertDialog),
+    );
+    expect(tester.takeException(), isNull);
   });
 
   test(
@@ -231,9 +267,10 @@ Future<void> _insertAccountWithData(AppDatabase database) async {
 }
 
 class _TestApp extends StatelessWidget {
-  const _TestApp({required this.child});
+  const _TestApp({required this.child, this.textScale = 1});
 
   final Widget child;
+  final double textScale;
 
   @override
   Widget build(BuildContext context) => MaterialApp(
@@ -246,5 +283,10 @@ class _TestApp extends StatelessWidget {
       GlobalCupertinoLocalizations.delegate,
     ],
     supportedLocales: AppLocalizations.supportedLocales,
+    builder: (context, child) => MediaQuery(
+      data: MediaQuery.of(context)
+          .copyWith(textScaler: TextScaler.linear(textScale)),
+      child: child!,
+    ),
   );
 }

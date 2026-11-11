@@ -2,9 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-void expectNoTextOverlapOrClipping(WidgetTester tester, String screen) {
-  final paragraphs = find
-      .byType(Text)
+Finder findTextContaining(String value) => find.byWidgetPredicate((widget) {
+  final text = switch (widget) {
+    Text(:final data, :final textSpan) => data ?? textSpan?.toPlainText(),
+    SelectableText(:final data, :final textSpan) =>
+      data ?? textSpan?.toPlainText(),
+    _ => null,
+  };
+  return text?.contains(value) ?? false;
+});
+
+void expectNoTextOverlapOrClipping(
+  WidgetTester tester,
+  String screen, {
+  Finder? within,
+}) {
+  final textFinder = find.byWidgetPredicate(
+    (widget) => widget is Text || widget is SelectableText,
+  );
+  final paragraphFinder = within == null
+      ? textFinder
+      : find.descendant(of: within, matching: textFinder);
+  final paragraphs = paragraphFinder
       .evaluate()
       .map((element) => element.findRenderObject())
       .whereType<RenderParagraph>()

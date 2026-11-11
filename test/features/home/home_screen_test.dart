@@ -8,7 +8,7 @@ import 'package:sustainable_living_app/app/router.dart';
 import 'package:sustainable_living_app/core/theme/app_theme.dart';
 import 'package:sustainable_living_app/l10n/generated/app_localizations.dart';
 
-import 'text_layout_expectations.dart';
+import '../../support/text_layout_expectations.dart';
 
 void main() {
   testWidgets('renders all required Home modules and About Us for a guest', (

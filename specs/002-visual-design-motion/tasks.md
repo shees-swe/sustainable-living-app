@@ -79,14 +79,14 @@ Phase 6 for global confirmation.
 
 ### Batch 3 — Account, Settings, Privacy, and Secondary Destinations
 
-- [ ] T025 [P] [US1] Apply shared tokens and Very Large text wrapping to `lib/features/account/presentation/account_screen.dart`, preserving the existing registration and sign-in actions and flow.
-- [ ] T026 [P] [US1] Apply shared tokens and hairline list rows to `lib/features/settings/presentation/settings_screen.dart`, preserving every setting and its behavior.
-- [ ] T027 [P] [US1] Apply shared tokens and Very Large text wrapping to `lib/features/settings/presentation/region_picker.dart`, preserving current region choices and selection behavior.
-- [ ] T028 [P] [US1] Apply shared tokens and readable long-form typography to `lib/features/settings/presentation/privacy_policy_screen.dart`, preserving the existing policy text and privacy actions.
-- [ ] T029 [P] [US1] Apply shared tokens and Very Large text wrapping to `lib/features/about/presentation/about_screen.dart` without adding content or navigation.
-- [ ] T030 [P] [US1] Apply shared tokens and the specified empty-state language/layout to `lib/features/gallery/presentation/gallery_screen.dart` without adding gallery content.
-- [ ] T031 [P] [US1] Apply shared tokens and Very Large text wrapping to `lib/features/contact/presentation/contact_screen.dart` without changing its existing availability message or navigation.
-- [ ] T032 [US1] Extend `test/features/account/account_flow_test.dart`, `test/features/settings/settings_screen_test.dart`, `test/features/settings/region_settings_test.dart`, `test/features/settings/privacy_policy_screen_test.dart`, and `test/features/settings/privacy_actions_test.dart` with Very Large text/no-overlap coverage for changed Batch 3 screens; run those focused tests and `flutter analyze`, and record Batch 3 review in `specs/002-visual-design-motion/evidence/very-large-text-review.md`.
+- [X] T025 [P] [US1] Apply shared tokens and Very Large text wrapping to `lib/features/account/presentation/account_screen.dart`, preserving the existing registration and sign-in actions and flow.
+- [X] T026 [P] [US1] Apply shared tokens and hairline list rows to `lib/features/settings/presentation/settings_screen.dart`, preserving every setting and its behavior.
+- [X] T027 [P] [US1] Apply shared tokens and Very Large text wrapping to `lib/features/settings/presentation/region_picker.dart`, preserving current region choices and selection behavior.
+- [X] T028 [P] [US1] Apply shared tokens and readable long-form typography to `lib/features/settings/presentation/privacy_policy_screen.dart`, preserving the existing policy text and privacy actions.
+- [X] T029 [P] [US1] Apply shared tokens and Very Large text wrapping to `lib/features/about/presentation/about_screen.dart` without adding content or navigation.
+- [X] T030 [P] [US1] Apply shared tokens and the specified empty-state language/layout to `lib/features/gallery/presentation/gallery_screen.dart` without adding gallery content.
+- [X] T031 [P] [US1] Apply shared tokens and Very Large text wrapping to `lib/features/contact/presentation/contact_screen.dart` without changing its existing availability message or navigation.
+- [X] T032 [US1] Extend `test/features/account/account_flow_test.dart`, `test/features/settings/settings_screen_test.dart`, `test/features/settings/region_settings_test.dart`, `test/features/settings/privacy_policy_screen_test.dart`, and `test/features/settings/privacy_actions_test.dart` with Very Large text/no-overlap coverage for changed Batch 3 screens; run those focused tests and `flutter analyze`, and record Batch 3 review in `specs/002-visual-design-motion/evidence/very-large-text-review.md`.
 
 ---
 
