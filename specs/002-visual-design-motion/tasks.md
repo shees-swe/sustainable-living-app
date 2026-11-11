@@ -57,9 +57,9 @@ Phase 6 for global confirmation.
 
 ### Batch 1 — Onboarding and Region Selection
 
-- [ ] T009 [US1] Apply the shared theme, list/divider hierarchy, spacing, and responsive Very Large text layout to `lib/features/onboarding/presentation/onboarding_screen.dart` without changing onboarding questions, region flow, or routes.
-- [ ] T010 [US1] Extend `test/features/onboarding/presentation/onboarding_screen_test.dart` to cover the Climate Instrument onboarding and region-selection states at Very Large text, asserting no clipped text, overlap, or unusable control.
-- [ ] T011 [US1] Verify Batch 1 with `flutter test test/features/onboarding/presentation/onboarding_screen_test.dart` and `flutter analyze`; record the Very Large text review for `lib/features/onboarding/presentation/onboarding_screen.dart` in `specs/002-visual-design-motion/evidence/very-large-text-review.md`.
+- [X] T009 [US1] Apply the shared theme, list/divider hierarchy, spacing, and responsive Very Large text layout to `lib/features/onboarding/presentation/onboarding_screen.dart` without changing onboarding questions, region flow, or routes.
+- [X] T010 [US1] Extend `test/features/onboarding/presentation/onboarding_screen_test.dart` to cover the Climate Instrument onboarding and region-selection states at Very Large text, asserting no clipped text, overlap, or unusable control.
+- [X] T011 [US1] Verify Batch 1 with `flutter test test/features/onboarding/presentation/onboarding_screen_test.dart` and `flutter analyze`; record the Very Large text review for `lib/features/onboarding/presentation/onboarding_screen.dart` in `specs/002-visual-design-motion/evidence/very-large-text-review.md`.
 
 ### Batch 2 — Home and All Module Destinations
 

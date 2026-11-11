@@ -37,6 +37,26 @@ void main() {
     expect(find.text('Annual travel (km)'), findsOneWidget);
   });
 
+  testWidgets('onboarding stays readable and unclipped at Very Large text', (
+    tester,
+  ) async {
+    final router = createAppRouter(initialLocation: AppRoutes.onboarding);
+    addTearDown(() async {
+      await tester.pumpWidget(const SizedBox.shrink());
+      router.dispose();
+    });
+
+    await tester.pumpWidget(_TestApp(router: router, textScale: 2.0));
+    await _pumpUntilVisible(tester, find.text('Choose a region'));
+
+    await tester.tap(find.text('Demo region (demo only)'));
+    await tester.pump(const Duration(milliseconds: 100));
+
+    expect(find.text('Annual electricity use (kWh)'), findsOneWidget);
+    expect(find.text('Annual travel (km)'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('can skip onboarding and continue as a guest', (tester) async {
     final router = createAppRouter(initialLocation: AppRoutes.onboarding);
     addTearDown(() async {
@@ -203,13 +223,13 @@ void main() {
         find.byKey(const ValueKey('electricityInput')),
         '100',
       );
-      await tester.scrollUntilVisible(
-        find.text('Calculate estimate'),
-        250,
-        scrollable: find.byType(Scrollable).first,
-      );
-      await tester.tap(find.text('Calculate estimate'));
-      await tester.pumpAndSettle();
+      final button = find.text('Calculate estimate');
+      await tester.drag(find.byType(Scrollable).first, const Offset(0, -250));
+      await tester.pump();
+      await tester.ensureVisible(button);
+      await tester.tap(button);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
 
       expect(find.text('Your estimated footprint'), findsOneWidget);
       expect(find.text('Pakistan'), findsOneWidget);
@@ -243,7 +263,8 @@ void main() {
       expect(settings.displayLanguageTag, 'en');
 
       await tester.binding.handlePopRoute();
-      await tester.pumpAndSettle();
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
       expect(find.text('Choose a region'), findsOneWidget);
     },
   );
@@ -264,7 +285,11 @@ void main() {
       find.byKey(const ValueKey('electricityInput')),
       '100',
     );
-    await tester.tap(find.text('Calculate demo estimate'));
+    final button = find.text('Calculate demo estimate');
+    await tester.drag(find.byType(Scrollable).first, const Offset(0, -200));
+    await tester.pump();
+    await tester.ensureVisible(button);
+    await tester.tap(button);
     await tester.pump();
 
     expect(
@@ -288,9 +313,10 @@ Future<void> _pumpUntilVisible(WidgetTester tester, Finder finder) async {
 }
 
 class _TestApp extends StatelessWidget {
-  const _TestApp({required this.router});
+  const _TestApp({required this.router, this.textScale = 1});
 
   final RouterConfig<Object> router;
+  final double textScale;
 
   @override
   Widget build(BuildContext context) {
@@ -298,6 +324,12 @@ class _TestApp extends StatelessWidget {
       child: MaterialApp.router(
         theme: AppTheme.light,
         routerConfig: router,
+        builder: (context, child) => MediaQuery(
+          data: MediaQuery.of(context).copyWith(
+            textScaler: TextScaler.linear(textScale),
+          ),
+          child: child!,
+        ),
         localizationsDelegates: const [
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,

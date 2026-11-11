@@ -6,7 +6,7 @@ import '../../../core/data/regions/foundation_references.dart';
 import '../../../core/data/regions/region_catalog.dart';
 import '../../../core/data/regions/region_pack_parser.dart';
 import '../../../core/data/regions/region_repository.dart';
-import '../../../core/theme/design_tokens.dart';
+import '../../../core/theme/app_theme.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../data/estimate_demo_fixtures.dart';
 import '../domain/footprint_estimate.dart';
@@ -91,105 +91,188 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ) ==
             true;
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.onboarding)),
-      body: ListView(
-        padding: const EdgeInsets.all(DesignTokens.space4),
-        children: [
-          Text(
-            l10n.onboardingIntro,
-            style: Theme.of(context).textTheme.bodyLarge,
+      appBar: AppBar(
+        title: Text(l10n.onboarding),
+      ),
+      body: SafeArea(
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(
+            16,
+            20,
+            16,
+            20,
           ),
-          const SizedBox(height: DesignTokens.space3),
-          if (!_hasRegionalData)
+          children: [
             Text(
-              l10n.chooseRegion,
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-          if (_hasRegionalData)
-            RegionPicker(
-              preferences: widget.preferences!,
-              catalog: widget.regionCatalog!,
-              onSelectionChanged: (regionId) {
-                setState(() {
-                  _selectedRegionId = regionId;
-                  _selectedRegion = _demoRegionForCatalogSelection(regionId);
-                  _answerError = null;
-                });
-              },
-            )
-          else
-            RadioGroup<String>(
-              groupValue: _selectedRegion?.regionId,
-              onChanged: (regionId) {
-                if (regionId == null) return;
-                final selectedRegion = foundationEstimateDemoRegions
-                    .where((region) => region.regionId == regionId)
-                    .first;
-                setState(() {
-                  _selectedRegion = selectedRegion;
-                  _answerError = null;
-                });
-              },
-              child: Column(
-                children: [
-                  for (final region in foundationEstimateDemoRegions)
-                    RadioListTile<String>(
-                      contentPadding: EdgeInsets.zero,
-                      title: Text(_regionLabel(l10n, region.labelKey)),
-                      value: region.regionId,
-                    ),
-                ],
+              l10n.onboardingIntro,
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                color: Theme.of(context).colorScheme.onSurface,
+                height: 1.5,
               ),
             ),
-          if (isDemoSelection || selectedPack != null) ...[
-            const SizedBox(height: DesignTokens.space2),
-            TextField(
-              key: const ValueKey('electricityInput'),
-              controller: _electricityController,
-              keyboardType: const TextInputType.numberWithOptions(
-                decimal: true,
+            const SizedBox(height: 20),
+            DecoratedBox(
+              decoration: const BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    color: ClimateColors.divider,
+                    width: 1,
+                  ),
+                ),
               ),
-              decoration: InputDecoration(labelText: l10n.annualElectricityUse),
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: _hasRegionalData
+                    ? RegionPicker(
+                        preferences: widget.preferences!,
+                        catalog: widget.regionCatalog!,
+                        onSelectionChanged: (regionId) {
+                          setState(() {
+                            _selectedRegionId = regionId;
+                            _selectedRegion =
+                                _demoRegionForCatalogSelection(regionId);
+                            _answerError = null;
+                          });
+                        },
+                      )
+                    : Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (!_hasRegionalData)
+                            Text(
+                              l10n.chooseRegion,
+                              style: Theme.of(context).textTheme.titleLarge,
+                            ),
+                          const SizedBox(height: 8),
+                          RadioGroup<String>(
+                            groupValue: _selectedRegion?.regionId,
+                            onChanged: (regionId) {
+                              if (regionId == null) return;
+                              final selectedRegion = foundationEstimateDemoRegions
+                                  .where((region) => region.regionId == regionId)
+                                  .first;
+                              setState(() {
+                                _selectedRegion = selectedRegion;
+                                _answerError = null;
+                              });
+                            },
+                            child: Column(
+                              children: [
+                                for (final region in foundationEstimateDemoRegions)
+                                  Container(
+                                    decoration: const BoxDecoration(
+                                      border: Border(
+                                        bottom: BorderSide(
+                                          color: ClimateColors.divider,
+                                          width: 1,
+                                        ),
+                                      ),
+                                    ),
+                                    child: RadioListTile<String>(
+                                      contentPadding: EdgeInsets.zero,
+                                      title: Text(
+                                        _regionLabel(l10n, region.labelKey),
+                                      ),
+                                      value: region.regionId,
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+              ),
             ),
-            if (hasTransportInput) ...[
-              const SizedBox(height: DesignTokens.space2),
+            if (isDemoSelection || selectedPack != null) ...[
+              const SizedBox(height: 20),
               TextField(
-                key: const ValueKey('travelInput'),
-                controller: _travelController,
+                key: const ValueKey('electricityInput'),
+                controller: _electricityController,
                 keyboardType: const TextInputType.numberWithOptions(
                   decimal: true,
                 ),
-                decoration: InputDecoration(labelText: l10n.annualTravel),
+                decoration: InputDecoration(
+                  labelText: l10n.annualElectricityUse,
+                  filled: true,
+                  fillColor: Theme.of(context).colorScheme.surface,
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 14,
+                  ),
+                ),
               ),
-            ] else ...[
-              const SizedBox(height: DesignTokens.space2),
-              Text(l10n.transportDataUnavailable),
-              const SizedBox(height: DesignTokens.space2),
-              Text(l10n.regionalEstimateContext),
-            ],
-            if (_answerError != null) ...[
-              const SizedBox(height: DesignTokens.space2),
-              Text(
-                _answerError!,
-                style: TextStyle(color: Theme.of(context).colorScheme.error),
+              if (hasTransportInput) ...[
+                const SizedBox(height: 16),
+                TextField(
+                  key: const ValueKey('travelInput'),
+                  controller: _travelController,
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
+                  decoration: InputDecoration(
+                    labelText: l10n.annualTravel,
+                    filled: true,
+                    fillColor: Theme.of(context).colorScheme.surface,
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 14,
+                    ),
+                  ),
+                ),
+              ] else ...[
+                const SizedBox(height: 16),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: Text(
+                    l10n.transportDataUnavailable,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  l10n.regionalEstimateContext,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
+              if (_answerError != null) ...[
+                const SizedBox(height: 12),
+                Text(
+                  _answerError!,
+                  style: TextStyle(color: Theme.of(context).colorScheme.error),
+                ),
+              ],
+              const SizedBox(height: 24),
+              FilledButton(
+                onPressed: _continueToEstimate,
+                style: Theme.of(context).filledButtonTheme.style?.copyWith(
+                  minimumSize: const WidgetStatePropertyAll(
+                    Size.fromHeight(48),
+                  ),
+                  padding: const WidgetStatePropertyAll(
+                    EdgeInsets.symmetric(vertical: 12),
+                  ),
+                ),
+                child: Text(
+                  isDemoSelection
+                      ? l10n.calculateDemoEstimate
+                      : l10n.calculateSourcedEstimate,
+                ),
               ),
             ],
-            const SizedBox(height: DesignTokens.space3),
-            FilledButton(
-              onPressed: _continueToEstimate,
-              child: Text(
-                isDemoSelection
-                    ? l10n.calculateDemoEstimate
-                    : l10n.calculateSourcedEstimate,
+            const SizedBox(height: 20),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton(
+                onPressed: () => context.go(AppRoutes.home),
+                child: Text(l10n.skipAndContinueAsGuest),
               ),
             ),
           ],
-          const SizedBox(height: DesignTokens.space2),
-          TextButton(
-            onPressed: () => context.go(AppRoutes.home),
-            child: Text(l10n.skipAndContinueAsGuest),
-          ),
-        ],
+        ),
       ),
     );
   }
