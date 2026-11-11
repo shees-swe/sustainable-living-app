@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/theme/design_tokens.dart';
+import '../../../core/theme/app_theme.dart';
 import '../../../l10n/generated/app_localizations.dart';
 
 class FoundationModuleScreen extends StatelessWidget {
@@ -14,34 +14,36 @@ class FoundationModuleScreen extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(title: Text(title)),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(DesignTokens.space6),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                Icons.eco_outlined,
-                size: 48,
-                color: theme.colorScheme.primary,
-                semanticLabel: l10n.foundationDestination,
-              ),
-              const SizedBox(height: DesignTokens.space3),
-              Text(
-                l10n.foundationDestination,
-                style: theme.textTheme.titleMedium,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: DesignTokens.space1),
-              Text(
-                l10n.moduleDetailsComingSoon,
-                style: theme.textTheme.bodyMedium,
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
+      appBar: AppBar(
+        toolbarHeight:
+            kToolbarHeight * MediaQuery.textScalerOf(context).scale(1),
+        title: Text(title, maxLines: 2),
+      ),
+      body: ListView(
+        padding: const EdgeInsets.symmetric(
+          horizontal: ClimateSpacing.space16,
+          vertical: ClimateSpacing.space8,
         ),
+        children: [
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: Icon(
+              Icons.eco_outlined,
+              size: 48,
+              color: theme.colorScheme.primary,
+              semanticLabel: l10n.foundationDestination,
+            ),
+            title: Text(
+              l10n.foundationDestination,
+              style: theme.textTheme.titleMedium,
+            ),
+            subtitle: Text(
+              l10n.moduleDetailsComingSoon,
+              style: theme.textTheme.bodyMedium,
+            ),
+          ),
+          const Divider(height: 1),
+        ],
       ),
     );
   }

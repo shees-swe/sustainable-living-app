@@ -8,6 +8,8 @@ import 'package:sustainable_living_app/app/router.dart';
 import 'package:sustainable_living_app/core/theme/app_theme.dart';
 import 'package:sustainable_living_app/l10n/generated/app_localizations.dart';
 
+import 'text_layout_expectations.dart';
+
 void main() {
   testWidgets('renders all required Home modules and About Us for a guest', (
     tester,
@@ -58,7 +60,7 @@ void main() {
     await tester.pumpAndSettle();
 
     final carbonEntry = find.widgetWithText(
-      OutlinedButton,
+      ListTile,
       'Carbon Footprint Tracker',
     );
     expect(carbonEntry, findsOneWidget);
@@ -76,6 +78,44 @@ void main() {
       find.text('Detailed features will be available in a future update.'),
       findsOneWidget,
     );
+  });
+
+  testWidgets('Home remains readable at Very Large text', (tester) async {
+    final router = createAppRouter(initialLocation: AppRoutes.home);
+    addTearDown(() async {
+      await tester.pumpWidget(const SizedBox.shrink());
+      router.dispose();
+    });
+
+    await tester.pumpWidget(_TestApp(router: router, textScale: 2));
+    await tester.pumpAndSettle();
+
+    final scrollable = find.byType(Scrollable).first;
+    for (final title in _moduleTitles) {
+      await tester.scrollUntilVisible(
+        find.text(title),
+        300,
+        scrollable: scrollable,
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text(title), findsOneWidget);
+      expectNoTextOverlapOrClipping(tester, title);
+      expect(
+        tester.takeException(),
+        isNull,
+        reason: '$title must not overflow',
+      );
+    }
+
+    await tester.scrollUntilVisible(
+      find.text('About Us'),
+      300,
+      scrollable: scrollable,
+    );
+    expect(find.text('About Us'), findsOneWidget);
+    expectNoTextOverlapOrClipping(tester, 'About Us');
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('Gallery and Contact Us are available only in secondary nav', (
@@ -116,9 +156,10 @@ const _moduleTitles = [
 ];
 
 class _TestApp extends StatelessWidget {
-  const _TestApp({required this.router});
+  const _TestApp({required this.router, this.textScale = 1});
 
   final RouterConfig<Object> router;
+  final double textScale;
 
   @override
   Widget build(BuildContext context) {
@@ -126,6 +167,11 @@ class _TestApp extends StatelessWidget {
       child: MaterialApp.router(
         theme: AppTheme.light,
         routerConfig: router,
+        builder: (context, child) => MediaQuery(
+          data: MediaQuery.of(context)
+              .copyWith(textScaler: TextScaler.linear(textScale)),
+          child: child!,
+        ),
         localizationsDelegates: const [
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,

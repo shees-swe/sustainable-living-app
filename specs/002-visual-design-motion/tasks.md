@@ -63,19 +63,19 @@ Phase 6 for global confirmation.
 
 ### Batch 2 — Home and All Module Destinations
 
-- [ ] T012 [P] [US1] Apply shared tokens and the list-row design to `lib/features/home/presentation/home_screen.dart` and `lib/features/home/presentation/foundation_module_screen.dart`, preserving every existing Home entry and destination.
-- [ ] T013 [P] [US1] Apply shared tokens, hairline dividers, and Very Large text wrapping to `lib/features/carbon_footprint_tracker/presentation/module_destination_screen.dart` without changing its destination behavior.
-- [ ] T014 [P] [US1] Apply shared tokens, hairline dividers, and Very Large text wrapping to `lib/features/eco_friendly_product_suggestions/presentation/module_destination_screen.dart` without changing its destination behavior.
-- [ ] T015 [P] [US1] Apply shared tokens, hairline dividers, and Very Large text wrapping to `lib/features/sustainable_living_challenges/presentation/module_destination_screen.dart` without changing its destination behavior.
-- [ ] T016 [P] [US1] Apply shared tokens, hairline dividers, and Very Large text wrapping to `lib/features/certifications_guide/presentation/module_destination_screen.dart` without changing its destination behavior.
-- [ ] T017 [P] [US1] Apply shared tokens, hairline dividers, and Very Large text wrapping to `lib/features/waste_reduction_tracker/presentation/module_destination_screen.dart` without changing its destination behavior.
-- [ ] T018 [P] [US1] Apply shared tokens, hairline dividers, and Very Large text wrapping to `lib/features/recipes_meal_planning/presentation/module_destination_screen.dart` without changing its destination behavior.
-- [ ] T019 [P] [US1] Apply shared tokens, hairline dividers, and Very Large text wrapping to `lib/features/energy_conservation_tips/presentation/module_destination_screen.dart` without changing its destination behavior.
-- [ ] T020 [P] [US1] Apply shared tokens, hairline dividers, and Very Large text wrapping to `lib/features/eco_travel_suggestions/presentation/module_destination_screen.dart` without changing its destination behavior.
-- [ ] T021 [P] [US1] Apply shared tokens, hairline dividers, and Very Large text wrapping to `lib/features/community_journal/presentation/module_destination_screen.dart` without changing its destination behavior.
-- [ ] T022 [P] [US1] Apply shared tokens, hairline dividers, and Very Large text wrapping to `lib/features/progress_dashboard/presentation/module_destination_screen.dart` without changing its destination behavior.
-- [ ] T023 [P] [US1] Apply shared tokens, hairline dividers, and Very Large text wrapping to `lib/features/educational_content/presentation/module_destination_screen.dart` without changing its destination behavior.
-- [ ] T024 [US1] Extend `test/features/home/home_screen_test.dart` and `test/features/home/module_destination_test.dart` with Very Large text/no-overlap assertions for Home and all 11 module destinations; run those focused tests and `flutter analyze`, and record Batch 2 review in `specs/002-visual-design-motion/evidence/very-large-text-review.md`.
+- [X] T012 [P] [US1] Apply shared tokens and the list-row design to `lib/features/home/presentation/home_screen.dart` and `lib/features/home/presentation/foundation_module_screen.dart`, preserving every existing Home entry and destination.
+- [X] T013 [P] [US1] Apply shared tokens, hairline dividers, and Very Large text wrapping to `lib/features/carbon_footprint_tracker/presentation/module_destination_screen.dart` without changing its destination behavior.
+- [X] T014 [P] [US1] Apply shared tokens, hairline dividers, and Very Large text wrapping to `lib/features/eco_friendly_product_suggestions/presentation/module_destination_screen.dart` without changing its destination behavior.
+- [X] T015 [P] [US1] Apply shared tokens, hairline dividers, and Very Large text wrapping to `lib/features/sustainable_living_challenges/presentation/module_destination_screen.dart` without changing its destination behavior.
+- [X] T016 [P] [US1] Apply shared tokens, hairline dividers, and Very Large text wrapping to `lib/features/certifications_guide/presentation/module_destination_screen.dart` without changing its destination behavior.
+- [X] T017 [P] [US1] Apply shared tokens, hairline dividers, and Very Large text wrapping to `lib/features/waste_reduction_tracker/presentation/module_destination_screen.dart` without changing its destination behavior.
+- [X] T018 [P] [US1] Apply shared tokens, hairline dividers, and Very Large text wrapping to `lib/features/recipes_meal_planning/presentation/module_destination_screen.dart` without changing its destination behavior.
+- [X] T019 [P] [US1] Apply shared tokens, hairline dividers, and Very Large text wrapping to `lib/features/energy_conservation_tips/presentation/module_destination_screen.dart` without changing its destination behavior.
+- [X] T020 [P] [US1] Apply shared tokens, hairline dividers, and Very Large text wrapping to `lib/features/eco_travel_suggestions/presentation/module_destination_screen.dart` without changing its destination behavior.
+- [X] T021 [P] [US1] Apply shared tokens, hairline dividers, and Very Large text wrapping to `lib/features/community_journal/presentation/module_destination_screen.dart` without changing its destination behavior.
+- [X] T022 [P] [US1] Apply shared tokens, hairline dividers, and Very Large text wrapping to `lib/features/progress_dashboard/presentation/module_destination_screen.dart` without changing its destination behavior.
+- [X] T023 [P] [US1] Apply shared tokens, hairline dividers, and Very Large text wrapping to `lib/features/educational_content/presentation/module_destination_screen.dart` without changing its destination behavior.
+- [X] T024 [US1] Extend `test/features/home/home_screen_test.dart` and `test/features/home/module_destination_test.dart` with Very Large text/no-overlap assertions for Home and all 11 module destinations; run those focused tests and `flutter analyze`, and record Batch 2 review in `specs/002-visual-design-motion/evidence/very-large-text-review.md`.
 
 ### Batch 3 — Account, Settings, Privacy, and Secondary Destinations
 

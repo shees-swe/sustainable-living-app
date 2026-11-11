@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../app/router.dart';
 import '../../../core/icons/app_icons.dart';
-import '../../../core/theme/design_tokens.dart';
+import '../../../core/theme/app_theme.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../domain/module_destination.dart';
 
@@ -18,7 +18,9 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.appTitle),
+        toolbarHeight:
+            kToolbarHeight * MediaQuery.textScalerOf(context).scale(1),
+        title: Text(l10n.appTitle, maxLines: 2),
         actions: [
           PopupMenuButton<String>(
             tooltip: l10n.moreNavigation,
@@ -45,70 +47,46 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
       body: ListView(
-        padding: const EdgeInsets.all(DesignTokens.space4),
+        padding: const EdgeInsets.symmetric(
+          horizontal: ClimateSpacing.space16,
+          vertical: ClimateSpacing.space8,
+        ),
         children: [
           if (onViewEstimate != null) ...[
-            SizedBox(
-              width: double.infinity,
-              child: OutlinedButton.icon(
-                onPressed: onViewEstimate,
-                icon: const Icon(AppIcons.chartLineUp),
-                label: Text(l10n.viewEstimate),
-                style: OutlinedButton.styleFrom(
-                  minimumSize: const Size.fromHeight(56),
-                ),
-              ),
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: const Icon(AppIcons.chartLineUp),
+              title: Text(l10n.viewEstimate),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: onViewEstimate,
             ),
-            const SizedBox(height: DesignTokens.space2),
+            const Divider(height: 1),
           ],
           Padding(
-            padding: const EdgeInsets.only(
-              bottom: DesignTokens.space3,
-              top: DesignTokens.space2,
+            padding: const EdgeInsets.symmetric(
+              vertical: ClimateSpacing.space16,
             ),
             child: Text(
               l10n.exploreModules,
-              style: Theme.of(context).textTheme.titleLarge,
+              style: Theme.of(context).textTheme.titleMedium,
             ),
           ),
           for (final destination in ModuleDestination.modules) ...[
-            SizedBox(
-              width: double.infinity,
-              child: OutlinedButton.icon(
-                onPressed: () => context.push(destination.path),
-                icon: Icon(_moduleIcon(destination.id)),
-                label: Text(_moduleTitle(l10n, destination.titleKey)),
-                style: OutlinedButton.styleFrom(
-                  alignment: Alignment.centerLeft,
-                  minimumSize: const Size.fromHeight(56),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: DesignTokens.space4,
-                    vertical: DesignTokens.space3,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                      DesignTokens.radiusMedium,
-                    ),
-                  ),
-                ),
-              ),
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: Icon(_moduleIcon(destination.id)),
+              title: Text(_moduleTitle(l10n, destination.titleKey)),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => context.push(destination.path),
             ),
-            const SizedBox(height: DesignTokens.space2),
+            const Divider(height: 1),
           ],
-          SizedBox(
-            width: double.infinity,
-            child: TextButton.icon(
-              onPressed: () => context.push(AppRoutes.about),
-              icon: const Icon(AppIcons.info),
-              label: Text(l10n.aboutUs),
-              style: TextButton.styleFrom(
-                minimumSize: const Size.fromHeight(56),
-                alignment: Alignment.centerLeft,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: DesignTokens.space4,
-                ),
-              ),
-            ),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: const Icon(AppIcons.info),
+            title: Text(l10n.aboutUs),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => context.push(AppRoutes.about),
           ),
         ],
       ),
