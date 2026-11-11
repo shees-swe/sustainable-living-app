@@ -150,8 +150,11 @@ rate/unit, and estimate coverage.
   (6 tests), including the result-loading placeholder's accessible status
   semantics.
 - `flutter analyze`: no issues. The full suite was not run.
-- Part B profile remeasurement is intentionally scheduled after the Part A
-  commit; T041–T042 remain pending until measurement evidence is available.
+- Part B was run after the Part A commit. All five scenarios passed the
+  build/raster p95 gate; the baseline comparison is recorded in
+  `specs/002-visual-design-motion/evidence/final-performance-report.md`.
+- There was no gate-breaking regression, so no performance fix or `motor`
+  dependency was introduced.
 
 ## Final profile comparison
 

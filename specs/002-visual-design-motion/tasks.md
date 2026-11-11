@@ -131,8 +131,8 @@ identical profile conditions and close only data-supported performance gaps.
 3–5 repeats, and at least 600 steady-state frames per repeat; compare separate
 build/raster p95 against 16.67 ms per thread.
 
-- [ ] T041 [US4] After Phases 2–5, rerun every scenario in `integration_test/foundation_motion_test.dart` on the same Infinix X678B profile-mode setup with Impeller verified active, identical actions, 3–5 repeats, and at least 600 steady-state frames per repeat; save separate before/after build, raster, and totalSpan percentile comparisons and per-thread p95 decisions in `specs/002-visual-design-motion/evidence/final-performance-report.md`.
-- [ ] T042 [US4] If `specs/002-visual-design-motion/evidence/final-performance-report.md` reports any per-thread p95 above 16.67 ms, trace that exact failing scenario, document its measured cause and smallest justified mitigation in `specs/002-visual-design-motion/evidence/performance-fix-decision.md`, change only the implicated existing source file, and rerun that scenario with Phase 1 sample/repeat requirements; if all scenarios pass, record no further optimization and do not add `motor`.
+- [X] T041 [US4] After Phases 2–5, rerun every scenario in `integration_test/foundation_motion_test.dart` on the same Infinix X678B profile-mode setup with Impeller verified active, identical actions, 3–5 repeats, and at least 600 steady-state frames per repeat; save separate before/after build, raster, and totalSpan percentile comparisons and per-thread p95 decisions in `specs/002-visual-design-motion/evidence/final-performance-report.md`.
+- [X] T042 [US4] If `specs/002-visual-design-motion/evidence/final-performance-report.md` reports any per-thread p95 above 16.67 ms, trace that exact failing scenario, document its measured cause and smallest justified mitigation in `specs/002-visual-design-motion/evidence/performance-fix-decision.md`, change only the implicated existing source file, and rerun that scenario with Phase 1 sample/repeat requirements; if all scenarios pass, record no further optimization and do not add `motor`.
 
 ---
 
