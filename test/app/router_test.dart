@@ -143,6 +143,11 @@ void main() {
         await _pumpUntilVisible(tester, find.text('Plastic-Free Week'));
       } else if (destination.id == 'wasteReductionTracker') {
         await _pumpUntilVisible(tester, find.text('No waste logged yet.'));
+      } else if (destination.id == 'energyConservationTips') {
+        await _pumpUntilVisible(
+          tester,
+          find.text('Use fans before air conditioning'),
+        );
       } else {
         await tester.pumpAndSettle();
       }
@@ -170,6 +175,9 @@ void main() {
         );
       } else if (destination.id == 'wasteReductionTracker') {
         expect(find.text('No waste logged yet.'), findsOneWidget);
+      } else if (destination.id == 'energyConservationTips') {
+        expect(find.text('Search by title or text'), findsOneWidget);
+        expect(find.text('Use fans before air conditioning'), findsOneWidget);
       } else {
         expect(find.text('Foundation destination'), findsOneWidget);
         expect(

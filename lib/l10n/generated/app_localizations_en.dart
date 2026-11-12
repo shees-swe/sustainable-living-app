@@ -860,6 +860,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get energyConservationTips => 'Energy Conservation Tips';
 
   @override
+  String get energyTipSearchLabel => 'Search by title or text';
+
+  @override
+  String get energyTipClearSearch => 'Clear energy tip search';
+
+  @override
+  String get energyTipCategoryFilter => 'Category';
+
+  @override
+  String get energyTipAllCategories => 'All categories';
+
+  @override
+  String get energyTipNoMatches =>
+      'No energy tips match your current search and category.';
+
+  @override
+  String get energyTipClearFilters => 'Clear search and category';
+
+  @override
+  String get energyTipCatalogLoadFailure => 'Energy tips could not be loaded.';
+
+  @override
   String get ecoTravelSuggestions => 'Eco-Travel Suggestions';
 
   @override

@@ -1581,6 +1581,48 @@ abstract class AppLocalizations {
   /// **'Energy Conservation Tips'**
   String get energyConservationTips;
 
+  /// No description provided for @energyTipSearchLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by title or text'**
+  String get energyTipSearchLabel;
+
+  /// No description provided for @energyTipClearSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear energy tip search'**
+  String get energyTipClearSearch;
+
+  /// No description provided for @energyTipCategoryFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get energyTipCategoryFilter;
+
+  /// No description provided for @energyTipAllCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'All categories'**
+  String get energyTipAllCategories;
+
+  /// No description provided for @energyTipNoMatches.
+  ///
+  /// In en, this message translates to:
+  /// **'No energy tips match your current search and category.'**
+  String get energyTipNoMatches;
+
+  /// No description provided for @energyTipClearFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear search and category'**
+  String get energyTipClearFilters;
+
+  /// No description provided for @energyTipCatalogLoadFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'Energy tips could not be loaded.'**
+  String get energyTipCatalogLoadFailure;
+
   /// No description provided for @ecoTravelSuggestions.
   ///
   /// In en, this message translates to:

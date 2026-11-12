@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "tips": [
+    {
+      "title": "Use fans before air conditioning",
+      "category": "Heating & cooling",
+      "text": "Fans use a fraction of the energy of air conditioning; often, moving air is all a room needs."
+    },
+    {
+      "title": "Seal gaps around doors and windows",
+      "category": "Heating & cooling",
+      "text": "Draughts let heated or cooled air escape; simple seals and door sweeps keep the air you paid to condition inside."
+    },
+    {
+      "title": "Work with the sun",
+      "category": "Heating & cooling",
+      "text": "Close curtains on sun-facing windows in the hot part of the day to keep rooms cooler; in cold weather, open them and let the sun warm the room."
+    },
+    {
+      "title": "Switch to LED bulbs",
+      "category": "Lighting",
+      "text": "LEDs use far less energy than incandescent bulbs and last much longer, so each switch saves twice — power and replacements."
+    },
+    {
+      "title": "Use daylight first",
+      "category": "Lighting",
+      "text": "Arrange work and reading near windows, and switch lights off in empty rooms; the cheapest light is the one already coming through the glass."
+    },
+    {
+      "title": "Kill standby power",
+      "category": "Appliances",
+      "text": "Many devices draw power while switched \"off\". A switchable power strip turns a whole group off at once — chargers, TVs, and consoles included."
+    },
+    {
+      "title": "Run full loads",
+      "category": "Appliances",
+      "text": "Washing machines and dishwashers use nearly the same energy partly loaded; full loads mean fewer cycles for the same work."
+    },
+    {
+      "title": "Set the fridge right",
+      "category": "Appliances",
+      "text": "Keep the fridge near 4 °C and the freezer near −18 °C; colder settings waste energy without keeping food any safer. A fridge works best neither empty nor overpacked."
+    },
+    {
+      "title": "Shorter, cooler showers",
+      "category": "Water",
+      "text": "Heating water takes real energy; shorter showers at a lower temperature cut water and energy use together."
+    },
+    {
+      "title": "Consider rooftop solar",
+      "category": "Renewables",
+      "text": "Solar panels turn a roof into a small power station; even a small system can cover daytime basics like lights, fans, and charging. Start by checking how much sun your roof gets and how much power you use in the daytime."
+    },
+    {
+      "title": "Take one small solar step",
+      "category": "Renewables",
+      "text": "If a full system is too big a step, solar garden lights, a solar power bank, or a solar water heater each cut one slice of grid use."
+    }
+  ]
+}

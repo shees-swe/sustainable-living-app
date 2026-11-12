@@ -70,6 +70,11 @@ void main() {
           tester,
           find.text('These waste amounts are your own estimates.'),
         );
+      } else if (destination.id == 'energyConservationTips') {
+        await _pumpUntilVisible(
+          tester,
+          find.text('Use fans before air conditioning'),
+        );
       } else {
         await tester.pumpAndSettle();
       }
@@ -106,6 +111,18 @@ void main() {
           scrollable: find.byType(Scrollable).first,
         );
         expect(emptyState, findsOneWidget);
+      } else if (destination.id == 'energyConservationTips') {
+        expect(find.text('Search by title or text'), findsOneWidget);
+        expectNoTextOverlapOrClipping(tester, destination.path);
+        final lastTip = find.byKey(
+          const ValueKey('energyTip-Take one small solar step'),
+        );
+        await tester.scrollUntilVisible(
+          lastTip,
+          200,
+          scrollable: find.byType(Scrollable).first,
+        );
+        expect(lastTip, findsOneWidget);
       } else {
         expect(
           find.text('Foundation destination'),
@@ -118,7 +135,13 @@ void main() {
           reason: '${destination.path} must show its existing details',
         );
       }
-      if (destination.id != 'carbonFootprintTracker') {
+      if (destination.id == 'energyConservationTips') {
+        expectNoTextOverlapOrClipping(
+          tester,
+          destination.path,
+          within: find.byKey(const ValueKey('energyTipsList')),
+        );
+      } else if (destination.id != 'carbonFootprintTracker') {
         expectNoTextOverlapOrClipping(tester, destination.path);
       }
       expect(
