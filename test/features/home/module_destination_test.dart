@@ -8,6 +8,8 @@ import 'package:sustainable_living_app/core/data/database/app_database.dart';
 import 'package:sustainable_living_app/core/theme/app_theme.dart';
 import 'package:sustainable_living_app/features/certifications_guide/data/certification_catalog.dart';
 import 'package:sustainable_living_app/features/eco_friendly_product_suggestions/data/product_catalog.dart';
+import 'package:sustainable_living_app/features/eco_travel_suggestions/data/travel_guide_catalog.dart';
+import 'package:sustainable_living_app/features/eco_travel_suggestions/data/travel_trip_repository.dart';
 import 'package:sustainable_living_app/features/sustainable_living_challenges/data/challenge_catalog.dart';
 import 'package:sustainable_living_app/features/sustainable_living_challenges/data/challenge_progress_repository.dart';
 import 'package:sustainable_living_app/features/settings/data/user_preferences_repository.dart';
@@ -23,16 +25,19 @@ void main() {
   late ChallengeCatalog challengeCatalog;
   late CertificationCatalog certificationCatalog;
   late RecipeCatalog recipeCatalog;
+  late TravelGuideCatalog travelGuideCatalog;
   late AppDatabase challengeDatabase;
   late ChallengeProgressRepository challengeProgressRepository;
   late WasteLogRepository wasteLogRepository;
   late UserPreferencesRepository wastePreferencesRepository;
+  late TravelTripRepository travelTripRepository;
 
   setUpAll(() async {
     productCatalog = await ProductCatalog.loadBundled();
     challengeCatalog = await ChallengeCatalog.loadBundled();
     certificationCatalog = await CertificationCatalog.loadBundled();
     recipeCatalog = await RecipeCatalog.loadBundled();
+    travelGuideCatalog = await TravelGuideCatalog.loadBundled();
     challengeDatabase = AppDatabase.forTesting(NativeDatabase.memory());
     challengeProgressRepository = ChallengeProgressRepository(
       database: challengeDatabase,
@@ -42,6 +47,7 @@ void main() {
       database: challengeDatabase,
       supportedRegionIds: const {},
     );
+    travelTripRepository = TravelTripRepository(database: challengeDatabase);
   });
 
   tearDownAll(() async {
@@ -58,8 +64,10 @@ void main() {
         challengeCatalog: challengeCatalog,
         certificationCatalog: certificationCatalog,
         recipeCatalog: recipeCatalog,
+        travelGuideCatalog: travelGuideCatalog,
         challengeProgressRepository: challengeProgressRepository,
         wasteLogRepository: wasteLogRepository,
+        travelTripRepository: travelTripRepository,
         userPreferencesRepository: wastePreferencesRepository,
       );
       await tester.pumpWidget(_TestApp(router: router, textScale: 2));
@@ -70,6 +78,8 @@ void main() {
           tester,
           find.text('These waste amounts are your own estimates.'),
         );
+      } else if (destination.id == 'ecoTravelSuggestions') {
+        await _pumpUntilVisible(tester, find.text('No trips planned yet.'));
       } else if (destination.id == 'energyConservationTips') {
         await _pumpUntilVisible(
           tester,
@@ -111,6 +121,16 @@ void main() {
           scrollable: find.byType(Scrollable).first,
         );
         expect(emptyState, findsOneWidget);
+      } else if (destination.id == 'ecoTravelSuggestions') {
+        expect(find.text('No trips planned yet.'), findsOneWidget);
+        expectNoTextOverlapOrClipping(tester, destination.path);
+        final finalTip = find.text('Leave places as you found them');
+        await tester.scrollUntilVisible(
+          finalTip,
+          200,
+          scrollable: find.byType(Scrollable).first,
+        );
+        expect(finalTip, findsOneWidget);
       } else if (destination.id == 'energyConservationTips') {
         expect(find.text('Search by title or text'), findsOneWidget);
         expectNoTextOverlapOrClipping(tester, destination.path);
@@ -140,6 +160,12 @@ void main() {
           tester,
           destination.path,
           within: find.byKey(const ValueKey('energyTipsList')),
+        );
+      } else if (destination.id == 'ecoTravelSuggestions') {
+        expectNoTextOverlapOrClipping(
+          tester,
+          destination.path,
+          within: find.byKey(const ValueKey('travelPlannerList')),
         );
       } else if (destination.id != 'carbonFootprintTracker') {
         expectNoTextOverlapOrClipping(tester, destination.path);

@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "modes": [
+    {
+      "mode": "Walking or cycling",
+      "guidance": "The lowest-impact way to travel — no fuel, no emissions, and you see the place properly."
+    },
+    {
+      "mode": "Train",
+      "guidance": "One of the lowest-impact motorised options, especially on electric lines."
+    },
+    {
+      "mode": "Bus or coach",
+      "guidance": "Sharing the ride spreads the fuel across every passenger."
+    },
+    {
+      "mode": "Car, shared",
+      "guidance": "A full car is far better than an empty one — fill every seat you can."
+    },
+    {
+      "mode": "Car, solo",
+      "guidance": "Convenient, but the highest-impact road option per person; combine several stops into one journey."
+    },
+    {
+      "mode": "Ferry",
+      "guidance": "A reasonable option for coastal and island routes; slower usually means gentler."
+    },
+    {
+      "mode": "Plane",
+      "guidance": "The highest-impact choice for most trips; if you fly, fewer and longer trips help."
+    }
+  ],
+  "tips": [
+    {
+      "title": "Pick the highest rung you can",
+      "text": "For most trips the order runs: walking and cycling first, then trains and buses, then a shared car, then a solo car, with flying last. Choose the highest rung your trip allows."
+    },
+    {
+      "title": "Prefer trains for medium distances",
+      "text": "Where a railway exists, trains usually beat driving alone and flying on both comfort and impact — and the journey becomes part of the trip."
+    },
+    {
+      "title": "Pack light",
+      "text": "Every extra kilo is carried by your transport the whole way; a lighter bag is a small saving multiplied by every kilometre."
+    },
+    {
+      "title": "Fly less, stay longer",
+      "text": "One two-week stay instead of two weekend flights halves the flying for the same days away."
+    },
+    {
+      "title": "Choose stays that prove it",
+      "text": "Look for accommodation with third-party certification — the Brand Directory module explains the labels — or locally owned guesthouses that keep money in the community."
+    },
+    {
+      "title": "Leave places as you found them",
+      "text": "Carry a reusable bottle and bag while travelling, refuse single-use plastics, and stick to marked paths in natural areas."
+    }
+  ]
+}

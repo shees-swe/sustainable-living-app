@@ -16,6 +16,8 @@ import '../features/account/data/password_hasher.dart';
 import '../features/carbon_footprint_tracker/data/activity_log_repository.dart';
 import '../features/certifications_guide/data/certification_catalog.dart';
 import '../features/eco_friendly_product_suggestions/data/product_catalog.dart';
+import '../features/eco_travel_suggestions/data/travel_guide_catalog.dart';
+import '../features/eco_travel_suggestions/data/travel_trip_repository.dart';
 import '../features/sustainable_living_challenges/data/challenge_catalog.dart';
 import '../features/sustainable_living_challenges/data/challenge_progress_repository.dart';
 import '../features/waste_reduction_tracker/data/waste_log_repository.dart';
@@ -36,6 +38,7 @@ class SustainableLivingApp extends StatefulWidget {
     this.productCatalog,
     this.challengeCatalog,
     this.certificationCatalog,
+    this.travelGuideCatalog,
     super.key,
   });
 
@@ -45,6 +48,7 @@ class SustainableLivingApp extends StatefulWidget {
   final ProductCatalog? productCatalog;
   final ChallengeCatalog? challengeCatalog;
   final CertificationCatalog? certificationCatalog;
+  final TravelGuideCatalog? travelGuideCatalog;
 
   @override
   State<SustainableLivingApp> createState() => _SustainableLivingAppState();
@@ -57,6 +61,7 @@ class _SustainableLivingAppState extends State<SustainableLivingApp> {
   late ActivityLogRepository _activityLogRepository;
   late ChallengeProgressRepository _challengeProgressRepository;
   late WasteLogRepository _wasteLogRepository;
+  late TravelTripRepository _travelTripRepository;
   late AccountRepository _accountRepository;
   late Future<GoRouter> _router;
   GoRouter? _resolvedRouter;
@@ -76,6 +81,7 @@ class _SustainableLivingAppState extends State<SustainableLivingApp> {
       database: database,
     );
     _wasteLogRepository = WasteLogRepository(database: database);
+    _travelTripRepository = TravelTripRepository(database: database);
     _accountRepository = AccountRepository(
       database: database,
       passwordHasher: const PasswordHasher(),
@@ -135,8 +141,10 @@ class _SustainableLivingAppState extends State<SustainableLivingApp> {
       productCatalog: productCatalog,
       challengeCatalog: challengeCatalog,
       certificationCatalog: certificationCatalog,
+      travelGuideCatalog: widget.travelGuideCatalog,
       challengeProgressRepository: _challengeProgressRepository,
       wasteLogRepository: _wasteLogRepository,
+      travelTripRepository: _travelTripRepository,
       selectedRegionPack: selectedRegionPack,
       demoRegion: demoRegion,
       userDataDeleter: UserDataDeleter(

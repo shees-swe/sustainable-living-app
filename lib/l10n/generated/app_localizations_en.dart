@@ -885,6 +885,81 @@ class AppLocalizationsEn extends AppLocalizations {
   String get ecoTravelSuggestions => 'Eco-Travel Suggestions';
 
   @override
+  String get travelTripSection => 'Your trips';
+
+  @override
+  String get travelGuideSection => 'Travel guide';
+
+  @override
+  String get travelTransportGuidance => 'Travel guidance';
+
+  @override
+  String get travelNoTrips => 'No trips planned yet.';
+
+  @override
+  String get travelAddTrip => 'Plan a trip';
+
+  @override
+  String get travelEditTrip => 'Edit trip';
+
+  @override
+  String get travelTitleLabel => 'Trip title';
+
+  @override
+  String get travelDestinationLabel => 'Destination';
+
+  @override
+  String get travelModeLabel => 'Transport mode';
+
+  @override
+  String get travelDateLabel => 'Date (optional)';
+
+  @override
+  String get travelNoDate => 'No date set';
+
+  @override
+  String get travelChooseDate => 'Choose date';
+
+  @override
+  String get travelClearDate => 'Clear date';
+
+  @override
+  String get travelNotesLabel => 'Notes (optional)';
+
+  @override
+  String get travelSaveTrip => 'Save trip';
+
+  @override
+  String get travelUpdateTrip => 'Update trip';
+
+  @override
+  String get travelDeleteTrip => 'Delete trip';
+
+  @override
+  String get travelEditTripTooltip => 'Edit trip';
+
+  @override
+  String get travelTitleRequired => 'Enter a trip title.';
+
+  @override
+  String get travelDestinationRequired => 'Enter a destination.';
+
+  @override
+  String get travelLoadFailure => 'Planned trips could not be loaded.';
+
+  @override
+  String get travelGuideLoadFailure => 'The travel guide could not be loaded.';
+
+  @override
+  String get travelSaveFailure => 'The trip could not be saved.';
+
+  @override
+  String get travelDeleteFailure => 'The trip could not be deleted.';
+
+  @override
+  String get travelTipsSection => 'Tips';
+
+  @override
   String get communityJournal => 'Community Journal';
 
   @override

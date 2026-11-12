@@ -82,6 +82,19 @@ void main() {
               amountKg: 1.25,
             ),
           );
+      await database
+          .into(database.plannedTrips)
+          .insert(
+            PlannedTripsCompanion.insert(
+              tripId: 'trip-1',
+              title: 'Weekend by train',
+              destination: 'York',
+              transportMode: 'Train',
+              tripDate: Value(DateTime.utc(2026, 4, 12)),
+              notes: const Value('Pack light.'),
+              createdAt: DateTime.utc(2026, 3, 5),
+            ),
+          );
       await database.savePreferences(
         UserPreferencesCompanion(
           preferenceId: const Value(1),
@@ -98,7 +111,7 @@ void main() {
       final userData = exported['userData']! as Map<String, Object?>;
       final encoded = jsonEncode(exported);
 
-      expect(exported['exportSchemaVersion'], 5);
+      expect(exported['exportSchemaVersion'], 6);
       expect(exported['createdAt'], '2026-11-07T00:00:00.000Z');
       expect((userData['accounts']! as List).single, {
         'accountId': 'account-1',
@@ -124,6 +137,15 @@ void main() {
         'createdAt': '2026-03-04T00:00:00.000Z',
         'category': 'Plastic',
         'amountKg': 1.25,
+      });
+      expect((userData['travelTrips']! as List).single, {
+        'tripId': 'trip-1',
+        'title': 'Weekend by train',
+        'destination': 'York',
+        'transportMode': 'Train',
+        'tripDate': '2026-04-12T00:00:00.000Z',
+        'notes': 'Pack light.',
+        'createdAt': '2026-03-05T00:00:00.000Z',
       });
       expect((userData['preferences']! as List).single, {
         'displayLanguageTag': 'en',

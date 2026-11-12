@@ -1629,6 +1629,156 @@ abstract class AppLocalizations {
   /// **'Eco-Travel Suggestions'**
   String get ecoTravelSuggestions;
 
+  /// No description provided for @travelTripSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Your trips'**
+  String get travelTripSection;
+
+  /// No description provided for @travelGuideSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Travel guide'**
+  String get travelGuideSection;
+
+  /// No description provided for @travelTransportGuidance.
+  ///
+  /// In en, this message translates to:
+  /// **'Travel guidance'**
+  String get travelTransportGuidance;
+
+  /// No description provided for @travelNoTrips.
+  ///
+  /// In en, this message translates to:
+  /// **'No trips planned yet.'**
+  String get travelNoTrips;
+
+  /// No description provided for @travelAddTrip.
+  ///
+  /// In en, this message translates to:
+  /// **'Plan a trip'**
+  String get travelAddTrip;
+
+  /// No description provided for @travelEditTrip.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit trip'**
+  String get travelEditTrip;
+
+  /// No description provided for @travelTitleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Trip title'**
+  String get travelTitleLabel;
+
+  /// No description provided for @travelDestinationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Destination'**
+  String get travelDestinationLabel;
+
+  /// No description provided for @travelModeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Transport mode'**
+  String get travelModeLabel;
+
+  /// No description provided for @travelDateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Date (optional)'**
+  String get travelDateLabel;
+
+  /// No description provided for @travelNoDate.
+  ///
+  /// In en, this message translates to:
+  /// **'No date set'**
+  String get travelNoDate;
+
+  /// No description provided for @travelChooseDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose date'**
+  String get travelChooseDate;
+
+  /// No description provided for @travelClearDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear date'**
+  String get travelClearDate;
+
+  /// No description provided for @travelNotesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Notes (optional)'**
+  String get travelNotesLabel;
+
+  /// No description provided for @travelSaveTrip.
+  ///
+  /// In en, this message translates to:
+  /// **'Save trip'**
+  String get travelSaveTrip;
+
+  /// No description provided for @travelUpdateTrip.
+  ///
+  /// In en, this message translates to:
+  /// **'Update trip'**
+  String get travelUpdateTrip;
+
+  /// No description provided for @travelDeleteTrip.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete trip'**
+  String get travelDeleteTrip;
+
+  /// No description provided for @travelEditTripTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit trip'**
+  String get travelEditTripTooltip;
+
+  /// No description provided for @travelTitleRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a trip title.'**
+  String get travelTitleRequired;
+
+  /// No description provided for @travelDestinationRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a destination.'**
+  String get travelDestinationRequired;
+
+  /// No description provided for @travelLoadFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'Planned trips could not be loaded.'**
+  String get travelLoadFailure;
+
+  /// No description provided for @travelGuideLoadFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'The travel guide could not be loaded.'**
+  String get travelGuideLoadFailure;
+
+  /// No description provided for @travelSaveFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'The trip could not be saved.'**
+  String get travelSaveFailure;
+
+  /// No description provided for @travelDeleteFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'The trip could not be deleted.'**
+  String get travelDeleteFailure;
+
+  /// No description provided for @travelTipsSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Tips'**
+  String get travelTipsSection;
+
   /// No description provided for @communityJournal.
   ///
   /// In en, this message translates to:

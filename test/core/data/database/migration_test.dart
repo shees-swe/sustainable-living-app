@@ -9,7 +9,7 @@ void main() {
     addTearDown(database.close);
 
     await database.select(database.userPreferences).get();
-    expect(database.schemaVersion, 5);
+    expect(database.schemaVersion, 6);
 
     await database.validateDatabaseSchema();
 
@@ -55,7 +55,7 @@ void main() {
             ),
           );
 
-      expect(database.schemaVersion, 5);
+      expect(database.schemaVersion, 6);
       expect(
         await database.select(database.challengeProgressRecords).get(),
         hasLength(1),
@@ -96,7 +96,7 @@ void main() {
           ),
         );
 
-    expect(database.schemaVersion, 5);
+    expect(database.schemaVersion, 6);
     final entry = await database.select(database.wasteLogEntries).getSingle();
     expect(entry.entryId, 'waste-1');
     expect(entry.category, 'Plastic');
@@ -125,11 +125,48 @@ void main() {
     final preference = await database
         .select(database.userPreferences)
         .getSingle();
-    expect(database.schemaVersion, 5);
+    expect(database.schemaVersion, 6);
     expect(preference.displayLanguageTag, 'fr');
     expect(preference.selectedRegionId, 'PK');
     expect(preference.reducedMotion, isTrue);
     expect(preference.recyclingCollectionDay, isNull);
     expect(preference.compostDay, isNull);
+  });
+
+  test('upgrades a version 5 database with the planned trips table', () async {
+    final executor = NativeDatabase.memory(
+      setup: (database) {
+        database.execute(
+          'CREATE TABLE user_preferences ('
+          'preference_id INTEGER NOT NULL CHECK (preference_id = 1), '
+          "display_language_tag TEXT NOT NULL DEFAULT 'en', "
+          'selected_region_id TEXT, reduced_motion INTEGER, '
+          'recycling_collection_day INTEGER, compost_day INTEGER, '
+          'updated_at INTEGER NOT NULL, PRIMARY KEY (preference_id))',
+        );
+        database.execute('PRAGMA user_version = 5');
+      },
+    );
+    final database = AppDatabase.forTesting(executor);
+    addTearDown(database.close);
+
+    await database
+        .into(database.plannedTrips)
+        .insert(
+          PlannedTripsCompanion.insert(
+            tripId: 'trip-1',
+            title: 'Weekend by train',
+            destination: 'York',
+            transportMode: 'Train',
+            createdAt: DateTime.utc(2026, 11, 12),
+          ),
+        );
+
+    expect(database.schemaVersion, 6);
+    final trip = await database.select(database.plannedTrips).getSingle();
+    expect(trip.tripId, 'trip-1');
+    expect(trip.title, 'Weekend by train');
+    expect(trip.tripDate, isNull);
+    expect(trip.notes, isNull);
   });
 }

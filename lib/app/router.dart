@@ -9,6 +9,8 @@ import '../features/carbon_footprint_tracker/presentation/module_destination_scr
     as carbon;
 import '../features/carbon_footprint_tracker/data/activity_log_repository.dart';
 import '../features/eco_friendly_product_suggestions/data/product_catalog.dart';
+import '../features/eco_travel_suggestions/data/travel_guide_catalog.dart';
+import '../features/eco_travel_suggestions/data/travel_trip_repository.dart';
 import '../features/sustainable_living_challenges/data/challenge_catalog.dart';
 import '../features/sustainable_living_challenges/data/challenge_progress_repository.dart';
 import '../features/waste_reduction_tracker/data/waste_log_repository.dart';
@@ -83,8 +85,10 @@ GoRouter createAppRouter({
   ChallengeCatalog? challengeCatalog,
   CertificationCatalog? certificationCatalog,
   RecipeCatalog? recipeCatalog,
+  TravelGuideCatalog? travelGuideCatalog,
   ChallengeProgressRepository? challengeProgressRepository,
   WasteLogRepository? wasteLogRepository,
+  TravelTripRepository? travelTripRepository,
   RegionDataPack? selectedRegionPack,
   EstimateDemoRegion? demoRegion,
   Future<void> Function()? onGuestReturn,
@@ -187,8 +191,10 @@ GoRouter createAppRouter({
             challengeCatalog: challengeCatalog,
             certificationCatalog: certificationCatalog,
             recipeCatalog: recipeCatalog,
+            travelGuideCatalog: travelGuideCatalog,
             challengeProgressRepository: challengeProgressRepository,
             wasteLogRepository: wasteLogRepository,
+            travelTripRepository: travelTripRepository,
             userPreferencesRepository: userPreferencesRepository,
             trackerRegionId: selectedRegionPack?.region.regionId,
             trackerFactors: selectedRegionPack == null
@@ -238,8 +244,10 @@ Widget _moduleScreen(
   required ChallengeCatalog? challengeCatalog,
   required CertificationCatalog? certificationCatalog,
   required RecipeCatalog? recipeCatalog,
+  required TravelGuideCatalog? travelGuideCatalog,
   required ChallengeProgressRepository? challengeProgressRepository,
   required WasteLogRepository? wasteLogRepository,
+  required TravelTripRepository? travelTripRepository,
   required UserPreferencesRepository? userPreferencesRepository,
   required String? trackerRegionId,
   required List<EmissionFactor> trackerFactors,
@@ -276,7 +284,13 @@ Widget _moduleScreen(
     catalog: recipeCatalog,
   ),
   'energyConservationTips' => const energy.EnergyConservationTipsScreen(),
-  'ecoTravelSuggestions' => const travel.EcoTravelSuggestionsScreen(),
+  'ecoTravelSuggestions' =>
+    travelTripRepository == null
+        ? _RoutePlaceholder(title: (l10n) => l10n.ecoTravelSuggestions)
+        : travel.EcoTravelSuggestionsScreen(
+            repository: travelTripRepository,
+            catalog: travelGuideCatalog,
+          ),
   'communityJournal' => const journal.CommunityJournalScreen(),
   'progressDashboard' => const progress.ProgressDashboardScreen(),
   'educationalContent' => const education.EducationalContentScreen(),

@@ -8,6 +8,8 @@ import 'package:sustainable_living_app/core/data/database/app_database.dart';
 import 'package:sustainable_living_app/core/theme/app_theme.dart';
 import 'package:sustainable_living_app/features/certifications_guide/data/certification_catalog.dart';
 import 'package:sustainable_living_app/features/eco_friendly_product_suggestions/data/product_catalog.dart';
+import 'package:sustainable_living_app/features/eco_travel_suggestions/data/travel_guide_catalog.dart';
+import 'package:sustainable_living_app/features/eco_travel_suggestions/data/travel_trip_repository.dart';
 import 'package:sustainable_living_app/features/sustainable_living_challenges/data/challenge_catalog.dart';
 import 'package:sustainable_living_app/features/sustainable_living_challenges/data/challenge_progress_repository.dart';
 import 'package:sustainable_living_app/features/settings/data/user_preferences_repository.dart';
@@ -23,16 +25,19 @@ void main() {
   late ChallengeCatalog challengeCatalog;
   late CertificationCatalog certificationCatalog;
   late RecipeCatalog recipeCatalog;
+  late TravelGuideCatalog travelGuideCatalog;
   late AppDatabase challengeDatabase;
   late ChallengeProgressRepository challengeProgressRepository;
   late WasteLogRepository wasteLogRepository;
   late UserPreferencesRepository wastePreferencesRepository;
+  late TravelTripRepository travelTripRepository;
 
   setUpAll(() async {
     productCatalog = await ProductCatalog.loadBundled();
     challengeCatalog = await ChallengeCatalog.loadBundled();
     certificationCatalog = await CertificationCatalog.loadBundled();
     recipeCatalog = await RecipeCatalog.loadBundled();
+    travelGuideCatalog = await TravelGuideCatalog.loadBundled();
     challengeDatabase = AppDatabase.forTesting(NativeDatabase.memory());
     challengeProgressRepository = ChallengeProgressRepository(
       database: challengeDatabase,
@@ -42,6 +47,7 @@ void main() {
       database: challengeDatabase,
       supportedRegionIds: const {},
     );
+    travelTripRepository = TravelTripRepository(database: challengeDatabase);
   });
 
   tearDownAll(() async {
@@ -132,8 +138,10 @@ void main() {
         challengeCatalog: challengeCatalog,
         certificationCatalog: certificationCatalog,
         recipeCatalog: recipeCatalog,
+        travelGuideCatalog: travelGuideCatalog,
         challengeProgressRepository: challengeProgressRepository,
         wasteLogRepository: wasteLogRepository,
+        travelTripRepository: travelTripRepository,
         userPreferencesRepository: wastePreferencesRepository,
       );
       addTearDown(router.dispose);
@@ -143,6 +151,8 @@ void main() {
         await _pumpUntilVisible(tester, find.text('Plastic-Free Week'));
       } else if (destination.id == 'wasteReductionTracker') {
         await _pumpUntilVisible(tester, find.text('No waste logged yet.'));
+      } else if (destination.id == 'ecoTravelSuggestions') {
+        await _pumpUntilVisible(tester, find.text('No trips planned yet.'));
       } else if (destination.id == 'energyConservationTips') {
         await _pumpUntilVisible(
           tester,
@@ -175,6 +185,15 @@ void main() {
         );
       } else if (destination.id == 'wasteReductionTracker') {
         expect(find.text('No waste logged yet.'), findsOneWidget);
+      } else if (destination.id == 'ecoTravelSuggestions') {
+        expect(find.text('No trips planned yet.'), findsOneWidget);
+        final guideHeading = find.text('Tips');
+        await tester.scrollUntilVisible(
+          guideHeading,
+          200,
+          scrollable: find.byType(Scrollable).first,
+        );
+        expect(guideHeading, findsOneWidget);
       } else if (destination.id == 'energyConservationTips') {
         expect(find.text('Search by title or text'), findsOneWidget);
         expect(find.text('Use fans before air conditioning'), findsOneWidget);

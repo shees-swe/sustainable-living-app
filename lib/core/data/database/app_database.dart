@@ -10,6 +10,7 @@ import 'package:path_provider/path_provider.dart';
 import 'tables/credential_verifiers.dart';
 import 'tables/challenge_day_completions.dart';
 import 'tables/challenge_progress_records.dart';
+import 'tables/planned_trips.dart';
 import 'tables/activity_log_entries.dart';
 import 'tables/footprint_estimates.dart';
 import 'tables/local_accounts.dart';
@@ -28,6 +29,7 @@ part 'app_database.g.dart';
     ChallengeProgressRecords,
     ChallengeDayCompletions,
     WasteLogEntries,
+    PlannedTrips,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -41,7 +43,7 @@ class AppDatabase extends _$AppDatabase {
   );
 
   @override
-  int get schemaVersion => 5;
+  int get schemaVersion => 6;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -71,6 +73,9 @@ class AppDatabase extends _$AppDatabase {
           userPreferences.recyclingCollectionDay,
         );
         await migrator.addColumn(userPreferences, userPreferences.compostDay);
+      }
+      if (from < 6) {
+        await migrator.createTable(plannedTrips);
       }
     },
     beforeOpen: (_) async {
@@ -117,6 +122,7 @@ class AppDatabase extends _$AppDatabase {
       await delete(footprintEstimates).go();
       await delete(activityLogEntries).go();
       await delete(wasteLogEntries).go();
+      await delete(plannedTrips).go();
       await delete(challengeDayCompletions).go();
       await delete(challengeProgressRecords).go();
       await delete(localAccounts).go();

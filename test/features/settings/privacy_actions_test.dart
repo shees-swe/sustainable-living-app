@@ -166,13 +166,14 @@ void main() {
           (userData['footprintEstimates'] as List).single
               as Map<String, Object?>;
 
-      expect(exported['exportSchemaVersion'], 5);
+      expect(exported['exportSchemaVersion'], 6);
       expect(account['loginIdentifier'], 'member@example.test');
       expect(estimate['estimateValue'], 12.5);
       final preference =
           (userData['preferences'] as List).single as Map<String, Object?>;
       expect(preference['recyclingCollectionDay'], DateTime.tuesday);
       expect(preference['compostDay'], DateTime.friday);
+      expect(userData['travelTrips'], isEmpty);
       expect(encoded, isNot(contains('credentialVerifiers')));
       expect(encoded, isNot(contains('"salt"')));
       expect(encoded, isNot(contains('"verifier"')));
@@ -201,6 +202,7 @@ void main() {
       hasLength(1),
     );
     expect(await database.select(database.wasteLogEntries).get(), hasLength(1));
+    expect(await database.select(database.plannedTrips).get(), hasLength(1));
     expect(closeCalls, 0);
     expect(fileDeletionCalls, 0);
     expect(guestResetCalls, 0);
@@ -225,6 +227,7 @@ void main() {
     expect(await database.select(database.credentialVerifiers).get(), isEmpty);
     expect(await database.select(database.footprintEstimates).get(), isEmpty);
     expect(await database.select(database.wasteLogEntries).get(), isEmpty);
+    expect(await database.select(database.plannedTrips).get(), isEmpty);
     final preferences =
         (await database.select(database.userPreferences).get()).single;
     expect(preferences.displayLanguageTag, 'en');
@@ -291,6 +294,19 @@ Future<void> _insertAccountWithData(AppDatabase database) async {
           createdAt: DateTime.utc(2026, 11, 12),
           category: 'Organic',
           amountKg: 0.75,
+        ),
+      );
+  await database
+      .into(database.plannedTrips)
+      .insert(
+        PlannedTripsCompanion.insert(
+          tripId: 'trip-1',
+          title: 'Weekend by train',
+          destination: 'York',
+          transportMode: 'Train',
+          tripDate: const Value(null),
+          notes: const Value(null),
+          createdAt: DateTime.utc(2026, 11, 12),
         ),
       );
 }
