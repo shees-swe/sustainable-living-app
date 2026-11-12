@@ -631,6 +631,44 @@ class AppLocalizationsEn extends AppLocalizations {
   String get certificationsGuide => 'Green Certifications & Labels Guide';
 
   @override
+  String get certificationsSection => 'Certifications';
+
+  @override
+  String get certificationDisclaimer =>
+      'Certifications are awarded by independent bodies; this app does not certify any brand.';
+
+  @override
+  String get certificationSearchLabel => 'Search by name or meaning';
+
+  @override
+  String get certificationClearSearch => 'Clear search';
+
+  @override
+  String get certificationCategoryFilter => 'Category';
+
+  @override
+  String get certificationAllCategories => 'All categories';
+
+  @override
+  String get certificationNoMatches =>
+      'No certifications match your current search and category.';
+
+  @override
+  String get certificationClearFilters => 'Clear search and category filter';
+
+  @override
+  String get certificationDetail => 'Certification details';
+
+  @override
+  String get certificationMeaningLabel => 'Meaning';
+
+  @override
+  String get certificationWhereSeenLabel => 'Where you may see it';
+
+  @override
+  String get checkBrandSection => 'Check a brand';
+
+  @override
   String get wasteReductionTracker => 'Waste Reduction Tracker';
 
   @override

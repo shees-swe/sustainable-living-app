@@ -16,6 +16,7 @@ import '../features/community_journal/presentation/module_destination_screen.dar
 import '../features/contact/presentation/contact_screen.dart';
 import '../features/certifications_guide/presentation/module_destination_screen.dart'
     as certifications;
+import '../features/certifications_guide/data/certification_catalog.dart';
 import '../features/eco_friendly_product_suggestions/presentation/module_destination_screen.dart'
     as products;
 import '../features/eco_travel_suggestions/presentation/module_destination_screen.dart'
@@ -78,6 +79,7 @@ GoRouter createAppRouter({
   FoundationReferences? foundationReferences,
   ProductCatalog? productCatalog,
   ChallengeCatalog? challengeCatalog,
+  CertificationCatalog? certificationCatalog,
   ChallengeProgressRepository? challengeProgressRepository,
   RegionDataPack? selectedRegionPack,
   EstimateDemoRegion? demoRegion,
@@ -179,6 +181,7 @@ GoRouter createAppRouter({
             foundationReferences: foundationReferences,
             productCatalog: productCatalog,
             challengeCatalog: challengeCatalog,
+            certificationCatalog: certificationCatalog,
             challengeProgressRepository: challengeProgressRepository,
             trackerRegionId: selectedRegionPack?.region.regionId,
             trackerFactors: selectedRegionPack == null
@@ -226,6 +229,7 @@ Widget _moduleScreen(
   required FoundationReferences? foundationReferences,
   required ProductCatalog? productCatalog,
   required ChallengeCatalog? challengeCatalog,
+  required CertificationCatalog? certificationCatalog,
   required ChallengeProgressRepository? challengeProgressRepository,
   required String? trackerRegionId,
   required List<EmissionFactor> trackerFactors,
@@ -245,7 +249,12 @@ Widget _moduleScreen(
             catalog: challengeCatalog,
             repository: challengeProgressRepository,
           ),
-  'certificationsGuide' => const certifications.CertificationsGuideScreen(),
+  'certificationsGuide' =>
+    certificationCatalog == null
+        ? _RoutePlaceholder(title: (l10n) => l10n.certificationsGuide)
+        : certifications.CertificationsGuideScreen(
+            catalog: certificationCatalog,
+          ),
   'wasteReductionTracker' => const waste.WasteReductionTrackerScreen(),
   'recipesMealPlanning' => const recipes.RecipesMealPlanningScreen(),
   'energyConservationTips' => const energy.EnergyConservationTipsScreen(),

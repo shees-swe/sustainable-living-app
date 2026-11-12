@@ -6,6 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:sustainable_living_app/app/router.dart';
 import 'package:sustainable_living_app/core/data/database/app_database.dart';
 import 'package:sustainable_living_app/core/theme/app_theme.dart';
+import 'package:sustainable_living_app/features/certifications_guide/data/certification_catalog.dart';
 import 'package:sustainable_living_app/features/eco_friendly_product_suggestions/data/product_catalog.dart';
 import 'package:sustainable_living_app/features/sustainable_living_challenges/data/challenge_catalog.dart';
 import 'package:sustainable_living_app/features/sustainable_living_challenges/data/challenge_progress_repository.dart';
@@ -17,12 +18,14 @@ import '../../support/text_layout_expectations.dart';
 void main() {
   late ProductCatalog productCatalog;
   late ChallengeCatalog challengeCatalog;
+  late CertificationCatalog certificationCatalog;
   late AppDatabase challengeDatabase;
   late ChallengeProgressRepository challengeProgressRepository;
 
   setUpAll(() async {
     productCatalog = await ProductCatalog.loadBundled();
     challengeCatalog = await ChallengeCatalog.loadBundled();
+    certificationCatalog = await CertificationCatalog.loadBundled();
     challengeDatabase = AppDatabase.forTesting(NativeDatabase.memory());
     challengeProgressRepository = ChallengeProgressRepository(
       database: challengeDatabase,
@@ -41,6 +44,7 @@ void main() {
         initialLocation: destination.path,
         productCatalog: productCatalog,
         challengeCatalog: challengeCatalog,
+        certificationCatalog: certificationCatalog,
         challengeProgressRepository: challengeProgressRepository,
       );
       await tester.pumpWidget(_TestApp(router: router, textScale: 2));
@@ -67,6 +71,8 @@ void main() {
         expect(find.text('Search by name or note'), findsOneWidget);
       } else if (destination.id == 'sustainableLivingChallenges') {
         expect(find.text('Plastic-Free Week'), findsOneWidget);
+      } else if (destination.id == 'certificationsGuide') {
+        expect(find.text('Search by name or meaning'), findsOneWidget);
       } else {
         expect(
           find.text('Foundation destination'),

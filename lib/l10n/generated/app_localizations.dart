@@ -1149,6 +1149,78 @@ abstract class AppLocalizations {
   /// **'Green Certifications & Labels Guide'**
   String get certificationsGuide;
 
+  /// No description provided for @certificationsSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Certifications'**
+  String get certificationsSection;
+
+  /// No description provided for @certificationDisclaimer.
+  ///
+  /// In en, this message translates to:
+  /// **'Certifications are awarded by independent bodies; this app does not certify any brand.'**
+  String get certificationDisclaimer;
+
+  /// No description provided for @certificationSearchLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by name or meaning'**
+  String get certificationSearchLabel;
+
+  /// No description provided for @certificationClearSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear search'**
+  String get certificationClearSearch;
+
+  /// No description provided for @certificationCategoryFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get certificationCategoryFilter;
+
+  /// No description provided for @certificationAllCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'All categories'**
+  String get certificationAllCategories;
+
+  /// No description provided for @certificationNoMatches.
+  ///
+  /// In en, this message translates to:
+  /// **'No certifications match your current search and category.'**
+  String get certificationNoMatches;
+
+  /// No description provided for @certificationClearFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear search and category filter'**
+  String get certificationClearFilters;
+
+  /// No description provided for @certificationDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Certification details'**
+  String get certificationDetail;
+
+  /// No description provided for @certificationMeaningLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Meaning'**
+  String get certificationMeaningLabel;
+
+  /// No description provided for @certificationWhereSeenLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Where you may see it'**
+  String get certificationWhereSeenLabel;
+
+  /// No description provided for @checkBrandSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Check a brand'**
+  String get checkBrandSection;
+
   /// No description provided for @wasteReductionTracker.
   ///
   /// In en, this message translates to:

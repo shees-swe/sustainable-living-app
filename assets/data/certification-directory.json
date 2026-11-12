@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "certifications": [
+    {
+      "name": "Fairtrade",
+      "category": "Food & farming",
+      "meaning": "Farmers and workers receive fair prices and work under safer, fairer conditions.",
+      "whereSeen": "Coffee, tea, bananas, cocoa, cotton."
+    },
+    {
+      "name": "FSC (Forest Stewardship Council)",
+      "category": "Wood & paper",
+      "meaning": "Wood and paper come from responsibly managed forests.",
+      "whereSeen": "Furniture, paper, packaging, books."
+    },
+    {
+      "name": "GOTS (Global Organic Textile Standard)",
+      "category": "Textiles",
+      "meaning": "Textiles made from organic fibres, processed under environmental and social rules.",
+      "whereSeen": "Clothing, bedding, towels."
+    },
+    {
+      "name": "Energy Star",
+      "category": "Energy",
+      "meaning": "Appliances and electronics meet strict energy-efficiency requirements.",
+      "whereSeen": "Refrigerators, air conditioners, computers, lighting."
+    },
+    {
+      "name": "EU Energy Label",
+      "category": "Energy",
+      "meaning": "Appliances are rated A to G for energy efficiency, A being the most efficient.",
+      "whereSeen": "Washing machines, fridges, TVs sold in the EU."
+    },
+    {
+      "name": "USDA Organic",
+      "category": "Food & farming",
+      "meaning": "Food grown without most synthetic pesticides and fertilisers, under US organic rules.",
+      "whereSeen": "Packaged food, produce, dairy in the US."
+    },
+    {
+      "name": "EU Organic Leaf",
+      "category": "Food & farming",
+      "meaning": "Food produced under the European Union's organic farming rules.",
+      "whereSeen": "Food and drink sold in the EU."
+    },
+    {
+      "name": "Rainforest Alliance",
+      "category": "Food & farming",
+      "meaning": "Farms and forests are audited against sustainability standards for people and nature.",
+      "whereSeen": "Coffee, tea, cocoa, bananas."
+    },
+    {
+      "name": "Certified B Corporation",
+      "category": "Whole company",
+      "meaning": "The whole company meets verified standards of social and environmental performance.",
+      "whereSeen": "Company websites, packaging across many industries."
+    },
+    {
+      "name": "OEKO-TEX Standard 100",
+      "category": "Textiles",
+      "meaning": "The textile has been tested and found free of harmful levels of listed substances.",
+      "whereSeen": "Clothing, bedding, baby textiles."
+    },
+    {
+      "name": "MSC (Marine Stewardship Council)",
+      "category": "Seafood",
+      "meaning": "The seafood comes from a fishery certified as sustainably managed.",
+      "whereSeen": "Fish and seafood packaging."
+    },
+    {
+      "name": "Leaping Bunny",
+      "category": "Cosmetics & household",
+      "meaning": "The product and its ingredients were not tested on animals.",
+      "whereSeen": "Cosmetics, toiletries, cleaning products."
+    }
+  ],
+  "guide": [
+    {
+      "title": "Look for third-party certification",
+      "text": "A label from an independent body (like the ones in this directory) means more than a logo the brand designed itself."
+    },
+    {
+      "title": "Specific claims beat vague words",
+      "text": "\"Made with 70% recycled cotton\" can be checked; \"eco-friendly\" and \"natural\" on their own cannot."
+    },
+    {
+      "title": "Judge the whole company, not one green product",
+      "text": "One recycled line does not make a brand sustainable if the rest of its range and policies are unchanged."
+    },
+    {
+      "title": "Look for published policies and reports",
+      "text": "Brands that measure their impact publish numbers and targets you can read; silence is also an answer."
+    }
+  ]
+}

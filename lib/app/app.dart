@@ -14,6 +14,7 @@ import '../core/theme/app_theme.dart';
 import '../features/account/data/account_repository.dart';
 import '../features/account/data/password_hasher.dart';
 import '../features/carbon_footprint_tracker/data/activity_log_repository.dart';
+import '../features/certifications_guide/data/certification_catalog.dart';
 import '../features/eco_friendly_product_suggestions/data/product_catalog.dart';
 import '../features/sustainable_living_challenges/data/challenge_catalog.dart';
 import '../features/sustainable_living_challenges/data/challenge_progress_repository.dart';
@@ -33,6 +34,7 @@ class SustainableLivingApp extends StatefulWidget {
     this.foundationReferences,
     this.productCatalog,
     this.challengeCatalog,
+    this.certificationCatalog,
     super.key,
   });
 
@@ -41,6 +43,7 @@ class SustainableLivingApp extends StatefulWidget {
   final FoundationReferences? foundationReferences;
   final ProductCatalog? productCatalog;
   final ChallengeCatalog? challengeCatalog;
+  final CertificationCatalog? certificationCatalog;
 
   @override
   State<SustainableLivingApp> createState() => _SustainableLivingAppState();
@@ -85,6 +88,8 @@ class _SustainableLivingAppState extends State<SustainableLivingApp> {
         widget.productCatalog ?? await ProductCatalog.loadBundled();
     final challengeCatalog =
         widget.challengeCatalog ?? await ChallengeCatalog.loadBundled();
+    final certificationCatalog =
+        widget.certificationCatalog ?? await CertificationCatalog.loadBundled();
     final regionCatalog = RegionCatalog.fromRepository(regionRepository);
     final preferences = UserPreferencesRepository(
       database: _database,
@@ -126,6 +131,7 @@ class _SustainableLivingAppState extends State<SustainableLivingApp> {
       foundationReferences: foundationReferences,
       productCatalog: productCatalog,
       challengeCatalog: challengeCatalog,
+      certificationCatalog: certificationCatalog,
       challengeProgressRepository: _challengeProgressRepository,
       selectedRegionPack: selectedRegionPack,
       demoRegion: demoRegion,
