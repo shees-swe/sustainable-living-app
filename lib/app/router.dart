@@ -8,6 +8,7 @@ import '../features/account/presentation/account_screen.dart';
 import '../features/carbon_footprint_tracker/presentation/module_destination_screen.dart'
     as carbon;
 import '../features/carbon_footprint_tracker/data/activity_log_repository.dart';
+import '../features/eco_friendly_product_suggestions/data/product_catalog.dart';
 import '../features/community_journal/presentation/module_destination_screen.dart'
     as journal;
 import '../features/contact/presentation/contact_screen.dart';
@@ -73,6 +74,7 @@ GoRouter createAppRouter({
   RegionCatalog? regionCatalog,
   RegionRepository? regionRepository,
   FoundationReferences? foundationReferences,
+  ProductCatalog? productCatalog,
   RegionDataPack? selectedRegionPack,
   EstimateDemoRegion? demoRegion,
   Future<void> Function()? onGuestReturn,
@@ -171,6 +173,7 @@ GoRouter createAppRouter({
             destination.id,
             activityLogRepository: activityLogRepository,
             foundationReferences: foundationReferences,
+            productCatalog: productCatalog,
             trackerRegionId: selectedRegionPack?.region.regionId,
             trackerFactors: selectedRegionPack == null
                 ? const []
@@ -215,6 +218,7 @@ Widget _moduleScreen(
   String moduleId, {
   required ActivityLogRepository? activityLogRepository,
   required FoundationReferences? foundationReferences,
+  required ProductCatalog? productCatalog,
   required String? trackerRegionId,
   required List<EmissionFactor> trackerFactors,
 }) => switch (moduleId) {
@@ -225,7 +229,7 @@ Widget _moduleScreen(
     references: foundationReferences,
   ),
   'ecoFriendlyProductSuggestions' =>
-    const products.EcoFriendlyProductSuggestionsScreen(),
+    products.EcoFriendlyProductSuggestionsScreen(catalog: productCatalog),
   'sustainableLivingChallenges' =>
     const challenges.SustainableLivingChallengesScreen(),
   'certificationsGuide' => const certifications.CertificationsGuideScreen(),

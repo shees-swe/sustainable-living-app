@@ -554,6 +554,44 @@ class AppLocalizationsEn extends AppLocalizations {
       'Eco-Friendly Product Suggestions';
 
   @override
+  String get productSearchLabel => 'Search by name or note';
+
+  @override
+  String get productClearSearch => 'Clear search';
+
+  @override
+  String get productCategoryFilter => 'Category';
+
+  @override
+  String get productAllCategories => 'All categories';
+
+  @override
+  String get productSortLabel => 'Sort by name';
+
+  @override
+  String get productSortAscending => 'A–Z';
+
+  @override
+  String get productSortDescending => 'Z–A';
+
+  @override
+  String get productNoMatches =>
+      'No products match your current search and category.';
+
+  @override
+  String get productClearFilters => 'Clear search and filters';
+
+  @override
+  String get productDetail => 'Product details';
+
+  @override
+  String get productNoteLabel => 'Note';
+
+  @override
+  String get productCatalogLoadFailure =>
+      'Product suggestions could not be loaded.';
+
+  @override
   String get sustainableLivingChallenges => 'Sustainable Living Challenges';
 
   @override

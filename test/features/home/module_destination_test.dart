@@ -4,17 +4,27 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sustainable_living_app/app/router.dart';
 import 'package:sustainable_living_app/core/theme/app_theme.dart';
+import 'package:sustainable_living_app/features/eco_friendly_product_suggestions/data/product_catalog.dart';
 import 'package:sustainable_living_app/features/home/domain/module_destination.dart';
 import 'package:sustainable_living_app/l10n/generated/app_localizations.dart';
 
 import '../../support/text_layout_expectations.dart';
 
 void main() {
+  late ProductCatalog productCatalog;
+
+  setUpAll(() async {
+    productCatalog = await ProductCatalog.loadBundled();
+  });
+
   testWidgets('all module destinations remain readable at Very Large text', (
     tester,
   ) async {
     for (final destination in ModuleDestination.modules) {
-      final router = createAppRouter(initialLocation: destination.path);
+      final router = createAppRouter(
+        initialLocation: destination.path,
+        productCatalog: productCatalog,
+      );
       await tester.pumpWidget(_TestApp(router: router, textScale: 2));
       await tester.pumpAndSettle();
 
@@ -31,6 +41,8 @@ void main() {
         );
         await tester.pumpAndSettle();
         expect(emptyState, findsOneWidget);
+      } else if (destination.id == 'ecoFriendlyProductSuggestions') {
+        expect(find.text('Search by name or note'), findsOneWidget);
       } else {
         expect(
           find.text('Foundation destination'),

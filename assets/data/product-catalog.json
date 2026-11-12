@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "products": [
+    {
+      "name": "Stainless steel water bottle",
+      "category": "Reusable alternatives",
+      "note": "Replaces single-use plastic bottles for years."
+    },
+    {
+      "name": "Bamboo toothbrush",
+      "category": "Reusable alternatives",
+      "note": "Biodegradable handle instead of plastic."
+    },
+    {
+      "name": "Cloth shopping tote",
+      "category": "Reusable alternatives",
+      "note": "One bag replaces hundreds of plastic carry bags."
+    },
+    {
+      "name": "Glass food storage containers",
+      "category": "Reusable alternatives",
+      "note": "Durable, washable, no plastic leaching."
+    },
+    {
+      "name": "Beeswax food wraps",
+      "category": "Reusable alternatives",
+      "note": "Reusable alternative to cling film."
+    },
+    {
+      "name": "Rechargeable AA/AAA batteries",
+      "category": "Reusable alternatives",
+      "note": "One set replaces dozens of disposables."
+    },
+    {
+      "name": "Seasonal local vegetables",
+      "category": "Organic food options",
+      "note": "Shorter transport, fresher, supports local growers."
+    },
+    {
+      "name": "Organic lentils and beans",
+      "category": "Organic food options",
+      "note": "Low-impact protein, stores well in bulk."
+    },
+    {
+      "name": "Free-range eggs",
+      "category": "Organic food options",
+      "note": "From hens raised without routine antibiotics."
+    },
+    {
+      "name": "Raw local honey",
+      "category": "Organic food options",
+      "note": "Unprocessed, supports local beekeepers and pollinators."
+    },
+    {
+      "name": "Organic whole-wheat flour",
+      "category": "Organic food options",
+      "note": "Grown without synthetic pesticides."
+    },
+    {
+      "name": "Herbal teas (loose leaf)",
+      "category": "Organic food options",
+      "note": "No plastic tea-bag waste."
+    },
+    {
+      "name": "LED bulb (9W)",
+      "category": "Energy-efficient appliances",
+      "note": "Uses about 80% less energy than an incandescent bulb of similar brightness."
+    },
+    {
+      "name": "Solar power bank",
+      "category": "Energy-efficient appliances",
+      "note": "Charges small devices from sunlight."
+    },
+    {
+      "name": "Inverter ceiling fan",
+      "category": "Energy-efficient appliances",
+      "note": "Draws far less power than a conventional fan motor."
+    },
+    {
+      "name": "Electric kettle with auto shut-off",
+      "category": "Energy-efficient appliances",
+      "note": "Boils only the water needed, then stops."
+    },
+    {
+      "name": "Solar garden lights",
+      "category": "Energy-efficient appliances",
+      "note": "No wiring, no grid electricity."
+    },
+    {
+      "name": "Smart power strip",
+      "category": "Energy-efficient appliances",
+      "note": "Cuts standby power to idle devices."
+    },
+    {
+      "name": "Bar soap and shampoo bars",
+      "category": "Zero-waste alternatives",
+      "note": "No plastic bottles at all."
+    },
+    {
+      "name": "Compostable trash bags",
+      "category": "Zero-waste alternatives",
+      "note": "Break down instead of persisting as plastic."
+    },
+    {
+      "name": "Cloth napkins and kitchen towels",
+      "category": "Zero-waste alternatives",
+      "note": "Washable replacements for paper rolls."
+    },
+    {
+      "name": "Refillable cleaning spray bottles",
+      "category": "Zero-waste alternatives",
+      "note": "One bottle, many refill sachets."
+    },
+    {
+      "name": "Safety razor (metal)",
+      "category": "Zero-waste alternatives",
+      "note": "Only the blade is replaced, no plastic cartridges."
+    },
+    {
+      "name": "Silicone stretch lids",
+      "category": "Zero-waste alternatives",
+      "note": "Reusable covers instead of foil or cling film."
+    }
+  ]
+}

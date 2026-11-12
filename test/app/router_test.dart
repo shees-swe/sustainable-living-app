@@ -4,12 +4,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sustainable_living_app/app/router.dart';
 import 'package:sustainable_living_app/core/theme/app_theme.dart';
+import 'package:sustainable_living_app/features/eco_friendly_product_suggestions/data/product_catalog.dart';
 import 'package:sustainable_living_app/features/home/domain/module_destination.dart';
 import 'package:sustainable_living_app/l10n/generated/app_localizations.dart';
 
 import '../support/text_layout_expectations.dart';
 
 void main() {
+  late ProductCatalog productCatalog;
+
+  setUpAll(() async {
+    productCatalog = await ProductCatalog.loadBundled();
+  });
+
   testWidgets('guest can open Home without an account redirect', (
     tester,
   ) async {
@@ -88,7 +95,10 @@ void main() {
     tester,
   ) async {
     for (final destination in ModuleDestination.modules) {
-      final router = createAppRouter(initialLocation: destination.path);
+      final router = createAppRouter(
+        initialLocation: destination.path,
+        productCatalog: productCatalog,
+      );
       addTearDown(router.dispose);
 
       await tester.pumpWidget(_TestApp(router: router));
@@ -104,6 +114,8 @@ void main() {
           find.text('No activities logged for this period yet.'),
           findsOneWidget,
         );
+      } else if (destination.id == 'ecoFriendlyProductSuggestions') {
+        expect(find.text('Search by name or note'), findsOneWidget);
       } else {
         expect(find.text('Foundation destination'), findsOneWidget);
         expect(

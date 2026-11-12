@@ -14,6 +14,7 @@ import '../core/theme/app_theme.dart';
 import '../features/account/data/account_repository.dart';
 import '../features/account/data/password_hasher.dart';
 import '../features/carbon_footprint_tracker/data/activity_log_repository.dart';
+import '../features/eco_friendly_product_suggestions/data/product_catalog.dart';
 import '../features/onboarding/data/estimate_demo_fixtures.dart';
 import '../features/onboarding/data/footprint_estimate_repository.dart';
 import '../features/settings/data/user_data_deleter.dart';
@@ -28,12 +29,14 @@ class SustainableLivingApp extends StatefulWidget {
     this.database,
     this.regionRepository,
     this.foundationReferences,
+    this.productCatalog,
     super.key,
   });
 
   final AppDatabase? database;
   final RegionRepository? regionRepository;
   final FoundationReferences? foundationReferences;
+  final ProductCatalog? productCatalog;
 
   @override
   State<SustainableLivingApp> createState() => _SustainableLivingAppState();
@@ -70,6 +73,8 @@ class _SustainableLivingAppState extends State<SustainableLivingApp> {
         widget.regionRepository ?? await RegionRepository.loadBundled();
     final foundationReferences =
         widget.foundationReferences ?? await FoundationReferences.loadBundled();
+    final productCatalog =
+        widget.productCatalog ?? await ProductCatalog.loadBundled();
     final regionCatalog = RegionCatalog.fromRepository(regionRepository);
     final preferences = UserPreferencesRepository(
       database: _database,
@@ -109,6 +114,7 @@ class _SustainableLivingAppState extends State<SustainableLivingApp> {
       regionCatalog: regionCatalog,
       regionRepository: regionRepository,
       foundationReferences: foundationReferences,
+      productCatalog: productCatalog,
       selectedRegionPack: selectedRegionPack,
       demoRegion: demoRegion,
       userDataDeleter: UserDataDeleter(

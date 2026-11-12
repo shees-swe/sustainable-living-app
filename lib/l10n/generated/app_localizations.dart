@@ -1011,6 +1011,78 @@ abstract class AppLocalizations {
   /// **'Eco-Friendly Product Suggestions'**
   String get ecoFriendlyProductSuggestions;
 
+  /// No description provided for @productSearchLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by name or note'**
+  String get productSearchLabel;
+
+  /// No description provided for @productClearSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear search'**
+  String get productClearSearch;
+
+  /// No description provided for @productCategoryFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get productCategoryFilter;
+
+  /// No description provided for @productAllCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'All categories'**
+  String get productAllCategories;
+
+  /// No description provided for @productSortLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Sort by name'**
+  String get productSortLabel;
+
+  /// No description provided for @productSortAscending.
+  ///
+  /// In en, this message translates to:
+  /// **'A–Z'**
+  String get productSortAscending;
+
+  /// No description provided for @productSortDescending.
+  ///
+  /// In en, this message translates to:
+  /// **'Z–A'**
+  String get productSortDescending;
+
+  /// No description provided for @productNoMatches.
+  ///
+  /// In en, this message translates to:
+  /// **'No products match your current search and category.'**
+  String get productNoMatches;
+
+  /// No description provided for @productClearFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear search and filters'**
+  String get productClearFilters;
+
+  /// No description provided for @productDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Product details'**
+  String get productDetail;
+
+  /// No description provided for @productNoteLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Note'**
+  String get productNoteLabel;
+
+  /// No description provided for @productCatalogLoadFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'Product suggestions could not be loaded.'**
+  String get productCatalogLoadFailure;
+
   /// No description provided for @sustainableLivingChallenges.
   ///
   /// In en, this message translates to:
