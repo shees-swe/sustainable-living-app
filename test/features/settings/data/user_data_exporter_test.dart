@@ -53,6 +53,23 @@ void main() {
           assumptions: '["annualized"]',
         ),
       );
+      await database
+          .into(database.challengeProgressRecords)
+          .insert(
+            ChallengeProgressRecordsCompanion.insert(
+              challengeId: 'plastic-free-week',
+              startedAt: DateTime.utc(2026, 3, 1),
+            ),
+          );
+      await database
+          .into(database.challengeDayCompletions)
+          .insert(
+            ChallengeDayCompletionsCompanion.insert(
+              challengeId: 'plastic-free-week',
+              dayNumber: 2,
+              completedAt: DateTime.utc(2026, 3, 2),
+            ),
+          );
 
       final exported = await UserDataExporter(
         database: database,
@@ -61,7 +78,7 @@ void main() {
       final userData = exported['userData']! as Map<String, Object?>;
       final encoded = jsonEncode(exported);
 
-      expect(exported['exportSchemaVersion'], 2);
+      expect(exported['exportSchemaVersion'], 3);
       expect(exported['createdAt'], '2026-11-07T00:00:00.000Z');
       expect((userData['accounts']! as List).single, {
         'accountId': 'account-1',
@@ -74,6 +91,13 @@ void main() {
       expect(estimate['estimateValue'], 12.5);
       expect(estimate['answers'], isA<Map<String, Object?>>());
       expect(estimate['assumptions'], ['annualized']);
+      expect((userData['challengeProgress']! as List).single, {
+        'challengeId': 'plastic-free-week',
+        'startedAt': '2026-03-01T00:00:00.000Z',
+        'completedDays': [
+          {'dayNumber': 2, 'completedAt': '2026-03-02T00:00:00.000Z'},
+        ],
+      });
       expect(encoded, isNot(contains('credentialVerifiers')));
       expect(encoded, isNot(contains('"salt"')));
       expect(encoded, isNot(contains('"verifier"')));

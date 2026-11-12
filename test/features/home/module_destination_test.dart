@@ -1,10 +1,14 @@
+import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sustainable_living_app/app/router.dart';
+import 'package:sustainable_living_app/core/data/database/app_database.dart';
 import 'package:sustainable_living_app/core/theme/app_theme.dart';
 import 'package:sustainable_living_app/features/eco_friendly_product_suggestions/data/product_catalog.dart';
+import 'package:sustainable_living_app/features/sustainable_living_challenges/data/challenge_catalog.dart';
+import 'package:sustainable_living_app/features/sustainable_living_challenges/data/challenge_progress_repository.dart';
 import 'package:sustainable_living_app/features/home/domain/module_destination.dart';
 import 'package:sustainable_living_app/l10n/generated/app_localizations.dart';
 
@@ -12,9 +16,21 @@ import '../../support/text_layout_expectations.dart';
 
 void main() {
   late ProductCatalog productCatalog;
+  late ChallengeCatalog challengeCatalog;
+  late AppDatabase challengeDatabase;
+  late ChallengeProgressRepository challengeProgressRepository;
 
   setUpAll(() async {
     productCatalog = await ProductCatalog.loadBundled();
+    challengeCatalog = await ChallengeCatalog.loadBundled();
+    challengeDatabase = AppDatabase.forTesting(NativeDatabase.memory());
+    challengeProgressRepository = ChallengeProgressRepository(
+      database: challengeDatabase,
+    );
+  });
+
+  tearDownAll(() async {
+    await challengeDatabase.close();
   });
 
   testWidgets('all module destinations remain readable at Very Large text', (
@@ -24,9 +40,15 @@ void main() {
       final router = createAppRouter(
         initialLocation: destination.path,
         productCatalog: productCatalog,
+        challengeCatalog: challengeCatalog,
+        challengeProgressRepository: challengeProgressRepository,
       );
       await tester.pumpWidget(_TestApp(router: router, textScale: 2));
-      await tester.pumpAndSettle();
+      if (destination.id == 'sustainableLivingChallenges') {
+        await _pumpUntilVisible(tester, find.text('Plastic-Free Week'));
+      } else {
+        await tester.pumpAndSettle();
+      }
 
       if (destination.id == 'carbonFootprintTracker') {
         expect(find.text('Carbon Footprint Tracker'), findsOneWidget);
@@ -43,6 +65,8 @@ void main() {
         expect(emptyState, findsOneWidget);
       } else if (destination.id == 'ecoFriendlyProductSuggestions') {
         expect(find.text('Search by name or note'), findsOneWidget);
+      } else if (destination.id == 'sustainableLivingChallenges') {
+        expect(find.text('Plastic-Free Week'), findsOneWidget);
       } else {
         expect(
           find.text('Foundation destination'),
@@ -65,6 +89,8 @@ void main() {
       );
 
       await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pump();
+      await tester.pump(const Duration(seconds: 1));
       router.dispose();
     }
   });
@@ -150,4 +176,12 @@ class _TestApp extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<void> _pumpUntilVisible(WidgetTester tester, Finder finder) async {
+  for (var attempt = 0; attempt < 30; attempt++) {
+    if (finder.evaluate().isNotEmpty) return;
+    await tester.pump(const Duration(milliseconds: 100));
+  }
+  fail('Widget did not appear: $finder');
 }

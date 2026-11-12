@@ -6,6 +6,7 @@ import 'package:sustainable_living_app/core/data/database/app_database.dart';
 import 'package:sustainable_living_app/core/data/regions/foundation_references.dart';
 import 'package:sustainable_living_app/core/data/regions/region_repository.dart';
 import 'package:sustainable_living_app/features/eco_friendly_product_suggestions/data/product_catalog.dart';
+import 'package:sustainable_living_app/features/sustainable_living_challenges/data/challenge_catalog.dart';
 import 'package:sustainable_living_app/features/onboarding/data/estimate_demo_fixtures.dart';
 import 'package:sustainable_living_app/features/onboarding/data/footprint_estimate_repository.dart';
 import 'package:sustainable_living_app/features/onboarding/domain/footprint_calculator.dart';
@@ -15,11 +16,13 @@ void main() {
   late RegionRepository regionRepository;
   late FoundationReferences foundationReferences;
   late ProductCatalog productCatalog;
+  late ChallengeCatalog challengeCatalog;
 
   setUpAll(() async {
     regionRepository = await RegionRepository.loadBundled();
     foundationReferences = await FoundationReferences.loadBundled();
     productCatalog = await ProductCatalog.loadBundled();
+    challengeCatalog = await ChallengeCatalog.loadBundled();
   });
 
   testWidgets('first launch offers guest onboarding before Home', (
@@ -37,6 +40,7 @@ void main() {
         regionRepository: regionRepository,
         foundationReferences: foundationReferences,
         productCatalog: productCatalog,
+        challengeCatalog: challengeCatalog,
       ),
     );
     await _pumpUntilVisible(tester, find.text('Choose a region'));
@@ -76,6 +80,7 @@ void main() {
         regionRepository: regionRepository,
         foundationReferences: foundationReferences,
         productCatalog: productCatalog,
+        challengeCatalog: challengeCatalog,
       ),
     );
     await _pumpUntilVisible(tester, find.text('Sustainable Living Guide'));

@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "challenges": [
+    {
+      "title": "Plastic-Free Week",
+      "theme": "Plastic",
+      "days": 7,
+      "description": "Refuse single-use plastic all week: carry your own bag, bottle, and containers, and say no to plastic cutlery and straws."
+    },
+    {
+      "title": "Five-Minute Showers",
+      "theme": "Water",
+      "days": 7,
+      "description": "Keep every shower to five minutes or less for a full week. A timer or one song is your guide."
+    },
+    {
+      "title": "Meat-Free Week",
+      "theme": "Food",
+      "days": 7,
+      "description": "Eat plant-based for a week. Lentils, beans, and seasonal vegetables cover protein without meat."
+    },
+    {
+      "title": "Zero Food Waste",
+      "theme": "Food",
+      "days": 7,
+      "description": "Plan meals before shopping, use leftovers first, and compost scraps — nothing edible goes in the bin for a week."
+    },
+    {
+      "title": "Lights-Out Habit",
+      "theme": "Energy",
+      "days": 14,
+      "description": "Switch off lights and fans in empty rooms, and unplug chargers and idle devices, every day for two weeks."
+    },
+    {
+      "title": "Sort Your Waste",
+      "theme": "Waste",
+      "days": 14,
+      "description": "Separate recyclables — plastic, paper, metal, glass — from general waste every day for two weeks."
+    },
+    {
+      "title": "Cold-Wash Laundry",
+      "theme": "Energy",
+      "days": 14,
+      "description": "Wash clothes in cold water and line-dry them instead of using a dryer, for two weeks."
+    },
+    {
+      "title": "Walk & Cycle Short Trips",
+      "theme": "Transport",
+      "days": 21,
+      "description": "Make every trip under two kilometres on foot or by bicycle for three weeks."
+    },
+    {
+      "title": "Grow a Plant",
+      "theme": "Green",
+      "days": 30,
+      "description": "Plant a seed or a small sapling and care for it daily for a month — water, light, and a minute of attention."
+    },
+    {
+      "title": "Carry a Reusable Kit",
+      "theme": "Plastic",
+      "days": 30,
+      "description": "Keep a kit with you every day for a month — bottle, bag, cutlery, container — so disposables are never needed."
+    }
+  ]
+}

@@ -8,6 +8,8 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 import 'tables/credential_verifiers.dart';
+import 'tables/challenge_day_completions.dart';
+import 'tables/challenge_progress_records.dart';
 import 'tables/activity_log_entries.dart';
 import 'tables/footprint_estimates.dart';
 import 'tables/local_accounts.dart';
@@ -22,6 +24,8 @@ part 'app_database.g.dart';
     UserPreferences,
     FootprintEstimates,
     ActivityLogEntries,
+    ChallengeProgressRecords,
+    ChallengeDayCompletions,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -35,7 +39,7 @@ class AppDatabase extends _$AppDatabase {
   );
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -51,6 +55,10 @@ class AppDatabase extends _$AppDatabase {
     onUpgrade: (migrator, from, to) async {
       if (from < 2) {
         await migrator.createTable(activityLogEntries);
+      }
+      if (from < 3) {
+        await migrator.createTable(challengeProgressRecords);
+        await migrator.createTable(challengeDayCompletions);
       }
     },
     beforeOpen: (_) async {
@@ -96,6 +104,8 @@ class AppDatabase extends _$AppDatabase {
     return transaction(() async {
       await delete(footprintEstimates).go();
       await delete(activityLogEntries).go();
+      await delete(challengeDayCompletions).go();
+      await delete(challengeProgressRecords).go();
       await delete(localAccounts).go();
       await into(userPreferences).insertOnConflictUpdate(
         UserPreferencesCompanion.insert(

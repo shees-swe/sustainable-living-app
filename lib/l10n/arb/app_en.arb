@@ -349,6 +349,32 @@
   "productDetail": "Product details",
   "productNoteLabel": "Note",
   "productCatalogLoadFailure": "Product suggestions could not be loaded.",
+  "challengeProgressLoadFailure": "Challenge progress could not be loaded.",
+  "challengeProgressSaveFailure": "Challenge progress could not be saved.",
+  "challengeThemeLabel": "Theme",
+  "challengeDurationLabel": "Duration",
+  "challengeStart": "Start challenge",
+  "challengeReset": "Reset challenge",
+  "challengeCompleted": "Completed",
+  "challengeProgressSemanticsLabel": "{completed} of {total} days completed",
+  "@challengeProgressSemanticsLabel": {
+    "placeholders": {
+      "completed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "challengeDayLabel": "Day {day}",
+  "@challengeDayLabel": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      }
+    }
+  },
   "sustainableLivingChallenges": "Sustainable Living Challenges",
   "certificationsGuide": "Green Certifications & Labels Guide",
   "wasteReductionTracker": "Waste Reduction Tracker",

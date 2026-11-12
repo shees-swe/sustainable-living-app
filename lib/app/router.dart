@@ -9,6 +9,8 @@ import '../features/carbon_footprint_tracker/presentation/module_destination_scr
     as carbon;
 import '../features/carbon_footprint_tracker/data/activity_log_repository.dart';
 import '../features/eco_friendly_product_suggestions/data/product_catalog.dart';
+import '../features/sustainable_living_challenges/data/challenge_catalog.dart';
+import '../features/sustainable_living_challenges/data/challenge_progress_repository.dart';
 import '../features/community_journal/presentation/module_destination_screen.dart'
     as journal;
 import '../features/contact/presentation/contact_screen.dart';
@@ -75,6 +77,8 @@ GoRouter createAppRouter({
   RegionRepository? regionRepository,
   FoundationReferences? foundationReferences,
   ProductCatalog? productCatalog,
+  ChallengeCatalog? challengeCatalog,
+  ChallengeProgressRepository? challengeProgressRepository,
   RegionDataPack? selectedRegionPack,
   EstimateDemoRegion? demoRegion,
   Future<void> Function()? onGuestReturn,
@@ -174,6 +178,8 @@ GoRouter createAppRouter({
             activityLogRepository: activityLogRepository,
             foundationReferences: foundationReferences,
             productCatalog: productCatalog,
+            challengeCatalog: challengeCatalog,
+            challengeProgressRepository: challengeProgressRepository,
             trackerRegionId: selectedRegionPack?.region.regionId,
             trackerFactors: selectedRegionPack == null
                 ? const []
@@ -219,6 +225,8 @@ Widget _moduleScreen(
   required ActivityLogRepository? activityLogRepository,
   required FoundationReferences? foundationReferences,
   required ProductCatalog? productCatalog,
+  required ChallengeCatalog? challengeCatalog,
+  required ChallengeProgressRepository? challengeProgressRepository,
   required String? trackerRegionId,
   required List<EmissionFactor> trackerFactors,
 }) => switch (moduleId) {
@@ -231,7 +239,12 @@ Widget _moduleScreen(
   'ecoFriendlyProductSuggestions' =>
     products.EcoFriendlyProductSuggestionsScreen(catalog: productCatalog),
   'sustainableLivingChallenges' =>
-    const challenges.SustainableLivingChallengesScreen(),
+    challengeCatalog == null || challengeProgressRepository == null
+        ? _RoutePlaceholder(title: (l10n) => l10n.sustainableLivingChallenges)
+        : challenges.SustainableLivingChallengesScreen(
+            catalog: challengeCatalog,
+            repository: challengeProgressRepository,
+          ),
   'certificationsGuide' => const certifications.CertificationsGuideScreen(),
   'wasteReductionTracker' => const waste.WasteReductionTrackerScreen(),
   'recipesMealPlanning' => const recipes.RecipesMealPlanningScreen(),

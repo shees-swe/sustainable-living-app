@@ -592,6 +592,39 @@ class AppLocalizationsEn extends AppLocalizations {
       'Product suggestions could not be loaded.';
 
   @override
+  String get challengeProgressLoadFailure =>
+      'Challenge progress could not be loaded.';
+
+  @override
+  String get challengeProgressSaveFailure =>
+      'Challenge progress could not be saved.';
+
+  @override
+  String get challengeThemeLabel => 'Theme';
+
+  @override
+  String get challengeDurationLabel => 'Duration';
+
+  @override
+  String get challengeStart => 'Start challenge';
+
+  @override
+  String get challengeReset => 'Reset challenge';
+
+  @override
+  String get challengeCompleted => 'Completed';
+
+  @override
+  String challengeProgressSemanticsLabel(int completed, int total) {
+    return '$completed of $total days completed';
+  }
+
+  @override
+  String challengeDayLabel(int day) {
+    return 'Day $day';
+  }
+
+  @override
   String get sustainableLivingChallenges => 'Sustainable Living Challenges';
 
   @override

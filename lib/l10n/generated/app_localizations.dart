@@ -1083,6 +1083,60 @@ abstract class AppLocalizations {
   /// **'Product suggestions could not be loaded.'**
   String get productCatalogLoadFailure;
 
+  /// No description provided for @challengeProgressLoadFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'Challenge progress could not be loaded.'**
+  String get challengeProgressLoadFailure;
+
+  /// No description provided for @challengeProgressSaveFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'Challenge progress could not be saved.'**
+  String get challengeProgressSaveFailure;
+
+  /// No description provided for @challengeThemeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Theme'**
+  String get challengeThemeLabel;
+
+  /// No description provided for @challengeDurationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Duration'**
+  String get challengeDurationLabel;
+
+  /// No description provided for @challengeStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start challenge'**
+  String get challengeStart;
+
+  /// No description provided for @challengeReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset challenge'**
+  String get challengeReset;
+
+  /// No description provided for @challengeCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get challengeCompleted;
+
+  /// No description provided for @challengeProgressSemanticsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{completed} of {total} days completed'**
+  String challengeProgressSemanticsLabel(int completed, int total);
+
+  /// No description provided for @challengeDayLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Day {day}'**
+  String challengeDayLabel(int day);
+
   /// No description provided for @sustainableLivingChallenges.
   ///
   /// In en, this message translates to:

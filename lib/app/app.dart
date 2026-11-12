@@ -15,6 +15,8 @@ import '../features/account/data/account_repository.dart';
 import '../features/account/data/password_hasher.dart';
 import '../features/carbon_footprint_tracker/data/activity_log_repository.dart';
 import '../features/eco_friendly_product_suggestions/data/product_catalog.dart';
+import '../features/sustainable_living_challenges/data/challenge_catalog.dart';
+import '../features/sustainable_living_challenges/data/challenge_progress_repository.dart';
 import '../features/onboarding/data/estimate_demo_fixtures.dart';
 import '../features/onboarding/data/footprint_estimate_repository.dart';
 import '../features/settings/data/user_data_deleter.dart';
@@ -30,6 +32,7 @@ class SustainableLivingApp extends StatefulWidget {
     this.regionRepository,
     this.foundationReferences,
     this.productCatalog,
+    this.challengeCatalog,
     super.key,
   });
 
@@ -37,6 +40,7 @@ class SustainableLivingApp extends StatefulWidget {
   final RegionRepository? regionRepository;
   final FoundationReferences? foundationReferences;
   final ProductCatalog? productCatalog;
+  final ChallengeCatalog? challengeCatalog;
 
   @override
   State<SustainableLivingApp> createState() => _SustainableLivingAppState();
@@ -47,6 +51,7 @@ class _SustainableLivingAppState extends State<SustainableLivingApp> {
   late final bool _ownsDatabase = widget.database == null;
   late FootprintEstimateRepository _estimateRepository;
   late ActivityLogRepository _activityLogRepository;
+  late ChallengeProgressRepository _challengeProgressRepository;
   late AccountRepository _accountRepository;
   late Future<GoRouter> _router;
   GoRouter? _resolvedRouter;
@@ -62,6 +67,9 @@ class _SustainableLivingAppState extends State<SustainableLivingApp> {
     _database = database;
     _estimateRepository = FootprintEstimateRepository(database: database);
     _activityLogRepository = ActivityLogRepository(database: database);
+    _challengeProgressRepository = ChallengeProgressRepository(
+      database: database,
+    );
     _accountRepository = AccountRepository(
       database: database,
       passwordHasher: const PasswordHasher(),
@@ -75,6 +83,8 @@ class _SustainableLivingAppState extends State<SustainableLivingApp> {
         widget.foundationReferences ?? await FoundationReferences.loadBundled();
     final productCatalog =
         widget.productCatalog ?? await ProductCatalog.loadBundled();
+    final challengeCatalog =
+        widget.challengeCatalog ?? await ChallengeCatalog.loadBundled();
     final regionCatalog = RegionCatalog.fromRepository(regionRepository);
     final preferences = UserPreferencesRepository(
       database: _database,
@@ -115,6 +125,8 @@ class _SustainableLivingAppState extends State<SustainableLivingApp> {
       regionRepository: regionRepository,
       foundationReferences: foundationReferences,
       productCatalog: productCatalog,
+      challengeCatalog: challengeCatalog,
+      challengeProgressRepository: _challengeProgressRepository,
       selectedRegionPack: selectedRegionPack,
       demoRegion: demoRegion,
       userDataDeleter: UserDataDeleter(
