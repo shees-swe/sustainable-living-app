@@ -217,6 +217,7 @@ class _ChallengeDetailBody extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     return ListView(
+      key: const ValueKey('challengeDetailList'),
       padding: const EdgeInsets.symmetric(
         horizontal: ClimateSpacing.space16,
         vertical: ClimateSpacing.space16,
@@ -265,24 +266,7 @@ class _ChallengeDetailBody extends StatelessWidget {
             ),
           ],
           const SizedBox(height: ClimateSpacing.space16),
-          for (var day = 1; day <= challenge.days; day++) ...[
-            _ChallengeDayRow(
-              day: day,
-              completed: progress!.completedDays.contains(day),
-              onChanged: (completed) => unawaited(
-                _performChallengeAction(
-                  context,
-                  () => repository.setDayCompleted(
-                    challengeId: challenge.id,
-                    totalDays: challenge.days,
-                    dayNumber: day,
-                    completed: completed,
-                  ),
-                ),
-              ),
-            ),
-            if (day < challenge.days) const Divider(height: 1),
-          ],
+          ..._dayRows(context, progress!),
           const SizedBox(height: ClimateSpacing.space16),
           Align(
             alignment: AlignmentDirectional.centerStart,
@@ -298,6 +282,42 @@ class _ChallengeDetailBody extends StatelessWidget {
           ),
         ],
       ],
+    );
+  }
+
+  List<Widget> _dayRows(BuildContext context, ChallengeProgress progress) {
+    return [
+      for (var dayNumber = 1; dayNumber <= challenge.days; dayNumber++) ...[
+        _dayRow(context, progress, dayNumber),
+        if (dayNumber < challenge.days) const Divider(height: 1),
+      ],
+    ];
+  }
+
+  Widget _dayRow(
+    BuildContext context,
+    ChallengeProgress progress,
+    int dayNumber,
+  ) {
+    final l10n = AppLocalizations.of(context)!;
+    final completed = progress.completedDays.contains(dayNumber);
+    return _ChallengeDayRow(
+      key: ValueKey<int>(dayNumber),
+      day: dayNumber,
+      completed: completed,
+      locked: !completed && !repository.isDayUnlocked(progress, dayNumber),
+      lockedNote: l10n.challengeDayNotAvailableYet,
+      onChanged: (completed) => unawaited(
+        _performChallengeAction(
+          context,
+          () => repository.setDayCompleted(
+            challengeId: challenge.id,
+            totalDays: challenge.days,
+            dayNumber: dayNumber,
+            completed: completed,
+          ),
+        ),
+      ),
     );
   }
 }
@@ -342,13 +362,18 @@ class _ProgressSummary extends StatelessWidget {
 
 class _ChallengeDayRow extends StatelessWidget {
   const _ChallengeDayRow({
+    super.key,
     required this.day,
     required this.completed,
+    required this.locked,
+    required this.lockedNote,
     required this.onChanged,
   });
 
   final int day;
   final bool completed;
+  final bool locked;
+  final String lockedNote;
   final ValueChanged<bool> onChanged;
 
   @override
@@ -358,8 +383,21 @@ class _ChallengeDayRow extends StatelessWidget {
       contentPadding: EdgeInsets.zero,
       controlAffinity: ListTileControlAffinity.leading,
       value: completed,
-      onChanged: (value) => onChanged(value ?? false),
-      title: _ChallengeText(l10n.challengeDayLabel(day)),
+      onChanged: locked ? null : (value) => onChanged(value ?? false),
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _ChallengeText(l10n.challengeDayLabel(day)),
+          if (locked) ...[
+            const SizedBox(height: ClimateSpacing.space8),
+            Text(
+              lockedNote,
+              style: Theme.of(context).textTheme.bodySmall
+                  ?.copyWith(color: ClimateColors.textSecondary),
+            ),
+          ],
+        ],
+      ),
     );
   }
 }

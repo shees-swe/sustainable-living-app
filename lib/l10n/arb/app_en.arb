@@ -351,6 +351,7 @@
   "productCatalogLoadFailure": "Product suggestions could not be loaded.",
   "challengeProgressLoadFailure": "Challenge progress could not be loaded.",
   "challengeProgressSaveFailure": "Challenge progress could not be saved.",
+  "challengeDayNotAvailableYet": "Not available yet.",
   "challengeThemeLabel": "Theme",
   "challengeDurationLabel": "Duration",
   "challengeStart": "Start challenge",

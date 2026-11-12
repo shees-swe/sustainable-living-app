@@ -1095,6 +1095,12 @@ abstract class AppLocalizations {
   /// **'Challenge progress could not be saved.'**
   String get challengeProgressSaveFailure;
 
+  /// No description provided for @challengeDayNotAvailableYet.
+  ///
+  /// In en, this message translates to:
+  /// **'Not available yet.'**
+  String get challengeDayNotAvailableYet;
+
   /// No description provided for @challengeThemeLabel.
   ///
   /// In en, this message translates to:

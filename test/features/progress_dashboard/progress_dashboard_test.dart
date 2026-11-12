@@ -35,7 +35,11 @@ void main() {
     final database = AppDatabase.forTesting(NativeDatabase.memory());
     final activities = ActivityLogRepository(database: database);
     final waste = WasteLogRepository(database: database);
-    final challenges = ChallengeProgressRepository(database: database);
+    var challengeNow = DateTime(DateTime.now().year, 1, 1);
+    final challenges = ChallengeProgressRepository(
+      database: database,
+      clock: () => challengeNow,
+    );
     final trips = TravelTripRepository(database: database);
     final posts = CommunityPostRepository(database: database);
     final year = DateTime.now().year;
@@ -64,6 +68,7 @@ void main() {
     );
     await challenges.startChallenge('challenge-one');
     await challenges.startChallenge('challenge-two');
+    challengeNow = challengeNow.add(const Duration(days: 7));
     await challenges.setDayCompleted(
       challengeId: 'challenge-one',
       totalDays: 3,

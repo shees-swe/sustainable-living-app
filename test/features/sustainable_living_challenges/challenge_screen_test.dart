@@ -45,17 +45,17 @@ void main() {
         findsOneWidget,
       );
       expect(find.text('Start challenge'), findsOneWidget);
-      expect(find.text('0 / 7 days'), findsNothing);
+      expect(_progressCount(0), findsNothing);
 
       await tester.tap(find.text('Start challenge'));
-      await _pumpUntilVisible(tester, find.text('0 / 7 days'));
-      expect(find.text('0 / 7 days'), findsOneWidget);
+      await _pumpUntilVisible(tester, _progressCount(0));
+      expect(_progressCount(0), findsOneWidget);
       for (var day = 1; day <= 7; day++) {
         final dayLabel = find.text('Day $day');
         await tester.scrollUntilVisible(
           dayLabel,
           160,
-          scrollable: find.byType(Scrollable).first,
+          scrollable: _detailScrollable,
         );
         expect(dayLabel, findsOneWidget);
       }
@@ -66,21 +66,29 @@ void main() {
       );
 
       await tester.tap(find.text('Day 1'));
-      await _pumpUntilVisible(tester, find.text('1 / 7 days'));
-      expect(find.text('1 / 7 days'), findsOneWidget);
+      var progress = (await repository.readChallengeProgress(
+        'plastic-free-week',
+      ))!;
+      expect(progress.completedDays, {1});
+      await tester.pump();
+      await _scrollDetailToTop(tester);
+      await _pumpUntilVisible(tester, _progressCount(1));
+      expect(_progressCount(1), findsOneWidget);
       var progressBar = tester.widget<LinearProgressIndicator>(
-        find.byType(LinearProgressIndicator).last,
+        _detailProgressBar,
       );
       expect(progressBar.value, 1 / 7);
       expect(progressBar.semanticsValue, (1 / 7).toString());
       expect(progressBar.semanticsLabel, '1 of 7 days completed');
 
       await tester.tap(find.text('Day 1'));
-      await _pumpUntilVisible(tester, find.text('0 / 7 days'));
-      expect(find.text('0 / 7 days'), findsOneWidget);
-      progressBar = tester.widget<LinearProgressIndicator>(
-        find.byType(LinearProgressIndicator).last,
-      );
+      progress = (await repository.readChallengeProgress('plastic-free-week'))!;
+      expect(progress.completedDays, isEmpty);
+      await tester.pump();
+      await _scrollDetailToTop(tester);
+      await _pumpUntilVisible(tester, _progressCount(0));
+      expect(_progressCount(0), findsOneWidget);
+      progressBar = tester.widget<LinearProgressIndicator>(_detailProgressBar);
       expect(progressBar.value, 0);
     } finally {
       await tester.pumpWidget(const SizedBox.shrink());
@@ -94,34 +102,158 @@ void main() {
   ) async {
     final database = AppDatabase.forTesting(NativeDatabase.memory());
     try {
-      final repository = ChallengeProgressRepository(database: database);
+      var now = DateTime(2026, 1, 1);
+      final repository = ChallengeProgressRepository(
+        database: database,
+        clock: () => now,
+      );
       await _openChallengeDetail(tester, catalog, repository, 'Meat-Free Week');
       await tester.tap(find.text('Start challenge'));
-      await _pumpUntilVisible(tester, find.text('0 / 7 days'));
+      await _pumpUntilVisible(tester, _progressCount(0));
+      now = DateTime(2026, 1, 8);
 
       for (var day = 1; day <= 7; day++) {
         final dayLabel = find.text('Day $day');
-        await tester.scrollUntilVisible(
-          dayLabel,
-          160,
-          scrollable: find.byType(Scrollable).first,
-        );
+        await _ensureDayVisible(tester, day);
         await tester.tap(dayLabel);
-        final count = find.text('$day / 7 days');
-        await tester.scrollUntilVisible(
-          count,
-          160,
-          scrollable: find.byType(Scrollable).first,
-        );
+        final progress = (await repository.readChallengeProgress(
+          'meat-free-week',
+        ))!;
+        expect(progress.completedDayCount, day);
+        await tester.pump();
+        await _scrollDetailToTop(tester);
+        final count = _progressCount(day);
+        await tester.ensureVisible(count);
+        await tester.pump();
         expect(count, findsOneWidget);
       }
 
-      expect(find.text('7 / 7 days'), findsOneWidget);
+      expect(_progressCount(7), findsOneWidget);
       expect(find.text('Completed'), findsOneWidget);
       final progressBar = tester.widget<LinearProgressIndicator>(
         find.byType(LinearProgressIndicator).last,
       );
       expect(progressBar.value, 1);
+    } finally {
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pump(const Duration(milliseconds: 1));
+      await database.close();
+    }
+  });
+
+  testWidgets('tapping Day 2 toggles only Day 2', (tester) async {
+    final database = AppDatabase.forTesting(NativeDatabase.memory());
+    try {
+      var now = DateTime(2026, 1, 1);
+      final repository = ChallengeProgressRepository(
+        database: database,
+        clock: () => now,
+      );
+      await repository.startChallenge('plastic-free-week');
+      await repository.setDayCompleted(
+        challengeId: 'plastic-free-week',
+        totalDays: 7,
+        dayNumber: 1,
+        completed: true,
+      );
+      now = DateTime(2026, 1, 8);
+      await repository.setDayCompleted(
+        challengeId: 'plastic-free-week',
+        totalDays: 7,
+        dayNumber: 2,
+        completed: true,
+      );
+
+      await _openChallengeDetail(
+        tester,
+        catalog,
+        repository,
+        'Plastic-Free Week',
+      );
+
+      await _ensureDayVisible(tester, 2);
+      expect(_dayCheckbox(tester, 2).value, isTrue);
+      expect(_dayCheckbox(tester, 2).onChanged, isNotNull);
+      await tester.tap(find.text('Day 2'));
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(_dayCheckbox(tester, 2).value, isFalse);
+      var progress = (await repository.readChallengeProgress(
+        'plastic-free-week',
+      ))!;
+      expect(progress.completedDays, {1});
+      expect(_dayCheckbox(tester, 1).value, isTrue);
+      expect(_dayCheckbox(tester, 2).value, isFalse);
+      await tester.pump();
+      expect(progress.completedDays.contains(1), isTrue);
+      expect(progress.completedDays.contains(2), isFalse);
+
+      await _ensureDayVisible(tester, 2);
+      await tester.tap(find.text('Day 2'));
+      await tester.pump(const Duration(milliseconds: 100));
+      progress = (await repository.readChallengeProgress('plastic-free-week'))!;
+      expect(progress.completedDays, {1, 2});
+      expect(_dayCheckbox(tester, 1).value, isTrue);
+      expect(_dayCheckbox(tester, 2).value, isTrue);
+      await tester.pump();
+      expect(progress.completedDays, {1, 2});
+      expect(progress.completedDays.contains(1), isTrue);
+      expect(progress.completedDays.contains(2), isTrue);
+    } finally {
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pump(const Duration(milliseconds: 1));
+      await database.close();
+    }
+  });
+
+  testWidgets('locked future day shows a note and cannot be checked', (
+    tester,
+  ) async {
+    final database = AppDatabase.forTesting(NativeDatabase.memory());
+    try {
+      final repository = ChallengeProgressRepository(
+        database: database,
+        clock: () => DateTime(2026, 1, 1),
+      );
+      await _openChallengeDetail(
+        tester,
+        catalog,
+        repository,
+        'Plastic-Free Week',
+      );
+      await tester.tap(find.text('Start challenge'));
+      expect(
+        await repository.readChallengeProgress('plastic-free-week'),
+        isNotNull,
+      );
+      await tester.pump();
+      await _pumpUntilVisible(tester, _progressCount(0));
+
+      final dayTwoRow = find.byKey(const ValueKey<int>(2));
+      await tester.scrollUntilVisible(
+        find.text('Day 2'),
+        160,
+        scrollable: _detailScrollable,
+      );
+      expect(
+        find.descendant(
+          of: dayTwoRow,
+          matching: find.text('Not available yet.'),
+        ),
+        findsOneWidget,
+      );
+      final checkbox = tester.widget<CheckboxListTile>(
+        find.descendant(of: dayTwoRow, matching: find.byType(CheckboxListTile)),
+      );
+      expect(checkbox.onChanged, isNull);
+
+      await tester.tap(find.text('Day 2'));
+      await tester.pump(const Duration(milliseconds: 200));
+      final progress = (await repository.readChallengeProgress(
+        'plastic-free-week',
+      ))!;
+      expect(progress.completedDays, isEmpty);
+      await _scrollDetailToTop(tester);
+      expect(_progressCount(0), findsOneWidget);
     } finally {
       await tester.pumpWidget(const SizedBox.shrink());
       await tester.pump(const Duration(milliseconds: 1));
@@ -227,6 +359,47 @@ Future<void> _pumpUntilVisible(WidgetTester tester, Finder finder) async {
   }
   fail('Widget did not appear: $finder');
 }
+
+Finder _progressCount(int completed) => find.descendant(
+  of: find.byKey(const ValueKey('challengeDetailList')),
+  matching: find.byWidgetPredicate(
+    (widget) =>
+        widget is RichText &&
+        widget.text.toPlainText() == '$completed / 7 days',
+    skipOffstage: false,
+  ),
+);
+
+CheckboxListTile _dayCheckbox(WidgetTester tester, int dayNumber) =>
+    tester.widget<CheckboxListTile>(
+      find.descendant(
+        of: find.byKey(ValueKey<int>(dayNumber)),
+        matching: find.byType(CheckboxListTile),
+      ),
+    );
+
+Future<void> _scrollDetailToTop(WidgetTester tester) async {
+  await tester.drag(
+    find.byKey(const ValueKey('challengeDetailList')),
+    const Offset(0, 1000),
+  );
+  await tester.pump();
+}
+
+Future<void> _ensureDayVisible(WidgetTester tester, int dayNumber) async {
+  await tester.ensureVisible(find.text('Day $dayNumber'));
+  await tester.pump();
+}
+
+final _detailScrollable = find.descendant(
+  of: find.byKey(const ValueKey('challengeDetailList')),
+  matching: find.byType(Scrollable),
+);
+
+final _detailProgressBar = find.descendant(
+  of: find.byKey(const ValueKey('challengeDetailList')),
+  matching: find.byType(LinearProgressIndicator),
+);
 
 void _expectVisibleListTextReadable(
   WidgetTester tester,

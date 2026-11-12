@@ -25,6 +25,9 @@ class ChallengeProgressRepository {
     return null;
   }
 
+  bool isDayUnlocked(ChallengeProgress progress, int dayNumber) =>
+      progress.isDayUnlocked(dayNumber, _clock());
+
   Future<void> startChallenge(String challengeId) async {
     _requireChallengeId(challengeId);
     await database
@@ -57,6 +60,14 @@ class ChallengeProgressRepository {
       )..where((row) => row.challengeId.equals(challengeId))).getSingleOrNull();
       if (progress == null) {
         throw StateError('Start the challenge before marking a day complete.');
+      }
+      if (completed &&
+          !ChallengeProgress.isDayUnlockedFrom(
+            startedAt: progress.startedAt,
+            dayNumber: dayNumber,
+            now: _clock(),
+          )) {
+        return;
       }
 
       final mark = database.challengeDayCompletions;

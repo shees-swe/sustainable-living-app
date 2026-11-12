@@ -600,6 +600,9 @@ class AppLocalizationsEn extends AppLocalizations {
       'Challenge progress could not be saved.';
 
   @override
+  String get challengeDayNotAvailableYet => 'Not available yet.';
+
+  @override
   String get challengeThemeLabel => 'Theme';
 
   @override
