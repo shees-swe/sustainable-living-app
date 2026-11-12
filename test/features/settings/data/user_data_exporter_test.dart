@@ -70,6 +70,17 @@ void main() {
               completedAt: DateTime.utc(2026, 3, 2),
             ),
           );
+      await database
+          .into(database.wasteLogEntries)
+          .insert(
+            WasteLogEntriesCompanion.insert(
+              entryId: 'waste-1',
+              wasteDate: DateTime.utc(2026, 3, 4),
+              createdAt: DateTime.utc(2026, 3, 4),
+              category: 'Plastic',
+              amountKg: 1.25,
+            ),
+          );
 
       final exported = await UserDataExporter(
         database: database,
@@ -78,7 +89,7 @@ void main() {
       final userData = exported['userData']! as Map<String, Object?>;
       final encoded = jsonEncode(exported);
 
-      expect(exported['exportSchemaVersion'], 3);
+      expect(exported['exportSchemaVersion'], 4);
       expect(exported['createdAt'], '2026-11-07T00:00:00.000Z');
       expect((userData['accounts']! as List).single, {
         'accountId': 'account-1',
@@ -97,6 +108,13 @@ void main() {
         'completedDays': [
           {'dayNumber': 2, 'completedAt': '2026-03-02T00:00:00.000Z'},
         ],
+      });
+      expect((userData['wasteLogEntries']! as List).single, {
+        'entryId': 'waste-1',
+        'wasteDate': '2026-03-04T00:00:00.000Z',
+        'createdAt': '2026-03-04T00:00:00.000Z',
+        'category': 'Plastic',
+        'amountKg': 1.25,
       });
       expect(encoded, isNot(contains('credentialVerifiers')));
       expect(encoded, isNot(contains('"salt"')));

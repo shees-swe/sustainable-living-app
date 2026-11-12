@@ -672,6 +672,72 @@ class AppLocalizationsEn extends AppLocalizations {
   String get wasteReductionTracker => 'Waste Reduction Tracker';
 
   @override
+  String get wasteEstimateNote => 'These waste amounts are your own estimates.';
+
+  @override
+  String get wasteMonthSummary => 'Current month summary';
+
+  @override
+  String get wasteMonthTotal => 'Month total';
+
+  @override
+  String get wasteMonthEmpty => 'No waste logged this month yet.';
+
+  @override
+  String get wasteLogSection => 'Waste log';
+
+  @override
+  String get wasteNoEntries => 'No waste logged yet.';
+
+  @override
+  String get wasteAddEntry => 'Add waste entry';
+
+  @override
+  String get wasteDeleteEntry => 'Delete waste entry';
+
+  @override
+  String get wasteDateLabel => 'Date';
+
+  @override
+  String get wasteCategoryLabel => 'Category';
+
+  @override
+  String get wasteAmountLabel => 'Amount';
+
+  @override
+  String get wasteSaveEntry => 'Save entry';
+
+  @override
+  String get wasteInvalidAmount => 'Enter a finite amount greater than zero.';
+
+  @override
+  String get wasteLoadFailure => 'Waste entries could not be loaded.';
+
+  @override
+  String get wasteSaveFailure => 'The waste entry could not be saved.';
+
+  @override
+  String get wasteDeleteFailure => 'The waste entry could not be deleted.';
+
+  @override
+  String get wastePlastic => 'Plastic';
+
+  @override
+  String get wastePaperCardboard => 'Paper & cardboard';
+
+  @override
+  String get wasteGlass => 'Glass';
+
+  @override
+  String get wasteMetal => 'Metal';
+
+  @override
+  String get wasteOrganic => 'Organic';
+
+  @override
+  String get wasteOther => 'Other';
+
+  @override
   String get recipesMealPlanning => 'Sustainable Recipes & Meal Planning';
 
   @override

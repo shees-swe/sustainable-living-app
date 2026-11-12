@@ -18,6 +18,7 @@ import '../features/certifications_guide/data/certification_catalog.dart';
 import '../features/eco_friendly_product_suggestions/data/product_catalog.dart';
 import '../features/sustainable_living_challenges/data/challenge_catalog.dart';
 import '../features/sustainable_living_challenges/data/challenge_progress_repository.dart';
+import '../features/waste_reduction_tracker/data/waste_log_repository.dart';
 import '../features/onboarding/data/estimate_demo_fixtures.dart';
 import '../features/onboarding/data/footprint_estimate_repository.dart';
 import '../features/settings/data/user_data_deleter.dart';
@@ -55,6 +56,7 @@ class _SustainableLivingAppState extends State<SustainableLivingApp> {
   late FootprintEstimateRepository _estimateRepository;
   late ActivityLogRepository _activityLogRepository;
   late ChallengeProgressRepository _challengeProgressRepository;
+  late WasteLogRepository _wasteLogRepository;
   late AccountRepository _accountRepository;
   late Future<GoRouter> _router;
   GoRouter? _resolvedRouter;
@@ -73,6 +75,7 @@ class _SustainableLivingAppState extends State<SustainableLivingApp> {
     _challengeProgressRepository = ChallengeProgressRepository(
       database: database,
     );
+    _wasteLogRepository = WasteLogRepository(database: database);
     _accountRepository = AccountRepository(
       database: database,
       passwordHasher: const PasswordHasher(),
@@ -133,6 +136,7 @@ class _SustainableLivingAppState extends State<SustainableLivingApp> {
       challengeCatalog: challengeCatalog,
       certificationCatalog: certificationCatalog,
       challengeProgressRepository: _challengeProgressRepository,
+      wasteLogRepository: _wasteLogRepository,
       selectedRegionPack: selectedRegionPack,
       demoRegion: demoRegion,
       userDataDeleter: UserDataDeleter(

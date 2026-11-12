@@ -11,6 +11,7 @@ import '../features/carbon_footprint_tracker/data/activity_log_repository.dart';
 import '../features/eco_friendly_product_suggestions/data/product_catalog.dart';
 import '../features/sustainable_living_challenges/data/challenge_catalog.dart';
 import '../features/sustainable_living_challenges/data/challenge_progress_repository.dart';
+import '../features/waste_reduction_tracker/data/waste_log_repository.dart';
 import '../features/community_journal/presentation/module_destination_screen.dart'
     as journal;
 import '../features/contact/presentation/contact_screen.dart';
@@ -81,6 +82,7 @@ GoRouter createAppRouter({
   ChallengeCatalog? challengeCatalog,
   CertificationCatalog? certificationCatalog,
   ChallengeProgressRepository? challengeProgressRepository,
+  WasteLogRepository? wasteLogRepository,
   RegionDataPack? selectedRegionPack,
   EstimateDemoRegion? demoRegion,
   Future<void> Function()? onGuestReturn,
@@ -183,6 +185,7 @@ GoRouter createAppRouter({
             challengeCatalog: challengeCatalog,
             certificationCatalog: certificationCatalog,
             challengeProgressRepository: challengeProgressRepository,
+            wasteLogRepository: wasteLogRepository,
             trackerRegionId: selectedRegionPack?.region.regionId,
             trackerFactors: selectedRegionPack == null
                 ? const []
@@ -231,6 +234,7 @@ Widget _moduleScreen(
   required ChallengeCatalog? challengeCatalog,
   required CertificationCatalog? certificationCatalog,
   required ChallengeProgressRepository? challengeProgressRepository,
+  required WasteLogRepository? wasteLogRepository,
   required String? trackerRegionId,
   required List<EmissionFactor> trackerFactors,
 }) => switch (moduleId) {
@@ -255,7 +259,10 @@ Widget _moduleScreen(
         : certifications.CertificationsGuideScreen(
             catalog: certificationCatalog,
           ),
-  'wasteReductionTracker' => const waste.WasteReductionTrackerScreen(),
+  'wasteReductionTracker' =>
+    wasteLogRepository == null
+        ? _RoutePlaceholder(title: (l10n) => l10n.wasteReductionTracker)
+        : waste.WasteReductionTrackerScreen(repository: wasteLogRepository),
   'recipesMealPlanning' => const recipes.RecipesMealPlanningScreen(),
   'energyConservationTips' => const energy.EnergyConservationTipsScreen(),
   'ecoTravelSuggestions' => const travel.EcoTravelSuggestionsScreen(),

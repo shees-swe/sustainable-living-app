@@ -1227,6 +1227,138 @@ abstract class AppLocalizations {
   /// **'Waste Reduction Tracker'**
   String get wasteReductionTracker;
 
+  /// No description provided for @wasteEstimateNote.
+  ///
+  /// In en, this message translates to:
+  /// **'These waste amounts are your own estimates.'**
+  String get wasteEstimateNote;
+
+  /// No description provided for @wasteMonthSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Current month summary'**
+  String get wasteMonthSummary;
+
+  /// No description provided for @wasteMonthTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Month total'**
+  String get wasteMonthTotal;
+
+  /// No description provided for @wasteMonthEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No waste logged this month yet.'**
+  String get wasteMonthEmpty;
+
+  /// No description provided for @wasteLogSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Waste log'**
+  String get wasteLogSection;
+
+  /// No description provided for @wasteNoEntries.
+  ///
+  /// In en, this message translates to:
+  /// **'No waste logged yet.'**
+  String get wasteNoEntries;
+
+  /// No description provided for @wasteAddEntry.
+  ///
+  /// In en, this message translates to:
+  /// **'Add waste entry'**
+  String get wasteAddEntry;
+
+  /// No description provided for @wasteDeleteEntry.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete waste entry'**
+  String get wasteDeleteEntry;
+
+  /// No description provided for @wasteDateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get wasteDateLabel;
+
+  /// No description provided for @wasteCategoryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get wasteCategoryLabel;
+
+  /// No description provided for @wasteAmountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount'**
+  String get wasteAmountLabel;
+
+  /// No description provided for @wasteSaveEntry.
+  ///
+  /// In en, this message translates to:
+  /// **'Save entry'**
+  String get wasteSaveEntry;
+
+  /// No description provided for @wasteInvalidAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a finite amount greater than zero.'**
+  String get wasteInvalidAmount;
+
+  /// No description provided for @wasteLoadFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'Waste entries could not be loaded.'**
+  String get wasteLoadFailure;
+
+  /// No description provided for @wasteSaveFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'The waste entry could not be saved.'**
+  String get wasteSaveFailure;
+
+  /// No description provided for @wasteDeleteFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'The waste entry could not be deleted.'**
+  String get wasteDeleteFailure;
+
+  /// No description provided for @wastePlastic.
+  ///
+  /// In en, this message translates to:
+  /// **'Plastic'**
+  String get wastePlastic;
+
+  /// No description provided for @wastePaperCardboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Paper & cardboard'**
+  String get wastePaperCardboard;
+
+  /// No description provided for @wasteGlass.
+  ///
+  /// In en, this message translates to:
+  /// **'Glass'**
+  String get wasteGlass;
+
+  /// No description provided for @wasteMetal.
+  ///
+  /// In en, this message translates to:
+  /// **'Metal'**
+  String get wasteMetal;
+
+  /// No description provided for @wasteOrganic.
+  ///
+  /// In en, this message translates to:
+  /// **'Organic'**
+  String get wasteOrganic;
+
+  /// No description provided for @wasteOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get wasteOther;
+
   /// No description provided for @recipesMealPlanning.
   ///
   /// In en, this message translates to:

@@ -66,7 +66,7 @@ void main() {
     await tester.tap(find.text('Export my data'));
     await tester.pumpAndSettle();
 
-    expect(sharedExport?['exportSchemaVersion'], 3);
+    expect(sharedExport?['exportSchemaVersion'], 4);
     expect(sharedExport?['userData'], isA<Map<String, Object?>>());
     expect(find.text('The data export was shared.'), findsOneWidget);
   });

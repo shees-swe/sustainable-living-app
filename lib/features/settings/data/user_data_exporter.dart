@@ -11,7 +11,7 @@ class UserDataExporter {
   UserDataExporter._(this._database, DateTime Function()? clock)
     : _clock = clock ?? DateTime.now;
 
-  static const int exportSchemaVersion = 3;
+  static const int exportSchemaVersion = 4;
 
   final AppDatabase _database;
   final DateTime Function() _clock;
@@ -25,6 +25,9 @@ class UserDataExporter {
           .get();
       final activityLogEntries = await _database
           .select(_database.activityLogEntries)
+          .get();
+      final wasteLogEntries = await _database
+          .select(_database.wasteLogEntries)
           .get();
       final challengeProgressRecords = await _database
           .select(_database.challengeProgressRecords)
@@ -76,6 +79,16 @@ class UserDataExporter {
                 'emissionsKg': entry.emissionsKg,
                 'regionId': entry.regionId,
                 'factorId': entry.factorId,
+              },
+          ],
+          'wasteLogEntries': [
+            for (final entry in wasteLogEntries)
+              {
+                'entryId': entry.entryId,
+                'wasteDate': entry.wasteDate.toUtc().toIso8601String(),
+                'createdAt': entry.createdAt.toUtc().toIso8601String(),
+                'category': entry.category,
+                'amountKg': entry.amountKg,
               },
           ],
           'challengeProgress': [

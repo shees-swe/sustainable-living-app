@@ -10,6 +10,7 @@ import 'package:sustainable_living_app/features/certifications_guide/data/certif
 import 'package:sustainable_living_app/features/eco_friendly_product_suggestions/data/product_catalog.dart';
 import 'package:sustainable_living_app/features/sustainable_living_challenges/data/challenge_catalog.dart';
 import 'package:sustainable_living_app/features/sustainable_living_challenges/data/challenge_progress_repository.dart';
+import 'package:sustainable_living_app/features/waste_reduction_tracker/data/waste_log_repository.dart';
 import 'package:sustainable_living_app/features/home/domain/module_destination.dart';
 import 'package:sustainable_living_app/l10n/generated/app_localizations.dart';
 
@@ -21,6 +22,7 @@ void main() {
   late CertificationCatalog certificationCatalog;
   late AppDatabase challengeDatabase;
   late ChallengeProgressRepository challengeProgressRepository;
+  late WasteLogRepository wasteLogRepository;
 
   setUpAll(() async {
     productCatalog = await ProductCatalog.loadBundled();
@@ -30,6 +32,7 @@ void main() {
     challengeProgressRepository = ChallengeProgressRepository(
       database: challengeDatabase,
     );
+    wasteLogRepository = WasteLogRepository(database: challengeDatabase);
   });
 
   tearDownAll(() async {
@@ -120,12 +123,15 @@ void main() {
         challengeCatalog: challengeCatalog,
         certificationCatalog: certificationCatalog,
         challengeProgressRepository: challengeProgressRepository,
+        wasteLogRepository: wasteLogRepository,
       );
       addTearDown(router.dispose);
 
       await tester.pumpWidget(_TestApp(router: router));
       if (destination.id == 'sustainableLivingChallenges') {
         await _pumpUntilVisible(tester, find.text('Plastic-Free Week'));
+      } else if (destination.id == 'wasteReductionTracker') {
+        await _pumpUntilVisible(tester, find.text('No waste logged yet.'));
       } else {
         await tester.pumpAndSettle();
       }
@@ -146,6 +152,8 @@ void main() {
         expect(find.text('Plastic-Free Week'), findsOneWidget);
       } else if (destination.id == 'certificationsGuide') {
         expect(find.text('Search by name or meaning'), findsOneWidget);
+      } else if (destination.id == 'wasteReductionTracker') {
+        expect(find.text('No waste logged yet.'), findsOneWidget);
       } else {
         expect(find.text('Foundation destination'), findsOneWidget);
         expect(

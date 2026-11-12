@@ -14,6 +14,7 @@ import 'tables/activity_log_entries.dart';
 import 'tables/footprint_estimates.dart';
 import 'tables/local_accounts.dart';
 import 'tables/user_preferences.dart';
+import 'tables/waste_log_entries.dart';
 
 part 'app_database.g.dart';
 
@@ -26,6 +27,7 @@ part 'app_database.g.dart';
     ActivityLogEntries,
     ChallengeProgressRecords,
     ChallengeDayCompletions,
+    WasteLogEntries,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -39,7 +41,7 @@ class AppDatabase extends _$AppDatabase {
   );
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -59,6 +61,9 @@ class AppDatabase extends _$AppDatabase {
       if (from < 3) {
         await migrator.createTable(challengeProgressRecords);
         await migrator.createTable(challengeDayCompletions);
+      }
+      if (from < 4) {
+        await migrator.createTable(wasteLogEntries);
       }
     },
     beforeOpen: (_) async {
@@ -104,6 +109,7 @@ class AppDatabase extends _$AppDatabase {
     return transaction(() async {
       await delete(footprintEstimates).go();
       await delete(activityLogEntries).go();
+      await delete(wasteLogEntries).go();
       await delete(challengeDayCompletions).go();
       await delete(challengeProgressRecords).go();
       await delete(localAccounts).go();

@@ -3059,6 +3059,376 @@ class ChallengeDayCompletionsCompanion
   }
 }
 
+class $WasteLogEntriesTable extends WasteLogEntries
+    with TableInfo<$WasteLogEntriesTable, WasteLogEntry> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $WasteLogEntriesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _entryIdMeta = const VerificationMeta(
+    'entryId',
+  );
+  @override
+  late final GeneratedColumn<String> entryId = GeneratedColumn<String>(
+    'entry_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _wasteDateMeta = const VerificationMeta(
+    'wasteDate',
+  );
+  @override
+  late final GeneratedColumn<DateTime> wasteDate = GeneratedColumn<DateTime>(
+    'waste_date',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _categoryMeta = const VerificationMeta(
+    'category',
+  );
+  @override
+  late final GeneratedColumn<String> category = GeneratedColumn<String>(
+    'category',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL CHECK (category IN (\'Plastic\', \'Paper & cardboard\', \'Glass\', \'Metal\', \'Organic\', \'Other\'))',
+  );
+  static const VerificationMeta _amountKgMeta = const VerificationMeta(
+    'amountKg',
+  );
+  @override
+  late final GeneratedColumn<double> amountKg = GeneratedColumn<double>(
+    'amount_kg',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL CHECK (amount_kg > 0)',
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    entryId,
+    wasteDate,
+    createdAt,
+    category,
+    amountKg,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'waste_log_entries';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<WasteLogEntry> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('entry_id')) {
+      context.handle(
+        _entryIdMeta,
+        entryId.isAcceptableOrUnknown(data['entry_id']!, _entryIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_entryIdMeta);
+    }
+    if (data.containsKey('waste_date')) {
+      context.handle(
+        _wasteDateMeta,
+        wasteDate.isAcceptableOrUnknown(data['waste_date']!, _wasteDateMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_wasteDateMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('category')) {
+      context.handle(
+        _categoryMeta,
+        category.isAcceptableOrUnknown(data['category']!, _categoryMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_categoryMeta);
+    }
+    if (data.containsKey('amount_kg')) {
+      context.handle(
+        _amountKgMeta,
+        amountKg.isAcceptableOrUnknown(data['amount_kg']!, _amountKgMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_amountKgMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {entryId};
+  @override
+  WasteLogEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return WasteLogEntry(
+      entryId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}entry_id'],
+      )!,
+      wasteDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}waste_date'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      category: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}category'],
+      )!,
+      amountKg: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}amount_kg'],
+      )!,
+    );
+  }
+
+  @override
+  $WasteLogEntriesTable createAlias(String alias) {
+    return $WasteLogEntriesTable(attachedDatabase, alias);
+  }
+}
+
+class WasteLogEntry extends DataClass implements Insertable<WasteLogEntry> {
+  final String entryId;
+  final DateTime wasteDate;
+  final DateTime createdAt;
+  final String category;
+  final double amountKg;
+  const WasteLogEntry({
+    required this.entryId,
+    required this.wasteDate,
+    required this.createdAt,
+    required this.category,
+    required this.amountKg,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['entry_id'] = Variable<String>(entryId);
+    map['waste_date'] = Variable<DateTime>(wasteDate);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    map['category'] = Variable<String>(category);
+    map['amount_kg'] = Variable<double>(amountKg);
+    return map;
+  }
+
+  WasteLogEntriesCompanion toCompanion(bool nullToAbsent) {
+    return WasteLogEntriesCompanion(
+      entryId: Value(entryId),
+      wasteDate: Value(wasteDate),
+      createdAt: Value(createdAt),
+      category: Value(category),
+      amountKg: Value(amountKg),
+    );
+  }
+
+  factory WasteLogEntry.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return WasteLogEntry(
+      entryId: serializer.fromJson<String>(json['entryId']),
+      wasteDate: serializer.fromJson<DateTime>(json['wasteDate']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      category: serializer.fromJson<String>(json['category']),
+      amountKg: serializer.fromJson<double>(json['amountKg']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'entryId': serializer.toJson<String>(entryId),
+      'wasteDate': serializer.toJson<DateTime>(wasteDate),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'category': serializer.toJson<String>(category),
+      'amountKg': serializer.toJson<double>(amountKg),
+    };
+  }
+
+  WasteLogEntry copyWith({
+    String? entryId,
+    DateTime? wasteDate,
+    DateTime? createdAt,
+    String? category,
+    double? amountKg,
+  }) => WasteLogEntry(
+    entryId: entryId ?? this.entryId,
+    wasteDate: wasteDate ?? this.wasteDate,
+    createdAt: createdAt ?? this.createdAt,
+    category: category ?? this.category,
+    amountKg: amountKg ?? this.amountKg,
+  );
+  WasteLogEntry copyWithCompanion(WasteLogEntriesCompanion data) {
+    return WasteLogEntry(
+      entryId: data.entryId.present ? data.entryId.value : this.entryId,
+      wasteDate: data.wasteDate.present ? data.wasteDate.value : this.wasteDate,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      category: data.category.present ? data.category.value : this.category,
+      amountKg: data.amountKg.present ? data.amountKg.value : this.amountKg,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('WasteLogEntry(')
+          ..write('entryId: $entryId, ')
+          ..write('wasteDate: $wasteDate, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('category: $category, ')
+          ..write('amountKg: $amountKg')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(entryId, wasteDate, createdAt, category, amountKg);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is WasteLogEntry &&
+          other.entryId == this.entryId &&
+          other.wasteDate == this.wasteDate &&
+          other.createdAt == this.createdAt &&
+          other.category == this.category &&
+          other.amountKg == this.amountKg);
+}
+
+class WasteLogEntriesCompanion extends UpdateCompanion<WasteLogEntry> {
+  final Value<String> entryId;
+  final Value<DateTime> wasteDate;
+  final Value<DateTime> createdAt;
+  final Value<String> category;
+  final Value<double> amountKg;
+  final Value<int> rowid;
+  const WasteLogEntriesCompanion({
+    this.entryId = const Value.absent(),
+    this.wasteDate = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.category = const Value.absent(),
+    this.amountKg = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  WasteLogEntriesCompanion.insert({
+    required String entryId,
+    required DateTime wasteDate,
+    required DateTime createdAt,
+    required String category,
+    required double amountKg,
+    this.rowid = const Value.absent(),
+  }) : entryId = Value(entryId),
+       wasteDate = Value(wasteDate),
+       createdAt = Value(createdAt),
+       category = Value(category),
+       amountKg = Value(amountKg);
+  static Insertable<WasteLogEntry> custom({
+    Expression<String>? entryId,
+    Expression<DateTime>? wasteDate,
+    Expression<DateTime>? createdAt,
+    Expression<String>? category,
+    Expression<double>? amountKg,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (entryId != null) 'entry_id': entryId,
+      if (wasteDate != null) 'waste_date': wasteDate,
+      if (createdAt != null) 'created_at': createdAt,
+      if (category != null) 'category': category,
+      if (amountKg != null) 'amount_kg': amountKg,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  WasteLogEntriesCompanion copyWith({
+    Value<String>? entryId,
+    Value<DateTime>? wasteDate,
+    Value<DateTime>? createdAt,
+    Value<String>? category,
+    Value<double>? amountKg,
+    Value<int>? rowid,
+  }) {
+    return WasteLogEntriesCompanion(
+      entryId: entryId ?? this.entryId,
+      wasteDate: wasteDate ?? this.wasteDate,
+      createdAt: createdAt ?? this.createdAt,
+      category: category ?? this.category,
+      amountKg: amountKg ?? this.amountKg,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (entryId.present) {
+      map['entry_id'] = Variable<String>(entryId.value);
+    }
+    if (wasteDate.present) {
+      map['waste_date'] = Variable<DateTime>(wasteDate.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (category.present) {
+      map['category'] = Variable<String>(category.value);
+    }
+    if (amountKg.present) {
+      map['amount_kg'] = Variable<double>(amountKg.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('WasteLogEntriesCompanion(')
+          ..write('entryId: $entryId, ')
+          ..write('wasteDate: $wasteDate, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('category: $category, ')
+          ..write('amountKg: $amountKg, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -3076,6 +3446,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $ChallengeProgressRecordsTable(this);
   late final $ChallengeDayCompletionsTable challengeDayCompletions =
       $ChallengeDayCompletionsTable(this);
+  late final $WasteLogEntriesTable wasteLogEntries = $WasteLogEntriesTable(
+    this,
+  );
   late final Index localAccountsLoginIdentifierUnique = Index(
     'local_accounts_login_identifier_unique',
     'CREATE UNIQUE INDEX local_accounts_login_identifier_unique ON local_accounts (login_identifier)',
@@ -3092,6 +3465,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     activityLogEntries,
     challengeProgressRecords,
     challengeDayCompletions,
+    wasteLogEntries,
     localAccountsLoginIdentifierUnique,
   ];
   @override
@@ -5512,6 +5886,217 @@ typedef $$ChallengeDayCompletionsTableProcessedTableManager =
       ChallengeDayCompletion,
       PrefetchHooks Function({bool challengeId})
     >;
+typedef $$WasteLogEntriesTableCreateCompanionBuilder =
+    WasteLogEntriesCompanion Function({
+      required String entryId,
+      required DateTime wasteDate,
+      required DateTime createdAt,
+      required String category,
+      required double amountKg,
+      Value<int> rowid,
+    });
+typedef $$WasteLogEntriesTableUpdateCompanionBuilder =
+    WasteLogEntriesCompanion Function({
+      Value<String> entryId,
+      Value<DateTime> wasteDate,
+      Value<DateTime> createdAt,
+      Value<String> category,
+      Value<double> amountKg,
+      Value<int> rowid,
+    });
+
+class $$WasteLogEntriesTableFilterComposer
+    extends Composer<_$AppDatabase, $WasteLogEntriesTable> {
+  $$WasteLogEntriesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get entryId => $composableBuilder(
+    column: $table.entryId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get wasteDate => $composableBuilder(
+    column: $table.wasteDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get category => $composableBuilder(
+    column: $table.category,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get amountKg => $composableBuilder(
+    column: $table.amountKg,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$WasteLogEntriesTableOrderingComposer
+    extends Composer<_$AppDatabase, $WasteLogEntriesTable> {
+  $$WasteLogEntriesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get entryId => $composableBuilder(
+    column: $table.entryId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get wasteDate => $composableBuilder(
+    column: $table.wasteDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get category => $composableBuilder(
+    column: $table.category,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get amountKg => $composableBuilder(
+    column: $table.amountKg,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$WasteLogEntriesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $WasteLogEntriesTable> {
+  $$WasteLogEntriesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get entryId =>
+      $composableBuilder(column: $table.entryId, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get wasteDate =>
+      $composableBuilder(column: $table.wasteDate, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<String> get category =>
+      $composableBuilder(column: $table.category, builder: (column) => column);
+
+  GeneratedColumn<double> get amountKg =>
+      $composableBuilder(column: $table.amountKg, builder: (column) => column);
+}
+
+class $$WasteLogEntriesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $WasteLogEntriesTable,
+          WasteLogEntry,
+          $$WasteLogEntriesTableFilterComposer,
+          $$WasteLogEntriesTableOrderingComposer,
+          $$WasteLogEntriesTableAnnotationComposer,
+          $$WasteLogEntriesTableCreateCompanionBuilder,
+          $$WasteLogEntriesTableUpdateCompanionBuilder,
+          (
+            WasteLogEntry,
+            BaseReferences<_$AppDatabase, $WasteLogEntriesTable, WasteLogEntry>,
+          ),
+          WasteLogEntry,
+          PrefetchHooks Function()
+        > {
+  $$WasteLogEntriesTableTableManager(
+    _$AppDatabase db,
+    $WasteLogEntriesTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$WasteLogEntriesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$WasteLogEntriesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$WasteLogEntriesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> entryId = const Value.absent(),
+                Value<DateTime> wasteDate = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<String> category = const Value.absent(),
+                Value<double> amountKg = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => WasteLogEntriesCompanion(
+                entryId: entryId,
+                wasteDate: wasteDate,
+                createdAt: createdAt,
+                category: category,
+                amountKg: amountKg,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String entryId,
+                required DateTime wasteDate,
+                required DateTime createdAt,
+                required String category,
+                required double amountKg,
+                Value<int> rowid = const Value.absent(),
+              }) => WasteLogEntriesCompanion.insert(
+                entryId: entryId,
+                wasteDate: wasteDate,
+                createdAt: createdAt,
+                category: category,
+                amountKg: amountKg,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$WasteLogEntriesTable, WasteLogEntry>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $WasteLogEntriesTable,
+                    WasteLogEntry
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$WasteLogEntriesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $WasteLogEntriesTable,
+      WasteLogEntry,
+      $$WasteLogEntriesTableFilterComposer,
+      $$WasteLogEntriesTableOrderingComposer,
+      $$WasteLogEntriesTableAnnotationComposer,
+      $$WasteLogEntriesTableCreateCompanionBuilder,
+      $$WasteLogEntriesTableUpdateCompanionBuilder,
+      (
+        WasteLogEntry,
+        BaseReferences<_$AppDatabase, $WasteLogEntriesTable, WasteLogEntry>,
+      ),
+      WasteLogEntry,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -5536,4 +6121,6 @@ class $AppDatabaseManager {
         _db,
         _db.challengeDayCompletions,
       );
+  $$WasteLogEntriesTableTableManager get wasteLogEntries =>
+      $$WasteLogEntriesTableTableManager(_db, _db.wasteLogEntries);
 }

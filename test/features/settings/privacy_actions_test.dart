@@ -158,7 +158,7 @@ void main() {
           (userData['footprintEstimates'] as List).single
               as Map<String, Object?>;
 
-      expect(exported['exportSchemaVersion'], 3);
+      expect(exported['exportSchemaVersion'], 4);
       expect(account['loginIdentifier'], 'member@example.test');
       expect(estimate['estimateValue'], 12.5);
       expect(encoded, isNot(contains('credentialVerifiers')));
@@ -188,6 +188,7 @@ void main() {
       await database.select(database.footprintEstimates).get(),
       hasLength(1),
     );
+    expect(await database.select(database.wasteLogEntries).get(), hasLength(1));
     expect(closeCalls, 0);
     expect(fileDeletionCalls, 0);
     expect(guestResetCalls, 0);
@@ -211,6 +212,7 @@ void main() {
     expect(await database.select(database.localAccounts).get(), isEmpty);
     expect(await database.select(database.credentialVerifiers).get(), isEmpty);
     expect(await database.select(database.footprintEstimates).get(), isEmpty);
+    expect(await database.select(database.wasteLogEntries).get(), isEmpty);
     final preferences =
         (await database.select(database.userPreferences).get()).single;
     expect(preferences.displayLanguageTag, 'en');
@@ -264,6 +266,17 @@ Future<void> _insertAccountWithData(AppDatabase database) async {
       updatedAt: Value(DateTime.utc(2026)),
     ),
   );
+  await database
+      .into(database.wasteLogEntries)
+      .insert(
+        WasteLogEntriesCompanion.insert(
+          entryId: 'waste-1',
+          wasteDate: DateTime(2026, 11, 12),
+          createdAt: DateTime.utc(2026, 11, 12),
+          category: 'Organic',
+          amountKg: 0.75,
+        ),
+      );
 }
 
 class _TestApp extends StatelessWidget {
