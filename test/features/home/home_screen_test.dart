@@ -60,7 +60,7 @@ void main() {
     await tester.pumpAndSettle();
 
     final carbonEntry = find.widgetWithText(
-      ListTile,
+      InkWell,
       'Carbon Footprint Tracker',
     );
     expect(carbonEntry, findsOneWidget);

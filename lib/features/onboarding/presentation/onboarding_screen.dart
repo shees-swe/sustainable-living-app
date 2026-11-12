@@ -7,6 +7,7 @@ import '../../../core/data/regions/region_catalog.dart';
 import '../../../core/data/regions/region_pack_parser.dart';
 import '../../../core/data/regions/region_repository.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/design_tokens.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../data/estimate_demo_fixtures.dart';
 import '../domain/footprint_estimate.dart';
@@ -80,6 +81,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final verdant = Theme.of(context).extension<VerdantColors>()!;
     final selectedPack = _selectedPack;
     final isDemoSelection = _hasRegionalData
         ? _selectedRegionId == 'demo-region'
@@ -90,176 +92,224 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               (factor) => factor.activityId == 'transport',
             ) ==
             true;
+
     return Scaffold(
+      backgroundColor: verdant.cream,
       appBar: AppBar(
-        title: Text(l10n.onboarding),
+        backgroundColor: verdant.forestGreen,
+        foregroundColor: Colors.white,
+        toolbarHeight:
+            kToolbarHeight * MediaQuery.textScalerOf(context).scale(1),
+        title: Text(
+          l10n.onboarding,
+          maxLines: 2,
+          style: const TextStyle(color: Colors.white),
+        ),
+        iconTheme: const IconThemeData(color: Colors.white),
+        elevation: 0,
+        scrolledUnderElevation: 0,
       ),
       body: SafeArea(
         child: ListView(
-          padding: const EdgeInsets.fromLTRB(
-            16,
-            20,
-            16,
-            20,
-          ),
+          padding: const EdgeInsets.fromLTRB(16, 20, 16, 32),
           children: [
-            Text(
-              l10n.onboardingIntro,
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: Theme.of(context).colorScheme.onSurface,
-                height: 1.5,
-              ),
-            ),
-            const SizedBox(height: 20),
-            DecoratedBox(
-              decoration: const BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                    color: ClimateColors.divider,
-                    width: 1,
-                  ),
+            // Intro card
+            Container(
+              decoration: DesignTokens.sectionCard(context),
+              padding: const EdgeInsets.all(16),
+              child: Text(
+                l10n.onboardingIntro,
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  color: ClimateColors.textPrimary,
+                  height: 1.6,
                 ),
               ),
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 12),
-                child: _hasRegionalData
-                    ? RegionPicker(
-                        preferences: widget.preferences!,
-                        catalog: widget.regionCatalog!,
-                        onSelectionChanged: (regionId) {
-                          setState(() {
-                            _selectedRegionId = regionId;
-                            _selectedRegion =
-                                _demoRegionForCatalogSelection(regionId);
-                            _answerError = null;
-                          });
-                        },
-                      )
-                    : Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          if (!_hasRegionalData)
-                            Text(
+            ),
+            const SizedBox(height: 16),
+            // Region selection card
+            Container(
+              decoration: DesignTokens.sectionCard(context),
+              padding: const EdgeInsets.all(16),
+              child: _hasRegionalData
+                  ? RegionPicker(
+                      preferences: widget.preferences!,
+                      catalog: widget.regionCatalog!,
+                      onSelectionChanged: (regionId) {
+                        setState(() {
+                          _selectedRegionId = regionId;
+                          _selectedRegion =
+                              _demoRegionForCatalogSelection(regionId);
+                          _answerError = null;
+                        });
+                      },
+                    )
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (!_hasRegionalData)
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 8),
+                            child: Text(
                               l10n.chooseRegion,
-                              style: Theme.of(context).textTheme.titleLarge,
-                            ),
-                          const SizedBox(height: 8),
-                          RadioGroup<String>(
-                            groupValue: _selectedRegion?.regionId,
-                            onChanged: (regionId) {
-                              if (regionId == null) return;
-                              final selectedRegion = foundationEstimateDemoRegions
-                                  .where((region) => region.regionId == regionId)
-                                  .first;
-                              setState(() {
-                                _selectedRegion = selectedRegion;
-                                _answerError = null;
-                              });
-                            },
-                            child: Column(
-                              children: [
-                                for (final region in foundationEstimateDemoRegions)
-                                  Container(
-                                    decoration: const BoxDecoration(
-                                      border: Border(
-                                        bottom: BorderSide(
-                                          color: ClimateColors.divider,
-                                          width: 1,
-                                        ),
-                                      ),
-                                    ),
-                                    child: RadioListTile<String>(
-                                      contentPadding: EdgeInsets.zero,
-                                      title: Text(
-                                        _regionLabel(l10n, region.labelKey),
-                                      ),
-                                      value: region.regionId,
-                                    ),
-                                  ),
-                              ],
+                              style: Theme.of(context).textTheme.titleLarge
+                                  ?.copyWith(color: verdant.forestGreen),
                             ),
                           ),
-                        ],
-                      ),
-              ),
+                        RadioGroup<String>(
+                          groupValue: _selectedRegion?.regionId,
+                          onChanged: (regionId) {
+                            if (regionId == null) return;
+                            final selectedRegion = foundationEstimateDemoRegions
+                                .where((region) => region.regionId == regionId)
+                                .first;
+                            setState(() {
+                              _selectedRegion = selectedRegion;
+                              _answerError = null;
+                            });
+                          },
+                          child: Column(
+                            children: [
+                              for (final region in foundationEstimateDemoRegions)
+                                Material(
+                                  color: Colors.transparent,
+                                  child: RadioListTile<String>(
+                                    contentPadding: EdgeInsets.zero,
+                                    title: Text(
+                                      _regionLabel(l10n, region.labelKey),
+                                    ),
+                                    value: region.regionId,
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
             ),
             if (isDemoSelection || selectedPack != null) ...[
-              const SizedBox(height: 20),
-              TextField(
-                key: const ValueKey('electricityInput'),
-                controller: _electricityController,
-                keyboardType: const TextInputType.numberWithOptions(
-                  decimal: true,
-                ),
-                decoration: InputDecoration(
-                  labelText: l10n.annualElectricityUse,
-                  filled: true,
-                  fillColor: Theme.of(context).colorScheme.surface,
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 14,
-                  ),
-                ),
-              ),
-              if (hasTransportInput) ...[
-                const SizedBox(height: 16),
-                TextField(
-                  key: const ValueKey('travelInput'),
-                  controller: _travelController,
-                  keyboardType: const TextInputType.numberWithOptions(
-                    decimal: true,
-                  ),
-                  decoration: InputDecoration(
-                    labelText: l10n.annualTravel,
-                    filled: true,
-                    fillColor: Theme.of(context).colorScheme.surface,
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 14,
+              const SizedBox(height: 16),
+              // Input fields card
+              Container(
+                decoration: DesignTokens.sectionCard(context),
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextField(
+                      key: const ValueKey('electricityInput'),
+                      controller: _electricityController,
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
+                      decoration: InputDecoration(
+                        labelText: l10n.annualElectricityUse,
+                        filled: true,
+                        fillColor: Colors.white,
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 14,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ] else ...[
-                const SizedBox(height: 16),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: Text(
-                    l10n.transportDataUnavailable,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    if (hasTransportInput) ...[
+                      const SizedBox(height: 16),
+                      TextField(
+                        key: const ValueKey('travelInput'),
+                        controller: _travelController,
+                        keyboardType: const TextInputType.numberWithOptions(
+                          decimal: true,
+                        ),
+                        decoration: InputDecoration(
+                          labelText: l10n.annualTravel,
+                          filled: true,
+                          fillColor: Colors.white,
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 14,
+                          ),
+                        ),
+                      ),
+                    ] else ...[
+                      const SizedBox(height: 16),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: verdant.amberLight,
+                          borderRadius: BorderRadius.circular(
+                            DesignTokens.radiusSmall,
+                          ),
+                          border: Border.all(
+                            color: verdant.amber.withValues(alpha: 0.3),
+                          ),
+                        ),
+                        padding: const EdgeInsets.all(12),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Icon(
+                              Icons.info_outline,
+                              size: 18,
+                              color: verdant.amber,
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    l10n.transportDataUnavailable,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(
+                                          color: ClimateColors.textPrimary,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    l10n.regionalEstimateContext,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall
+                                        ?.copyWith(
+                                          color: ClimateColors.textSecondary,
+                                        ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                    if (_answerError != null) ...[
+                      const SizedBox(height: 12),
+                      Text(
+                        _answerError!,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.error,
+                        ),
+                      ),
+                    ],
+                    const SizedBox(height: 20),
+                    SizedBox(
+                      width: double.infinity,
+                      child: FilledButton(
+                        onPressed: _continueToEstimate,
+                        style: FilledButton.styleFrom(
+                          backgroundColor: verdant.forestGreen,
+                          foregroundColor: Colors.white,
+                          minimumSize: const Size.fromHeight(48),
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                        ),
+                        child: Text(
+                          isDemoSelection
+                              ? l10n.calculateDemoEstimate
+                              : l10n.calculateSourcedEstimate,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  l10n.regionalEstimateContext,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-                ),
-              ],
-              if (_answerError != null) ...[
-                const SizedBox(height: 12),
-                Text(
-                  _answerError!,
-                  style: TextStyle(color: Theme.of(context).colorScheme.error),
-                ),
-              ],
-              const SizedBox(height: 24),
-              FilledButton(
-                onPressed: _continueToEstimate,
-                style: Theme.of(context).filledButtonTheme.style?.copyWith(
-                  minimumSize: const WidgetStatePropertyAll(
-                    Size.fromHeight(48),
-                  ),
-                  padding: const WidgetStatePropertyAll(
-                    EdgeInsets.symmetric(vertical: 12),
-                  ),
-                ),
-                child: Text(
-                  isDemoSelection
-                      ? l10n.calculateDemoEstimate
-                      : l10n.calculateSourcedEstimate,
+                  ],
                 ),
               ),
             ],
@@ -268,6 +318,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               alignment: Alignment.centerLeft,
               child: TextButton(
                 onPressed: () => context.go(AppRoutes.home),
+                style: TextButton.styleFrom(
+                  foregroundColor: verdant.forestGreen,
+                ),
                 child: Text(l10n.skipAndContinueAsGuest),
               ),
             ),

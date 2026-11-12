@@ -4,6 +4,7 @@ import '../../../core/accessibility/motion_aware_progress_indicator.dart';
 import '../../../core/accessibility/reduced_motion.dart';
 import '../../../core/motion/motion_spec.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/design_tokens.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../data/recipe_catalog.dart';
 
@@ -40,11 +41,22 @@ class _RecipesMealPlanningScreenState extends State<RecipesMealPlanningScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final verdant = Theme.of(context).extension<VerdantColors>()!;
     return Scaffold(
+      backgroundColor: verdant.cream,
       appBar: AppBar(
+        backgroundColor: verdant.forestGreen,
+        foregroundColor: Colors.white,
         toolbarHeight:
             kToolbarHeight * MediaQuery.textScalerOf(context).scale(1),
-        title: Text(l10n.recipesMealPlanning, maxLines: 2),
+        title: Text(
+          l10n.recipesMealPlanning,
+          maxLines: 2,
+          style: const TextStyle(color: Colors.white),
+        ),
+        iconTheme: const IconThemeData(color: Colors.white),
+        elevation: 0,
+        scrolledUnderElevation: 0,
       ),
       body: FutureBuilder<RecipeCatalog>(
         future: _catalog,
@@ -79,81 +91,110 @@ class _RecipesMealPlanningScreenState extends State<RecipesMealPlanningScreen> {
   ) {
     final recipes = catalog.filter(query: _query, season: _season);
     final theme = Theme.of(context);
+    final verdant = theme.extension<VerdantColors>()!;
     final numberStyle = theme.extension<ClimateTypography>()!.number;
     return ListView(
       key: const ValueKey('recipeCatalogList'),
-      padding: const EdgeInsets.symmetric(
-        horizontal: ClimateSpacing.space16,
-        vertical: ClimateSpacing.space16,
-      ),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
       children: [
-        TextField(
-          key: const ValueKey('recipeSearchField'),
-          controller: _searchController,
-          onChanged: (value) => setState(() => _query = value),
-          decoration: InputDecoration(
-            labelText: l10n.recipeSearchLabel,
-            suffixIcon: _query.isEmpty
-                ? null
-                : IconButton(
-                    tooltip: l10n.recipeClearSearch,
-                    onPressed: () {
-                      _searchController.clear();
-                      setState(() => _query = '');
-                    },
-                    icon: const Icon(Icons.clear),
-                  ),
+        // Search & filter card
+        Container(
+          decoration: DesignTokens.sectionCard(context),
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextField(
+                key: const ValueKey('recipeSearchField'),
+                controller: _searchController,
+                onChanged: (value) => setState(() => _query = value),
+                decoration: InputDecoration(
+                  labelText: l10n.recipeSearchLabel,
+                  prefixIcon: const Icon(Icons.search),
+                  suffixIcon: _query.isEmpty
+                      ? null
+                      : IconButton(
+                          tooltip: l10n.recipeClearSearch,
+                          onPressed: () {
+                            _searchController.clear();
+                            setState(() => _query = '');
+                          },
+                          icon: const Icon(Icons.clear),
+                        ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                l10n.recipeSeasonFilter,
+                style: theme.textTheme.labelMedium?.copyWith(
+                  color: ClimateColors.textSecondary,
+                ),
+              ),
+              const SizedBox(height: 4),
+              DropdownButtonFormField<String>(
+                key: const ValueKey('recipeSeasonFilter'),
+                initialValue: _season,
+                isExpanded: true,
+                decoration: const InputDecoration(),
+                items: [
+                  for (final season in catalog.seasons)
+                    DropdownMenuItem(
+                      value: season,
+                      child: Text(season, maxLines: 2),
+                    ),
+                ],
+                onChanged: (value) {
+                  if (value != null) setState(() => _season = value);
+                },
+              ),
+            ],
           ),
         ),
-        const SizedBox(height: ClimateSpacing.space16),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              l10n.recipeSeasonFilter,
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: ClimateColors.textSecondary,
-              ),
-            ),
-            const SizedBox(height: ClimateSpacing.space8),
-            DropdownButtonFormField<String>(
-              key: const ValueKey('recipeSeasonFilter'),
-              initialValue: _season,
-              isExpanded: true,
-              decoration: const InputDecoration(),
-              items: [
-                for (final season in catalog.seasons)
-                  DropdownMenuItem(
-                    value: season,
-                    child: Text(season, maxLines: 2),
-                  ),
-              ],
-              onChanged: (value) {
-                if (value != null) setState(() => _season = value);
-              },
-            ),
-          ],
-        ),
-        const SizedBox(height: ClimateSpacing.space16),
+        const SizedBox(height: 16),
         if (recipes.isEmpty) ...[
-          Text(l10n.recipeNoMatches),
-          const SizedBox(height: ClimateSpacing.space8),
-          Align(
-            alignment: AlignmentDirectional.centerStart,
-            child: TextButton(
-              onPressed: _clearFilters,
-              child: Text(l10n.recipeClearFilters),
+          Container(
+            decoration: DesignTokens.sectionCard(context),
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              children: [
+                Icon(
+                  Icons.soup_kitchen_outlined,
+                  size: 48,
+                  color: verdant.forestGreen.withValues(alpha: 0.4),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  l10n.recipeNoMatches,
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: ClimateColors.textSecondary,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                TextButton(
+                  onPressed: _clearFilters,
+                  child: Text(l10n.recipeClearFilters),
+                ),
+              ],
             ),
           ),
         ] else ...[
-          for (var index = 0; index < recipes.length; index++) ...[
-            _RecipeRow(
-              recipe: recipes[index],
-              numberStyle: numberStyle,
-              onTap: () => _openDetails(context, recipes[index]),
+          Container(
+            decoration: DesignTokens.sectionCard(context),
+            child: Column(
+              children: [
+                for (var index = 0; index < recipes.length; index++) ...[
+                  _RecipeRow(
+                    recipe: recipes[index],
+                    numberStyle: numberStyle,
+                    onTap: () => _openDetails(context, recipes[index]),
+                  ),
+                  if (index < recipes.length - 1)
+                    const Divider(height: 1, indent: 16, endIndent: 16),
+                ],
+              ],
             ),
-            if (index < recipes.length - 1) const Divider(height: 1),
-          ],
+          ),
         ],
       ],
     );
@@ -206,30 +247,62 @@ class _RecipeRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final verdant = theme.extension<VerdantColors>()!;
     return InkWell(
       key: ValueKey('recipe-${recipe.name}'),
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: ClimateSpacing.space16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: ClimateSpacing.space16,
+        ),
+        child: Row(
           children: [
-            Text(recipe.name, style: theme.textTheme.titleMedium),
-            const SizedBox(height: ClimateSpacing.space8),
-            Wrap(
-              spacing: ClimateSpacing.space16,
-              runSpacing: ClimateSpacing.space8,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: [
-                Text(recipe.preparationTime, style: numberStyle),
-                Text(
-                  recipe.season,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: ClimateColors.textSecondary,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(recipe.name, style: theme.textTheme.titleSmall),
+                  const SizedBox(height: 6),
+                  Wrap(
+                    spacing: ClimateSpacing.space12,
+                    runSpacing: ClimateSpacing.space4,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.schedule,
+                            size: 14,
+                            color: ClimateColors.textSecondary,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(recipe.preparationTime, style: numberStyle),
+                        ],
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          color: verdant.tagBackground,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Text(
+                          recipe.season,
+                          style: theme.textTheme.labelSmall?.copyWith(
+                            color: verdant.forestGreen,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
+            Icon(Icons.chevron_right, color: ClimateColors.textSecondary),
           ],
         ),
       ),
@@ -246,94 +319,213 @@ class _RecipeDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
+    final verdant = theme.extension<VerdantColors>()!;
     final numberStyle = theme.extension<ClimateTypography>()!.number;
     return Scaffold(
+      backgroundColor: verdant.cream,
       appBar: AppBar(
+        backgroundColor: verdant.forestGreen,
+        foregroundColor: Colors.white,
         toolbarHeight:
             kToolbarHeight * MediaQuery.textScalerOf(context).scale(1),
-        title: Text(l10n.recipeDetail, maxLines: 2),
+        title: Text(
+          l10n.recipeDetail,
+          maxLines: 2,
+          style: const TextStyle(color: Colors.white),
+        ),
+        iconTheme: const IconThemeData(color: Colors.white),
+        elevation: 0,
+        scrolledUnderElevation: 0,
       ),
       body: ListView(
         key: const ValueKey('recipeDetailList'),
-        padding: const EdgeInsets.symmetric(
-          horizontal: ClimateSpacing.space16,
-          vertical: ClimateSpacing.space16,
-        ),
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
         children: [
-          Text(recipe.name, style: theme.textTheme.headlineSmall),
-          const SizedBox(height: ClimateSpacing.space16),
-          const Divider(height: 1),
-          const SizedBox(height: ClimateSpacing.space16),
-          _RecipeMetadata(
-            label: l10n.recipePreparationTime,
-            value: recipe.preparationTime,
+          // Hero title card
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [verdant.forestGreen, verdant.forestDeep],
+              ),
+              borderRadius: BorderRadius.circular(DesignTokens.radiusLarge),
+            ),
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  recipe.name,
+                  style: theme.textTheme.titleLarge?.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Wrap(
+                  spacing: 12,
+                  runSpacing: 8,
+                  children: [
+                    _DetailBadge(
+                      icon: Icons.schedule,
+                      label: recipe.preparationTime,
+                    ),
+                    _DetailBadge(
+                      icon: Icons.people_outline,
+                      label: recipe.servings,
+                    ),
+                    _DetailBadge(
+                      icon: Icons.eco_outlined,
+                      label: recipe.season,
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
-          const SizedBox(height: ClimateSpacing.space16),
-          _RecipeMetadata(label: l10n.recipeServings, value: recipe.servings),
-          const SizedBox(height: ClimateSpacing.space16),
-          _RecipeMetadata(label: l10n.recipeSeasonFilter, value: recipe.season),
-          const SizedBox(height: ClimateSpacing.space16),
-          const Divider(height: 1),
-          const SizedBox(height: ClimateSpacing.space16),
-          Text(l10n.recipeSeasonalNote, style: theme.textTheme.titleMedium),
-          const SizedBox(height: ClimateSpacing.space8),
-          _RecipeRichText(recipe.seasonalNote),
-          const SizedBox(height: ClimateSpacing.space24),
-          const Divider(height: 1),
-          const SizedBox(height: ClimateSpacing.space16),
-          Text(l10n.recipeIngredients, style: theme.textTheme.titleMedium),
-          for (var index = 0; index < recipe.ingredients.length; index++) ...[
-            const Divider(height: 1),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: ClimateSpacing.space8,
-              ),
-              child: _RecipeRichText(recipe.ingredients[index]),
-            ),
-          ],
-          const Divider(height: 1),
-          const SizedBox(height: ClimateSpacing.space24),
-          Text(l10n.recipeSteps, style: theme.textTheme.titleMedium),
-          for (var index = 0; index < recipe.steps.length; index++) ...[
-            const Divider(height: 1),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: ClimateSpacing.space16,
-              ),
-              child: _RecipeStepText(
-                recipe.steps[index],
-                numberStyle: numberStyle,
+          const SizedBox(height: 12),
+          // Seasonal note
+          Container(
+            decoration: BoxDecoration(
+              color: verdant.forestLight,
+              borderRadius: BorderRadius.circular(DesignTokens.radiusMedium),
+              border: Border.all(
+                color: verdant.forestGreen.withValues(alpha: 0.2),
               ),
             ),
-          ],
-          const Divider(height: 1),
+            padding: const EdgeInsets.all(14),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.recipeSeasonalNote,
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    color: verdant.forestGreen,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                _RecipeRichText(recipe.seasonalNote),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+          // Ingredients
+          Container(
+            decoration: DesignTokens.sectionCard(context),
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.recipeIngredients,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    color: verdant.forestGreen,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                for (
+                  var index = 0;
+                  index < recipe.ingredients.length;
+                  index++
+                ) ...[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: ClimateSpacing.space8,
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 6),
+                          child: Container(
+                            width: 6,
+                            height: 6,
+                            decoration: BoxDecoration(
+                              color: verdant.forestGreen,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: _RecipeRichText(recipe.ingredients[index]),
+                        ),
+                      ],
+                    ),
+                  ),
+                  if (index < recipe.ingredients.length - 1)
+                    const Divider(height: 1),
+                ],
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+          // Steps
+          Container(
+            decoration: DesignTokens.sectionCard(context),
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.recipeSteps,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    color: verdant.forestGreen,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                for (var index = 0; index < recipe.steps.length; index++) ...[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: ClimateSpacing.space12,
+                    ),
+                    child: _RecipeStepText(
+                      recipe.steps[index],
+                      numberStyle: numberStyle,
+                    ),
+                  ),
+                  if (index < recipe.steps.length - 1)
+                    const Divider(height: 1),
+                ],
+              ],
+            ),
+          ),
         ],
       ),
     );
   }
 }
 
-class _RecipeMetadata extends StatelessWidget {
-  const _RecipeMetadata({required this.label, required this.value});
+class _DetailBadge extends StatelessWidget {
+  const _DetailBadge({required this.icon, required this.label});
 
+  final IconData icon;
   final String label;
-  final String value;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: theme.textTheme.bodySmall?.copyWith(
-            color: ClimateColors.textSecondary,
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.2),
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 14, color: Colors.white),
+          const SizedBox(width: 6),
+          Text(
+            label,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+            ),
           ),
-        ),
-        const SizedBox(height: ClimateSpacing.space8),
-        Text(value, style: theme.extension<ClimateTypography>()!.number),
-      ],
+        ],
+      ),
     );
   }
 }

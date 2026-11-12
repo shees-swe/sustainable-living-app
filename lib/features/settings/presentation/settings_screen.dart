@@ -9,7 +9,7 @@ import 'package:share_plus/share_plus.dart';
 import '../../../app/router.dart';
 import '../../../core/accessibility/motion_aware_progress_indicator.dart';
 import '../../../core/data/regions/region_catalog.dart';
-import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/design_tokens.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../data/user_data_deleter.dart';
 import '../data/user_data_exporter.dart';
@@ -205,102 +205,193 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final verdant = Theme.of(context).extension<VerdantColors>()!;
     final busy = _isExporting || _isDeleting || _isImporting;
 
     return Scaffold(
+      backgroundColor: verdant.cream,
       appBar: AppBar(
+        backgroundColor: verdant.forestGreen,
+        foregroundColor: Colors.white,
         toolbarHeight:
             kToolbarHeight * MediaQuery.textScalerOf(context).scale(1),
-        title: Text(l10n.settings, maxLines: 2),
+        title: Text(
+          l10n.settings,
+          maxLines: 2,
+          style: const TextStyle(color: Colors.white),
+        ),
+        iconTheme: const IconThemeData(color: Colors.white),
+        elevation: 0,
+        scrolledUnderElevation: 0,
       ),
       body: ListView(
-        padding: const EdgeInsets.symmetric(
-          horizontal: ClimateSpacing.space16,
-          vertical: ClimateSpacing.space8,
-        ),
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
         children: [
           if (widget.preferences != null && widget.regionCatalog != null) ...[
-            RegionPicker(
-              preferences: widget.preferences!,
-              catalog: widget.regionCatalog!,
+            Container(
+              decoration: DesignTokens.sectionCard(context),
+              padding: const EdgeInsets.all(16),
+              child: RegionPicker(
+                preferences: widget.preferences!,
+                catalog: widget.regionCatalog!,
+              ),
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: ClimateSpacing.space16),
-              child: Divider(height: 1),
-            ),
+            const SizedBox(height: 16),
           ],
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: ClimateSpacing.space16,
+          Container(
+            decoration: DesignTokens.sectionCard(context),
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.privacyControls,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: verdant.forestGreen,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Material(
+                  color: Colors.transparent,
+                  child: ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: verdant.forestLight,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Icon(
+                        Icons.file_download_outlined,
+                        color: verdant.forestGreen,
+                        size: 20,
+                      ),
+                    ),
+                    title: Text(l10n.importMyData),
+                    subtitle: Text(l10n.importDataDescription),
+                    trailing: _isImporting
+                        ? MotionAwareProgressIndicator(
+                            semanticsLabel: l10n.loading,
+                            size: 24,
+                            strokeWidth: 2,
+                          )
+                        : const Icon(Icons.chevron_right),
+                    onTap: busy ? null : _importData,
+                  ),
+                ),
+                const Divider(height: 1),
+                Material(
+                  color: Colors.transparent,
+                  child: ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: verdant.forestLight,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Icon(
+                        Icons.policy_outlined,
+                        color: verdant.forestGreen,
+                        size: 20,
+                      ),
+                    ),
+                    title: Text(l10n.privacyPolicy),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: busy ? null : () => context.push(AppRoutes.privacyPolicy),
+                  ),
+                ),
+                const Divider(height: 1),
+                Material(
+                  color: Colors.transparent,
+                  child: ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: verdant.forestLight,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Icon(
+                        Icons.file_upload_outlined,
+                        color: verdant.forestGreen,
+                        size: 20,
+                      ),
+                    ),
+                    title: Text(l10n.exportMyData),
+                    subtitle: Text(l10n.exportDataDescription),
+                    trailing: _isExporting
+                        ? MotionAwareProgressIndicator(
+                            semanticsLabel: l10n.loading,
+                            size: 24,
+                            strokeWidth: 2,
+                          )
+                        : const Icon(Icons.chevron_right),
+                    onTap: busy ? null : _exportData,
+                  ),
+                ),
+                const Divider(height: 1),
+                Material(
+                  color: Colors.transparent,
+                  child: ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFFEBEE),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Icon(
+                        Icons.delete_outline,
+                        color: Theme.of(context).colorScheme.error,
+                        size: 20,
+                      ),
+                    ),
+                    title: Text(
+                      l10n.deleteLocalData,
+                      style: TextStyle(color: Theme.of(context).colorScheme.error),
+                    ),
+                    subtitle: Text(l10n.deleteDataDescription),
+                    trailing: _isDeleting
+                        ? MotionAwareProgressIndicator(
+                            semanticsLabel: l10n.loading,
+                            size: 24,
+                            strokeWidth: 2,
+                          )
+                        : const Icon(Icons.chevron_right),
+                    onTap: busy ? null : _requestDeletion,
+                  ),
+                ),
+              ],
             ),
-            child: Text(
-              l10n.privacyControls,
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-          ),
-          const Divider(height: 1),
-          ListTile(
-            contentPadding: EdgeInsets.zero,
-            leading: const Icon(Icons.file_download_outlined),
-            title: Text(l10n.importMyData),
-            subtitle: Text(l10n.importDataDescription),
-            trailing: _isImporting
-                ? MotionAwareProgressIndicator(
-                    semanticsLabel: l10n.loading,
-                    size: 24,
-                    strokeWidth: 2,
-                  )
-                : const Icon(Icons.chevron_right),
-            onTap: busy ? null : _importData,
-          ),
-          const Divider(height: 1),
-          ListTile(
-            contentPadding: EdgeInsets.zero,
-            leading: const Icon(Icons.policy_outlined),
-            title: Text(l10n.privacyPolicy),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: busy ? null : () => context.push(AppRoutes.privacyPolicy),
-          ),
-          const Divider(height: 1),
-          ListTile(
-            contentPadding: EdgeInsets.zero,
-            leading: const Icon(Icons.file_upload_outlined),
-            title: Text(l10n.exportMyData),
-            subtitle: Text(l10n.exportDataDescription),
-            trailing: _isExporting
-                ? MotionAwareProgressIndicator(
-                    semanticsLabel: l10n.loading,
-                    size: 24,
-                    strokeWidth: 2,
-                  )
-                : const Icon(Icons.chevron_right),
-            onTap: busy ? null : _exportData,
-          ),
-          const Divider(height: 1),
-          ListTile(
-            contentPadding: EdgeInsets.zero,
-            leading: const Icon(Icons.delete_outline),
-            title: Text(l10n.deleteLocalData),
-            subtitle: Text(l10n.deleteDataDescription),
-            trailing: _isDeleting
-                ? MotionAwareProgressIndicator(
-                    semanticsLabel: l10n.loading,
-                    size: 24,
-                    strokeWidth: 2,
-                  )
-                : const Icon(Icons.chevron_right),
-            onTap: busy ? null : _requestDeletion,
           ),
           if (_status case final status?) ...[
-            const SizedBox(height: ClimateSpacing.space16),
-            Semantics(
-              liveRegion: true,
-              child: Text(
-                status,
-                style: TextStyle(
+            const SizedBox(height: 16),
+            Container(
+              decoration: BoxDecoration(
+                color: _statusIsError ? const Color(0xFFFFEBEE) : verdant.forestLight,
+                borderRadius: BorderRadius.circular(DesignTokens.radiusSmall),
+                border: Border.all(
                   color: _statusIsError
-                      ? Theme.of(context).colorScheme.error
-                      : Theme.of(context).colorScheme.primary,
+                      ? Theme.of(context).colorScheme.error.withValues(alpha: 0.3)
+                      : verdant.forestGreen.withValues(alpha: 0.3),
+                ),
+              ),
+              padding: const EdgeInsets.all(12),
+              child: Semantics(
+                liveRegion: true,
+                child: Text(
+                  status,
+                  style: TextStyle(
+                    color: _statusIsError
+                        ? Theme.of(context).colorScheme.error
+                        : verdant.forestDeep,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
             ),

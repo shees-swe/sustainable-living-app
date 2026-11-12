@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import '../../../core/accessibility/motion_aware_progress_indicator.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/design_tokens.dart';
 import '../../../l10n/generated/app_localizations.dart';
 
 class PrivacyPolicyScreen extends StatefulWidget {
@@ -20,12 +21,23 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final verdant = Theme.of(context).extension<VerdantColors>()!;
 
     return Scaffold(
+      backgroundColor: verdant.cream,
       appBar: AppBar(
+        backgroundColor: verdant.forestGreen,
+        foregroundColor: Colors.white,
         toolbarHeight:
             kToolbarHeight * MediaQuery.textScalerOf(context).scale(1),
-        title: Text(l10n.privacyPolicy, maxLines: 2),
+        title: Text(
+          l10n.privacyPolicy,
+          maxLines: 2,
+          style: const TextStyle(color: Colors.white),
+        ),
+        iconTheme: const IconThemeData(color: Colors.white),
+        elevation: 0,
+        scrolledUnderElevation: 0,
       ),
       body: FutureBuilder<String>(
         future: _policy,
@@ -57,13 +69,19 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
             );
           }
           return ListView(
-            padding: const EdgeInsets.symmetric(
-              horizontal: ClimateSpacing.space16,
-              vertical: ClimateSpacing.space8,
-            ),
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
             children: [
-              for (final line in policy.split('\n'))
-                if (line.trim().isNotEmpty) _buildPolicyLine(context, line),
+              Container(
+                decoration: DesignTokens.sectionCard(context),
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    for (final line in policy.split('\n'))
+                      if (line.trim().isNotEmpty) _buildPolicyLine(context, line),
+                  ],
+                ),
+              ),
             ],
           );
         },
@@ -80,6 +98,7 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
         : 0;
     if (headingLevel > 0) {
       final heading = text.substring(headingLevel == 1 ? 2 : 3);
+      final verdant = Theme.of(context).extension<VerdantColors>()!;
       return Padding(
         padding: const EdgeInsets.only(
           bottom: ClimateSpacing.space8,
@@ -87,23 +106,46 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
         ),
         child: Text(
           heading,
-          style: headingLevel == 1
-              ? Theme.of(context).textTheme.headlineSmall
-              : Theme.of(context).textTheme.titleLarge,
+          style: (headingLevel == 1
+                  ? Theme.of(context).textTheme.headlineSmall
+                  : Theme.of(context).textTheme.titleLarge)
+              ?.copyWith(
+            color: verdant.forestGreen,
+            fontWeight: FontWeight.w700,
+          ),
         ),
       );
     }
 
     if (text.startsWith('- ')) {
-      return Column(
-        children: [
-          ListTile(
-            contentPadding: EdgeInsets.zero,
-            leading: const Icon(Icons.circle, size: 8),
-            title: Text(text.substring(2)),
-          ),
-          const Divider(height: 1),
-        ],
+      final verdant = Theme.of(context).extension<VerdantColors>()!;
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Container(
+                width: 6,
+                height: 6,
+                decoration: BoxDecoration(
+                  color: verdant.forestGreen,
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                text.substring(2),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  height: 1.5,
+                ),
+              ),
+            ),
+          ],
+        ),
       );
     }
 
@@ -127,7 +169,9 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
       padding: const EdgeInsets.only(bottom: ClimateSpacing.space16),
       child: SelectableText.rich(
         TextSpan(
-          style: Theme.of(context).textTheme.bodyLarge,
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+            height: 1.6,
+          ),
           children: children,
         ),
       ),

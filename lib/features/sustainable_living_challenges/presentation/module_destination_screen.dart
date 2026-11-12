@@ -6,6 +6,7 @@ import '../../../core/accessibility/motion_aware_progress_indicator.dart';
 import '../../../core/accessibility/reduced_motion.dart';
 import '../../../core/motion/motion_spec.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/design_tokens.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../data/challenge_catalog.dart';
 import '../data/challenge_progress_repository.dart';
@@ -39,11 +40,22 @@ class _SustainableLivingChallengesScreenState
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final verdant = Theme.of(context).extension<VerdantColors>()!;
     return Scaffold(
+      backgroundColor: verdant.cream,
       appBar: AppBar(
+        backgroundColor: verdant.forestGreen,
+        foregroundColor: Colors.white,
         toolbarHeight:
             kToolbarHeight * MediaQuery.textScalerOf(context).scale(1),
-        title: Text(l10n.sustainableLivingChallenges, maxLines: 2),
+        title: Text(
+          l10n.sustainableLivingChallenges,
+          maxLines: 2,
+          style: const TextStyle(color: Colors.white),
+        ),
+        iconTheme: const IconThemeData(color: Colors.white),
+        elevation: 0,
+        scrolledUnderElevation: 0,
       ),
       body: StreamBuilder<List<ChallengeProgress>>(
         stream: _progress,
@@ -59,24 +71,25 @@ class _SustainableLivingChallengesScreenState
           }
           final byId = {for (final item in progress) item.challengeId: item};
           return ListView(
-            padding: const EdgeInsets.symmetric(
-              horizontal: ClimateSpacing.space16,
-              vertical: ClimateSpacing.space16,
-            ),
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
             children: [
               for (
                 var index = 0;
                 index < widget.catalog.challenges.length;
                 index++
               ) ...[
-                _ChallengeRow(
-                  challenge: widget.catalog.challenges[index],
-                  progress: byId[widget.catalog.challenges[index].id],
-                  onTap: () =>
-                      _openChallenge(context, widget.catalog.challenges[index]),
+                Container(
+                  margin: const EdgeInsets.only(bottom: 12),
+                  decoration: DesignTokens.sectionCard(context),
+                  child: _ChallengeRow(
+                    challenge: widget.catalog.challenges[index],
+                    progress: byId[widget.catalog.challenges[index].id],
+                    onTap: () => _openChallenge(
+                      context,
+                      widget.catalog.challenges[index],
+                    ),
+                  ),
                 ),
-                if (index < widget.catalog.challenges.length - 1)
-                  const Divider(height: 1),
               ],
             ],
           );
@@ -127,25 +140,75 @@ class _ChallengeRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final verdant = theme.extension<VerdantColors>()!;
     final l10n = AppLocalizations.of(context)!;
+    final isComplete =
+        progress != null && progress!.isCompleteFor(challenge.days);
     return InkWell(
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: ClimateSpacing.space16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: ClimateSpacing.space16,
+        ),
+        child: Row(
           children: [
-            Text(challenge.title, style: theme.textTheme.titleMedium),
-            const SizedBox(height: ClimateSpacing.space8),
-            _ChallengeText('${challenge.theme} · ${challenge.days} days'),
-            if (progress != null) ...[
-              const SizedBox(height: ClimateSpacing.space8),
-              _ProgressSummary(
-                progress: progress!,
-                totalDays: challenge.days,
-                l10n: l10n,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          challenge.title,
+                          style: theme.textTheme.titleSmall,
+                        ),
+                      ),
+                      if (isComplete)
+                        Icon(
+                          Icons.check_circle_rounded,
+                          color: ClimateColors.positiveSaved,
+                          size: 18,
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6,
+                          vertical: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          color: verdant.tagBackground,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Text(
+                          challenge.theme,
+                          style: theme.textTheme.labelSmall?.copyWith(
+                            color: verdant.forestGreen,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      _ChallengeText('${challenge.days} days'),
+                    ],
+                  ),
+                  if (progress != null) ...[
+                    const SizedBox(height: 8),
+                    _ProgressSummary(
+                      progress: progress!,
+                      totalDays: challenge.days,
+                      l10n: l10n,
+                    ),
+                  ],
+                ],
               ),
-            ],
+            ),
+            const SizedBox(width: 8),
+            Icon(Icons.chevron_right, color: ClimateColors.textSecondary),
           ],
         ),
       ),
@@ -165,11 +228,22 @@ class _ChallengeDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final verdant = Theme.of(context).extension<VerdantColors>()!;
     return Scaffold(
+      backgroundColor: verdant.cream,
       appBar: AppBar(
+        backgroundColor: verdant.forestGreen,
+        foregroundColor: Colors.white,
         toolbarHeight:
             kToolbarHeight * MediaQuery.textScalerOf(context).scale(1),
-        title: Text(challenge.title, maxLines: 2),
+        title: Text(
+          challenge.title,
+          maxLines: 2,
+          style: const TextStyle(color: Colors.white),
+        ),
+        iconTheme: const IconThemeData(color: Colors.white),
+        elevation: 0,
+        scrolledUnderElevation: 0,
       ),
       body: StreamBuilder<List<ChallengeProgress>>(
         stream: repository.watchProgress(),
@@ -216,69 +290,140 @@ class _ChallengeDetailBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
+    final verdant = theme.extension<VerdantColors>()!;
     return ListView(
       key: const ValueKey('challengeDetailList'),
-      padding: const EdgeInsets.symmetric(
-        horizontal: ClimateSpacing.space16,
-        vertical: ClimateSpacing.space16,
-      ),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
       children: [
-        Text(challenge.title, style: theme.textTheme.headlineSmall),
-        const SizedBox(height: ClimateSpacing.space16),
-        const Divider(height: 1),
-        const SizedBox(height: ClimateSpacing.space16),
-        Text('${l10n.challengeThemeLabel}: ${challenge.theme}'),
-        const SizedBox(height: ClimateSpacing.space8),
-        _ChallengeText(
-          '${l10n.challengeDurationLabel}: ${challenge.days} days',
-        ),
-        const SizedBox(height: ClimateSpacing.space16),
-        Text(challenge.description),
-        const SizedBox(height: ClimateSpacing.space16),
-        const Divider(height: 1),
-        const SizedBox(height: ClimateSpacing.space16),
-        if (progress == null)
-          Align(
-            alignment: AlignmentDirectional.centerStart,
-            child: FilledButton(
-              onPressed: () => unawaited(
-                _performChallengeAction(
-                  context,
-                  () => repository.startChallenge(challenge.id),
+        // Hero header
+        Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [verdant.forestGreen, verdant.forestDeep],
+            ),
+            borderRadius: BorderRadius.circular(DesignTokens.radiusLarge),
+          ),
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                challenge.title,
+                style: theme.textTheme.titleLarge?.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
-              child: Text(l10n.challengeStart),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.2),
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Text(
+                      challenge.theme,
+                      style: theme.textTheme.labelMedium?.copyWith(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  _ChallengeText(
+                    '${challenge.days} days',
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 12),
+        // Description card
+        Container(
+          decoration: DesignTokens.sectionCard(context),
+          padding: const EdgeInsets.all(16),
+          child: Text(
+            challenge.description,
+            style: theme.textTheme.bodyMedium?.copyWith(height: 1.6),
+          ),
+        ),
+        const SizedBox(height: 12),
+        // Progress / actions
+        if (progress == null)
+          Container(
+            decoration: DesignTokens.sectionCard(context),
+            padding: const EdgeInsets.all(16),
+            child: SizedBox(
+              width: double.infinity,
+              child: FilledButton(
+                onPressed: () => unawaited(
+                  _performChallengeAction(
+                    context,
+                    () => repository.startChallenge(challenge.id),
+                  ),
+                ),
+                style: FilledButton.styleFrom(
+                  backgroundColor: verdant.forestGreen,
+                  foregroundColor: Colors.white,
+                  minimumSize: const Size.fromHeight(44),
+                ),
+                child: Text(l10n.challengeStart),
+              ),
             ),
           )
         else ...[
-          _ProgressSummary(
-            progress: progress!,
-            totalDays: challenge.days,
-            l10n: l10n,
-          ),
-          if (progress!.isCompleteFor(challenge.days)) ...[
-            const SizedBox(height: ClimateSpacing.space8),
-            Text(
-              l10n.challengeCompleted,
-              style: theme.textTheme.titleMedium?.copyWith(
-                color: ClimateColors.positiveSaved,
-              ),
-            ),
-          ],
-          const SizedBox(height: ClimateSpacing.space16),
-          ..._dayRows(context, progress!),
-          const SizedBox(height: ClimateSpacing.space16),
-          Align(
-            alignment: AlignmentDirectional.centerStart,
-            child: TextButton(
-              onPressed: () => unawaited(
-                _performChallengeAction(
-                  context,
-                  () => repository.resetChallenge(challenge.id),
+          Container(
+            decoration: DesignTokens.sectionCard(context),
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _ProgressSummary(
+                  progress: progress!,
+                  totalDays: challenge.days,
+                  l10n: l10n,
                 ),
-              ),
-              child: Text(l10n.challengeReset),
+                if (progress!.isCompleteFor(challenge.days)) ...[
+                  const SizedBox(height: 12),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.check_circle_rounded,
+                        color: ClimateColors.positiveSaved,
+                        size: 20,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        l10n.challengeCompleted,
+                        style: theme.textTheme.titleSmall?.copyWith(
+                          color: ClimateColors.positiveSaved,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ],
             ),
+          ),
+          const SizedBox(height: 16),
+          // Day rows
+          ..._dayRows(context, progress!),
+          const SizedBox(height: 8),
+          TextButton(
+            onPressed: () => unawaited(
+              _performChallengeAction(
+                context,
+                () => repository.resetChallenge(challenge.id),
+              ),
+            ),
+            child: Text(l10n.challengeReset),
           ),
         ],
       ],
@@ -289,7 +434,8 @@ class _ChallengeDetailBody extends StatelessWidget {
     return [
       for (var dayNumber = 1; dayNumber <= challenge.days; dayNumber++) ...[
         _dayRow(context, progress, dayNumber),
-        if (dayNumber < challenge.days) const Divider(height: 1),
+        if (dayNumber < challenge.days)
+          const Divider(height: 1),
       ],
     ];
   }
@@ -335,6 +481,7 @@ class _ProgressSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final verdant = Theme.of(context).extension<VerdantColors>()!;
     final completed = progress.completedDayCount;
     final fraction = progress.fractionFor(totalDays);
     return Column(
@@ -342,17 +489,20 @@ class _ProgressSummary extends StatelessWidget {
       children: [
         _ChallengeText('$completed / $totalDays days'),
         const SizedBox(height: ClimateSpacing.space8),
-        LinearProgressIndicator(
-          value: fraction,
-          minHeight: 4,
-          color: progress.isCompleteFor(totalDays)
-              ? ClimateColors.positiveSaved
-              : ClimateColors.cobalt,
-          backgroundColor: ClimateColors.surfaceSecondary,
-          semanticsValue: fraction.toString(),
-          semanticsLabel: l10n.challengeProgressSemanticsLabel(
-            completed,
-            totalDays,
+        ClipRRect(
+          borderRadius: BorderRadius.circular(4),
+          child: LinearProgressIndicator(
+            value: fraction,
+            minHeight: 8,
+            color: progress.isCompleteFor(totalDays)
+                ? ClimateColors.positiveSaved
+                : verdant.forestGreen,
+            backgroundColor: verdant.forestLight,
+            semanticsValue: fraction.toString(),
+            semanticsLabel: l10n.challengeProgressSemanticsLabel(
+              completed,
+              totalDays,
+            ),
           ),
         ),
       ],
@@ -379,24 +529,27 @@ class _ChallengeDayRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return CheckboxListTile(
-      contentPadding: EdgeInsets.zero,
-      controlAffinity: ListTileControlAffinity.leading,
-      value: completed,
-      onChanged: locked ? null : (value) => onChanged(value ?? false),
-      title: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _ChallengeText(l10n.challengeDayLabel(day)),
-          if (locked) ...[
-            const SizedBox(height: ClimateSpacing.space8),
-            Text(
-              lockedNote,
-              style: Theme.of(context).textTheme.bodySmall
-                  ?.copyWith(color: ClimateColors.textSecondary),
-            ),
+    return Material(
+      color: Colors.transparent,
+      child: CheckboxListTile(
+        contentPadding: EdgeInsets.zero,
+        controlAffinity: ListTileControlAffinity.leading,
+        value: completed,
+        onChanged: locked ? null : (value) => onChanged(value ?? false),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _ChallengeText(l10n.challengeDayLabel(day)),
+            if (locked) ...[
+              const SizedBox(height: ClimateSpacing.space8),
+              Text(
+                lockedNote,
+                style: Theme.of(context).textTheme.bodySmall
+                    ?.copyWith(color: ClimateColors.textSecondary),
+              ),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }
@@ -423,7 +576,9 @@ class _ChallengeText extends StatelessWidget {
       spans.add(TextSpan(text: match.group(0), style: numberStyle));
       cursor = match.end;
     }
-    if (cursor < text.length) spans.add(TextSpan(text: text.substring(cursor)));
+    if (cursor < text.length) {
+      spans.add(TextSpan(text: text.substring(cursor)));
+    }
     return Text.rich(TextSpan(children: spans));
   }
 }

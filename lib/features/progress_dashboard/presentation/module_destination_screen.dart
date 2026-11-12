@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import '../../../core/accessibility/motion_aware_progress_indicator.dart';
 import '../../../core/data/database/app_database.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/design_tokens.dart';
 import '../../../features/carbon_footprint_tracker/data/activity_log_repository.dart';
 import '../../../features/carbon_footprint_tracker/domain/activity_log_insights.dart';
 import '../../../features/community_journal/data/community_post_repository.dart';
@@ -54,11 +55,22 @@ class _ProgressDashboardScreenState extends State<ProgressDashboardScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final verdant = Theme.of(context).extension<VerdantColors>()!;
     return Scaffold(
+      backgroundColor: verdant.cream,
       appBar: AppBar(
+        backgroundColor: verdant.forestGreen,
+        foregroundColor: Colors.white,
         toolbarHeight:
             kToolbarHeight * MediaQuery.textScalerOf(context).scale(1),
-        title: Text(l10n.progressDashboard, maxLines: 2),
+        title: Text(
+          l10n.progressDashboard,
+          maxLines: 2,
+          style: const TextStyle(color: Colors.white),
+        ),
+        iconTheme: const IconThemeData(color: Colors.white),
+        elevation: 0,
+        scrolledUnderElevation: 0,
       ),
       body: StreamBuilder<List<ActivityLogEntry>>(
         stream: _activityStream,
@@ -155,6 +167,7 @@ class _DashboardList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final verdant = Theme.of(context).extension<VerdantColors>()!;
     final year = DateTime.now().year;
     final carbonInsights = ActivityLogInsights.fromEntries(
       entries: activityEntries,
@@ -183,34 +196,48 @@ class _DashboardList extends StatelessWidget {
 
     return ListView(
       key: const ValueKey('progressDashboardList'),
-      padding: const EdgeInsets.symmetric(
-        horizontal: ClimateSpacing.space16,
-        vertical: ClimateSpacing.space16,
-      ),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
       children: [
         if (!hasAnyData) ...[
-          Padding(
-            padding: const EdgeInsets.only(bottom: ClimateSpacing.space16),
-            child: Text(l10n.progressOverallEmpty),
+          Container(
+            decoration: BoxDecoration(
+              color: verdant.amberLight,
+              borderRadius: BorderRadius.circular(DesignTokens.radiusMedium),
+              border: Border.all(
+                color: verdant.amber.withValues(alpha: 0.3),
+              ),
+            ),
+            padding: const EdgeInsets.all(14),
+            child: Row(
+              children: [
+                Icon(Icons.info_outline, size: 20, color: verdant.amber),
+                const SizedBox(width: 10),
+                Expanded(child: Text(l10n.progressOverallEmpty)),
+              ],
+            ),
           ),
-          const Divider(height: 1),
+          const SizedBox(height: 16),
         ],
-        _DashboardSection(
+        _DashboardSectionCard(
+          icon: Icons.eco_outlined,
           title: l10n.progressCarbonTitle,
           children: _carbonContent(context, l10n, year, carbonInsights),
         ),
-        const Divider(height: 1),
-        _DashboardSection(
+        const SizedBox(height: 16),
+        _DashboardSectionCard(
+          icon: Icons.delete_sweep_outlined,
           title: l10n.progressWasteTitle,
           children: _wasteContent(context, l10n, year, wasteTrend),
         ),
-        const Divider(height: 1),
-        _DashboardSection(
+        const SizedBox(height: 16),
+        _DashboardSectionCard(
+          icon: Icons.emoji_events_outlined,
           title: l10n.progressChallengesTitle,
           children: _challengeContent(context, l10n),
         ),
-        const Divider(height: 1),
-        _DashboardSection(
+        const SizedBox(height: 16),
+        _DashboardSectionCard(
+          icon: Icons.flight_takeoff_outlined,
           title: l10n.progressTravelTitle,
           children: _countContent(
             l10n.progressTravelEmpty,
@@ -219,8 +246,9 @@ class _DashboardList extends StatelessWidget {
             'progressTravelTripCount',
           ),
         ),
-        const Divider(height: 1),
-        _DashboardSection(
+        const SizedBox(height: 16),
+        _DashboardSectionCard(
+          icon: Icons.book_outlined,
           title: l10n.progressJournalTitle,
           children: _countContent(
             l10n.progressJournalEmpty,
@@ -229,10 +257,16 @@ class _DashboardList extends StatelessWidget {
             'progressJournalPostCount',
           ),
         ),
-        const Divider(height: 1),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: ClimateSpacing.space24),
-          child: Text(l10n.progressPurchasesScope),
+        const SizedBox(height: 16),
+        Container(
+          padding: const EdgeInsets.all(12),
+          child: Text(
+            l10n.progressPurchasesScope,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: ClimateColors.textSecondary,
+            ),
+            textAlign: TextAlign.center,
+          ),
         ),
       ],
     );
@@ -373,24 +407,45 @@ class _DashboardList extends StatelessWidget {
   ];
 }
 
-class _DashboardSection extends StatelessWidget {
-  const _DashboardSection({required this.title, required this.children});
+class _DashboardSectionCard extends StatelessWidget {
+  const _DashboardSectionCard({
+    required this.icon,
+    required this.title,
+    required this.children,
+  });
 
+  final IconData icon;
   final String title;
   final List<Widget> children;
 
   @override
-  Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.symmetric(vertical: ClimateSpacing.space16),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(title, style: Theme.of(context).textTheme.titleMedium),
-        const SizedBox(height: ClimateSpacing.space8),
-        ...children,
-      ],
-    ),
-  );
+  Widget build(BuildContext context) {
+    final verdant = Theme.of(context).extension<VerdantColors>()!;
+    return Container(
+      decoration: DesignTokens.sectionCard(context),
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(icon, size: 20, color: verdant.forestGreen),
+              const SizedBox(width: 8),
+              Text(
+                title,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  color: verdant.forestGreen,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          ...children,
+        ],
+      ),
+    );
+  }
 }
 
 class _Metric extends StatelessWidget {
@@ -417,11 +472,13 @@ class _Metric extends StatelessWidget {
             color: ClimateColors.textSecondary,
           ),
         ),
-        const SizedBox(height: ClimateSpacing.space8),
+        const SizedBox(height: 4),
         Text(
           value,
           key: valueKey,
-          style: theme.textTheme.titleLarge?.merge(typography.number),
+          style: theme.textTheme.titleLarge?.merge(typography.number).copyWith(
+            fontWeight: FontWeight.w700,
+          ),
         ),
       ],
     );
@@ -445,6 +502,7 @@ class _MonthlyTrendRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final verdant = Theme.of(context).extension<VerdantColors>()!;
     final typography = Theme.of(context).extension<ClimateTypography>()!;
     final amount = (kgCents / 100).toStringAsFixed(2);
     final ratio = maxKgCents <= 0
@@ -456,39 +514,35 @@ class _MonthlyTrendRow extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Wrap(
-            spacing: ClimateSpacing.space16,
-            runSpacing: ClimateSpacing.space8,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(month),
+              Text(month, style: const TextStyle(fontWeight: FontWeight.w500)),
               Text('$amount $unit', style: typography.number),
             ],
           ),
-          const SizedBox(height: ClimateSpacing.space8),
+          const SizedBox(height: 6),
           Semantics(
             label: month,
             value: '$amount $unit',
             child: ExcludeSemantics(
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: ClimateColors.surfaceSecondary,
-                  borderRadius: BorderRadius.circular(
-                    ClimateSpacing.radiusSmall,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(4),
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: verdant.forestLight,
                   ),
-                ),
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 8,
-                  child: Align(
-                    alignment: AlignmentDirectional.centerStart,
-                    child: FractionallySizedBox(
-                      widthFactor: ratio,
-                      heightFactor: 1,
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          color: ClimateColors.cobalt,
-                          borderRadius: BorderRadius.circular(
-                            ClimateSpacing.radiusSmall,
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: 8,
+                    child: Align(
+                      alignment: AlignmentDirectional.centerStart,
+                      child: FractionallySizedBox(
+                        widthFactor: ratio,
+                        heightFactor: 1,
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            color: verdant.forestGreen,
                           ),
                         ),
                       ),

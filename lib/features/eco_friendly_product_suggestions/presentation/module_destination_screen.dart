@@ -4,6 +4,7 @@ import '../../../core/accessibility/motion_aware_progress_indicator.dart';
 import '../../../core/accessibility/reduced_motion.dart';
 import '../../../core/motion/motion_spec.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/design_tokens.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../data/product_catalog.dart';
 
@@ -44,11 +45,22 @@ class _EcoFriendlyProductSuggestionsScreenState
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final verdant = Theme.of(context).extension<VerdantColors>()!;
     return Scaffold(
+      backgroundColor: verdant.cream,
       appBar: AppBar(
+        backgroundColor: verdant.forestGreen,
+        foregroundColor: Colors.white,
         toolbarHeight:
             kToolbarHeight * MediaQuery.textScalerOf(context).scale(1),
-        title: Text(l10n.ecoFriendlyProductSuggestions, maxLines: 2),
+        title: Text(
+          l10n.ecoFriendlyProductSuggestions,
+          maxLines: 2,
+          style: const TextStyle(color: Colors.white),
+        ),
+        iconTheme: const IconThemeData(color: Colors.white),
+        elevation: 0,
+        scrolledUnderElevation: 0,
       ),
       body: FutureBuilder<ProductCatalog>(
         future: _catalog,
@@ -81,6 +93,7 @@ class _EcoFriendlyProductSuggestionsScreenState
     AppLocalizations l10n,
     ProductCatalog catalog,
   ) {
+    final verdant = Theme.of(context).extension<VerdantColors>()!;
     final products = catalog.filter(
       query: _query,
       category: _category,
@@ -88,111 +101,166 @@ class _EcoFriendlyProductSuggestionsScreenState
     );
     return ListView(
       key: const ValueKey('productCatalogList'),
-      padding: const EdgeInsets.symmetric(
-        horizontal: ClimateSpacing.space16,
-        vertical: ClimateSpacing.space16,
-      ),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
       children: [
-        TextField(
-          key: const ValueKey('productSearchField'),
-          controller: _searchController,
-          onChanged: (value) => setState(() => _query = value),
-          decoration: InputDecoration(
-            labelText: l10n.productSearchLabel,
-            suffixIcon: _query.isEmpty
-                ? null
-                : IconButton(
-                    tooltip: l10n.productClearSearch,
-                    onPressed: () {
-                      _searchController.clear();
-                      setState(() => _query = '');
-                    },
-                    icon: const Icon(Icons.clear),
+        // Search & filter card
+        Container(
+          decoration: DesignTokens.sectionCard(context),
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextField(
+                key: const ValueKey('productSearchField'),
+                controller: _searchController,
+                onChanged: (value) => setState(() => _query = value),
+                decoration: InputDecoration(
+                  labelText: l10n.productSearchLabel,
+                  prefixIcon: const Icon(Icons.search),
+                  suffixIcon: _query.isEmpty
+                      ? null
+                      : IconButton(
+                          tooltip: l10n.productClearSearch,
+                          onPressed: () {
+                            _searchController.clear();
+                            setState(() => _query = '');
+                          },
+                          icon: const Icon(Icons.clear),
+                        ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          l10n.productCategoryFilter,
+                          style: Theme.of(context).textTheme.labelMedium
+                              ?.copyWith(color: ClimateColors.textSecondary),
+                        ),
+                        const SizedBox(height: 4),
+                        DropdownButtonFormField<String>(
+                          key: const ValueKey('productCategoryFilter'),
+                          initialValue: _category ?? _allCategoriesValue,
+                          isExpanded: true,
+                          decoration: const InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 10,
+                            ),
+                          ),
+                          items: [
+                            DropdownMenuItem(
+                              value: _allCategoriesValue,
+                              child: Text(l10n.productAllCategories),
+                            ),
+                            for (final category in ProductCatalog.categories)
+                              DropdownMenuItem(
+                                value: category,
+                                child: Text(category, maxLines: 2),
+                              ),
+                          ],
+                          onChanged: (value) => setState(
+                            () => _category =
+                                value == _allCategoriesValue ? null : value,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          l10n.productSortLabel,
+                          style: Theme.of(context).textTheme.labelMedium
+                              ?.copyWith(color: ClimateColors.textSecondary),
+                        ),
+                        const SizedBox(height: 4),
+                        DropdownButtonFormField<ProductSortOrder>(
+                          key: const ValueKey('productSortFilter'),
+                          initialValue: _sortOrder,
+                          isExpanded: true,
+                          decoration: const InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 10,
+                            ),
+                          ),
+                          items: [
+                            DropdownMenuItem(
+                              value: ProductSortOrder.ascending,
+                              child: Text(l10n.productSortAscending),
+                            ),
+                            DropdownMenuItem(
+                              value: ProductSortOrder.descending,
+                              child: Text(l10n.productSortDescending),
+                            ),
+                          ],
+                          onChanged: (value) {
+                            if (value != null) {
+                              setState(() => _sortOrder = value);
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
-        const SizedBox(height: ClimateSpacing.space16),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              l10n.productCategoryFilter,
-              style: Theme.of(context).textTheme.bodySmall
-                  ?.copyWith(color: ClimateColors.textSecondary),
-            ),
-            const SizedBox(height: ClimateSpacing.space8),
-            DropdownButtonFormField<String>(
-              key: const ValueKey('productCategoryFilter'),
-              initialValue: _category ?? _allCategoriesValue,
-              isExpanded: true,
-              decoration: const InputDecoration(),
-              items: [
-                DropdownMenuItem(
-                  value: _allCategoriesValue,
-                  child: Text(l10n.productAllCategories),
-                ),
-                for (final category in ProductCatalog.categories)
-                  DropdownMenuItem(
-                    value: category,
-                    child: Text(category, maxLines: 2),
-                  ),
-              ],
-              onChanged: (value) => setState(
-                () => _category = value == _allCategoriesValue ? null : value,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: ClimateSpacing.space16),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              l10n.productSortLabel,
-              style: Theme.of(context).textTheme.bodySmall
-                  ?.copyWith(color: ClimateColors.textSecondary),
-            ),
-            const SizedBox(height: ClimateSpacing.space8),
-            DropdownButtonFormField<ProductSortOrder>(
-              key: const ValueKey('productSortFilter'),
-              initialValue: _sortOrder,
-              isExpanded: true,
-              decoration: const InputDecoration(),
-              items: [
-                DropdownMenuItem(
-                  value: ProductSortOrder.ascending,
-                  child: Text(l10n.productSortAscending),
-                ),
-                DropdownMenuItem(
-                  value: ProductSortOrder.descending,
-                  child: Text(l10n.productSortDescending),
-                ),
-              ],
-              onChanged: (value) {
-                if (value != null) setState(() => _sortOrder = value);
-              },
-            ),
-          ],
-        ),
-        const SizedBox(height: ClimateSpacing.space16),
+        const SizedBox(height: 16),
+        // Results
         if (products.isEmpty) ...[
-          Text(l10n.productNoMatches),
-          const SizedBox(height: ClimateSpacing.space8),
-          Align(
-            alignment: AlignmentDirectional.centerStart,
-            child: TextButton(
-              onPressed: _clearFilters,
-              child: Text(l10n.productClearFilters),
+          Container(
+            decoration: DesignTokens.sectionCard(context),
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              children: [
+                Icon(
+                  Icons.search_off_rounded,
+                  size: 48,
+                  color: verdant.forestGreen.withValues(alpha: 0.4),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  l10n.productNoMatches,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: ClimateColors.textSecondary,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                TextButton(
+                  onPressed: _clearFilters,
+                  child: Text(l10n.productClearFilters),
+                ),
+              ],
             ),
           ),
         ] else ...[
-          for (var index = 0; index < products.length; index++) ...[
-            _ProductRow(
-              product: products[index],
-              onTap: () => _openDetails(context, products[index]),
+          Container(
+            decoration: DesignTokens.sectionCard(context),
+            child: Column(
+              children: [
+                for (var index = 0; index < products.length; index++) ...[
+                  _ProductRow(
+                    product: products[index],
+                    onTap: () => _openDetails(context, products[index]),
+                  ),
+                  if (index < products.length - 1)
+                    const Divider(height: 1, indent: 16, endIndent: 16),
+                ],
+              ],
             ),
-            if (index < products.length - 1) const Divider(height: 1),
-          ],
+          ),
         ],
       ],
     );
@@ -241,23 +309,53 @@ class _ProductRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final verdant = theme.extension<VerdantColors>()!;
     return InkWell(
       onTap: onTap,
+      borderRadius: BorderRadius.circular(DesignTokens.radiusMedium),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: ClimateSpacing.space16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: ClimateSpacing.space16,
+        ),
+        child: Row(
           children: [
-            _CatalogText(product.name, style: theme.textTheme.titleMedium),
-            const SizedBox(height: ClimateSpacing.space8),
-            _CatalogText(
-              product.category,
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: ClimateColors.textSecondary,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _CatalogText(product.name, style: theme.textTheme.titleSmall),
+                  const SizedBox(height: 4),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 3,
+                    ),
+                    decoration: BoxDecoration(
+                      color: verdant.tagBackground,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: _CatalogText(
+                      product.category,
+                      style: theme.textTheme.labelSmall?.copyWith(
+                        color: verdant.forestGreen,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  _CatalogText(
+                    product.note,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: ClimateColors.textSecondary,
+                    ),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: ClimateSpacing.space8),
-            _CatalogText(product.note),
+            Icon(
+              Icons.chevron_right,
+              color: ClimateColors.textSecondary,
+            ),
           ],
         ),
       ),
@@ -274,31 +372,87 @@ class _ProductDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
+    final verdant = theme.extension<VerdantColors>()!;
     return Scaffold(
+      backgroundColor: verdant.cream,
       appBar: AppBar(
+        backgroundColor: verdant.forestGreen,
+        foregroundColor: Colors.white,
         toolbarHeight:
             kToolbarHeight * MediaQuery.textScalerOf(context).scale(1),
-        title: Text(l10n.productDetail, maxLines: 2),
+        title: Text(
+          l10n.productDetail,
+          maxLines: 2,
+          style: const TextStyle(color: Colors.white),
+        ),
+        iconTheme: const IconThemeData(color: Colors.white),
+        elevation: 0,
+        scrolledUnderElevation: 0,
       ),
       body: ListView(
-        padding: const EdgeInsets.symmetric(
-          horizontal: ClimateSpacing.space16,
-          vertical: ClimateSpacing.space16,
-        ),
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
         children: [
-          _CatalogText(product.name, style: theme.textTheme.headlineSmall),
-          const SizedBox(height: ClimateSpacing.space16),
-          const Divider(height: 1),
-          const SizedBox(height: ClimateSpacing.space16),
-          Text(l10n.productCategoryFilter, style: theme.textTheme.titleMedium),
-          const SizedBox(height: ClimateSpacing.space8),
-          _CatalogText(product.category),
-          const SizedBox(height: ClimateSpacing.space16),
-          const Divider(height: 1),
-          const SizedBox(height: ClimateSpacing.space16),
-          Text(l10n.productNoteLabel, style: theme.textTheme.titleMedium),
-          const SizedBox(height: ClimateSpacing.space8),
-          _CatalogText(product.note),
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [verdant.forestGreen, verdant.forestDeep],
+              ),
+              borderRadius: BorderRadius.circular(DesignTokens.radiusLarge),
+            ),
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _CatalogText(
+                  product.name,
+                  style: theme.textTheme.titleLarge?.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.2),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: _CatalogText(
+                    product.category,
+                    style: theme.textTheme.labelMedium?.copyWith(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+          Container(
+            decoration: DesignTokens.sectionCard(context),
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.productNoteLabel,
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    color: verdant.forestGreen,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                _CatalogText(
+                  product.note,
+                  style: theme.textTheme.bodyMedium,
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );

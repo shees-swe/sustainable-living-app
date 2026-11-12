@@ -122,7 +122,10 @@ void main() {
       );
       await tester.enterText(find.byKey(const ValueKey('travelInput')), '200');
       tester.testTextInput.hide();
-      await tester.tap(find.text('Calculate demo estimate'));
+      final calculateButton = find.text('Calculate demo estimate');
+      await tester.ensureVisible(calculateButton);
+      await tester.pumpAndSettle();
+      await tester.tap(calculateButton);
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 400));
 
@@ -211,6 +214,7 @@ void main() {
       tester.testTextInput.hide();
       final calculateButton = find.text('Calculate demo estimate');
       await tester.ensureVisible(calculateButton);
+      await tester.pumpAndSettle();
       await tester.tap(calculateButton);
       await tester.pump();
       await _pumpUntilVisible(tester, find.text('Your estimated footprint'));

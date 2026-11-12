@@ -6,6 +6,7 @@ import '../../../core/accessibility/reduced_motion.dart';
 import '../../../core/data/database/app_database.dart';
 import '../../../core/motion/motion_spec.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/design_tokens.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../data/community_post_repository.dart';
 
@@ -38,11 +39,22 @@ class _CommunityJournalScreenState extends State<CommunityJournalScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final verdant = Theme.of(context).extension<VerdantColors>()!;
     return Scaffold(
+      backgroundColor: verdant.cream,
       appBar: AppBar(
+        backgroundColor: verdant.forestGreen,
+        foregroundColor: Colors.white,
         toolbarHeight:
             kToolbarHeight * MediaQuery.textScalerOf(context).scale(1),
-        title: Text(l10n.communityJournal, maxLines: 2),
+        title: Text(
+          l10n.communityJournal,
+          maxLines: 2,
+          style: const TextStyle(color: Colors.white),
+        ),
+        iconTheme: const IconThemeData(color: Colors.white),
+        elevation: 0,
+        scrolledUnderElevation: 0,
       ),
       body: StreamBuilder<List<CommunityJournalPost>>(
         stream: _posts,
@@ -176,55 +188,130 @@ class _CommunityJournalBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
+    final verdant = theme.extension<VerdantColors>()!;
     return ListView(
       key: const ValueKey('communityJournalList'),
-      padding: const EdgeInsets.symmetric(
-        horizontal: ClimateSpacing.space16,
-        vertical: ClimateSpacing.space16,
-      ),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
       children: [
-        Text(
-          l10n.communityLocalOnly,
-          style: theme.textTheme.bodySmall?.copyWith(
-            color: ClimateColors.textSecondary,
+        // Local only honesty card
+        Container(
+          decoration: BoxDecoration(
+            color: verdant.amberLight,
+            borderRadius: BorderRadius.circular(DesignTokens.radiusMedium),
+            border: Border.all(
+              color: verdant.amber.withValues(alpha: 0.3),
+            ),
+          ),
+          padding: const EdgeInsets.all(14),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(Icons.shield_outlined, size: 20, color: verdant.amber),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  l10n.communityLocalOnly,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: ClimateColors.textPrimary,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
-        const SizedBox(height: ClimateSpacing.space16),
-        Text(l10n.communityFeedHeading, style: theme.textTheme.titleMedium),
-        const SizedBox(height: ClimateSpacing.space8),
-        FilledButton.icon(
-          key: const ValueKey('communityAddPostButton'),
-          onPressed: onAdd,
-          icon: const Icon(Icons.add),
-          label: Text(l10n.communityAddPost),
+        const SizedBox(height: 16),
+        // Feed section card
+        Container(
+          decoration: DesignTokens.sectionCard(context),
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    l10n.communityFeedHeading,
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      color: verdant.forestGreen,
+                    ),
+                  ),
+                  FilledButton.icon(
+                    key: const ValueKey('communityAddPostButton'),
+                    onPressed: onAdd,
+                    style: FilledButton.styleFrom(
+                      backgroundColor: verdant.forestGreen,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 8,
+                      ),
+                    ),
+                    icon: const Icon(Icons.add, size: 18),
+                    label: Text(l10n.communityAddPost),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              if (posts.isEmpty)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 24),
+                  child: Center(
+                    child: Column(
+                      children: [
+                        Icon(
+                          Icons.menu_book_outlined,
+                          size: 44,
+                          color: verdant.forestGreen.withValues(alpha: 0.4),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          l10n.communityNoPosts,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: ClimateColors.textSecondary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              else
+                for (var i = 0; i < posts.length; i++) ...[
+                  _CommunityPostRow(
+                    post: posts[i],
+                    onEdit: () => onEdit(posts[i]),
+                    onDelete: () => onDelete(posts[i].postId),
+                  ),
+                  if (i < posts.length - 1)
+                    const Divider(height: 1),
+                ],
+            ],
+          ),
         ),
-        if (posts.isEmpty)
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: ClimateSpacing.space16,
-            ),
-            child: Text(l10n.communityNoPosts),
-          )
-        else
-          for (final post in posts) ...[
-            const Divider(height: 1),
-            _CommunityPostRow(
-              post: post,
-              onEdit: () => onEdit(post),
-              onDelete: () => onDelete(post.postId),
-            ),
-          ],
-        const Divider(height: 1),
-        const SizedBox(height: ClimateSpacing.space24),
-        Text(
-          l10n.communityGuidelinesHeading,
-          style: theme.textTheme.titleMedium,
+        const SizedBox(height: 16),
+        // Community Guidelines card
+        Container(
+          decoration: DesignTokens.sectionCard(context),
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                l10n.communityGuidelinesHeading,
+                style: theme.textTheme.titleMedium?.copyWith(
+                  color: verdant.forestGreen,
+                ),
+              ),
+              const SizedBox(height: 8),
+              for (var i = 0; i < _guidelines(l10n).length; i++) ...[
+                _GuidelineRow(guideline: _guidelines(l10n)[i]),
+                if (i < _guidelines(l10n).length - 1)
+                  const Divider(height: 1),
+              ],
+            ],
+          ),
         ),
-        for (final guideline in _guidelines(l10n)) ...[
-          const Divider(height: 1),
-          _GuidelineRow(guideline: guideline),
-        ],
-        const Divider(height: 1),
       ],
     );
   }
@@ -252,30 +339,50 @@ class _CommunityPostRow extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(post.title, style: theme.textTheme.titleSmall),
-          const SizedBox(height: ClimateSpacing.space8),
-          Text(post.body),
-          const SizedBox(height: ClimateSpacing.space8),
-          Wrap(
-            spacing: ClimateSpacing.space8,
-            runSpacing: ClimateSpacing.space8,
-            crossAxisAlignment: WrapCrossAlignment.center,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                DateFormat.yMMMd(l10n.localeName).format(post.createdAt),
-                style: numberStyle,
+              Expanded(
+                child: Text(
+                  post.title,
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ),
-              IconButton(
-                tooltip: l10n.communityEditPostTooltip,
-                onPressed: onEdit,
-                icon: const Icon(Icons.edit_outlined),
-              ),
-              IconButton(
-                tooltip: l10n.communityDeletePostTooltip,
-                onPressed: onDelete,
-                icon: const Icon(Icons.delete_outline),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    tooltip: l10n.communityEditPostTooltip,
+                    onPressed: onEdit,
+                    icon: const Icon(Icons.edit_outlined, size: 20),
+                    visualDensity: VisualDensity.compact,
+                  ),
+                  IconButton(
+                    tooltip: l10n.communityDeletePostTooltip,
+                    onPressed: onDelete,
+                    icon: const Icon(Icons.delete_outline, size: 20),
+                    visualDensity: VisualDensity.compact,
+                  ),
+                ],
               ),
             ],
+          ),
+          const SizedBox(height: 4),
+          Text(
+            post.body,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              height: 1.5,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            DateFormat.yMMMd(l10n.localeName).format(post.createdAt),
+            style: numberStyle.copyWith(
+              fontSize: 12,
+              color: ClimateColors.textSecondary,
+            ),
           ),
         ],
       ),
@@ -292,13 +399,18 @@ class _GuidelineRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: ClimateSpacing.space16),
+      padding: const EdgeInsets.symmetric(vertical: ClimateSpacing.space12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(guideline.title, style: theme.textTheme.titleSmall),
-          const SizedBox(height: ClimateSpacing.space8),
-          Text(guideline.text),
+          const SizedBox(height: 4),
+          Text(
+            guideline.text,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: ClimateColors.textSecondary,
+            ),
+          ),
         ],
       ),
     );
@@ -336,6 +448,7 @@ class _CommunityPostDialogState extends State<_CommunityPostDialog> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final verdant = Theme.of(context).extension<VerdantColors>()!;
     final isEditing = widget.post != null;
     return AlertDialog(
       scrollable: true,
@@ -385,6 +498,10 @@ class _CommunityPostDialogState extends State<_CommunityPostDialog> {
         FilledButton(
           key: const ValueKey('communitySavePostButton'),
           onPressed: _save,
+          style: FilledButton.styleFrom(
+            backgroundColor: verdant.forestGreen,
+            foregroundColor: Colors.white,
+          ),
           child: Text(
             isEditing ? l10n.communityUpdatePost : l10n.communitySavePost,
           ),
