@@ -166,7 +166,7 @@ void main() {
           (userData['footprintEstimates'] as List).single
               as Map<String, Object?>;
 
-      expect(exported['exportSchemaVersion'], 6);
+      expect(exported['exportSchemaVersion'], 7);
       expect(account['loginIdentifier'], 'member@example.test');
       expect(estimate['estimateValue'], 12.5);
       final preference =
@@ -174,6 +174,7 @@ void main() {
       expect(preference['recyclingCollectionDay'], DateTime.tuesday);
       expect(preference['compostDay'], DateTime.friday);
       expect(userData['travelTrips'], isEmpty);
+      expect(userData['communityPosts'], isEmpty);
       expect(encoded, isNot(contains('credentialVerifiers')));
       expect(encoded, isNot(contains('"salt"')));
       expect(encoded, isNot(contains('"verifier"')));
@@ -203,6 +204,10 @@ void main() {
     );
     expect(await database.select(database.wasteLogEntries).get(), hasLength(1));
     expect(await database.select(database.plannedTrips).get(), hasLength(1));
+    expect(
+      await database.select(database.communityJournalPosts).get(),
+      hasLength(1),
+    );
     expect(closeCalls, 0);
     expect(fileDeletionCalls, 0);
     expect(guestResetCalls, 0);
@@ -228,6 +233,10 @@ void main() {
     expect(await database.select(database.footprintEstimates).get(), isEmpty);
     expect(await database.select(database.wasteLogEntries).get(), isEmpty);
     expect(await database.select(database.plannedTrips).get(), isEmpty);
+    expect(
+      await database.select(database.communityJournalPosts).get(),
+      isEmpty,
+    );
     final preferences =
         (await database.select(database.userPreferences).get()).single;
     expect(preferences.displayLanguageTag, 'en');
@@ -306,6 +315,16 @@ Future<void> _insertAccountWithData(AppDatabase database) async {
           transportMode: 'Train',
           tripDate: const Value(null),
           notes: const Value(null),
+          createdAt: DateTime.utc(2026, 11, 12),
+        ),
+      );
+  await database
+      .into(database.communityJournalPosts)
+      .insert(
+        CommunityJournalPostsCompanion.insert(
+          postId: 'post-1',
+          title: 'A first step',
+          body: 'I tried repairing a lamp.',
           createdAt: DateTime.utc(2026, 11, 12),
         ),
       );

@@ -9,6 +9,7 @@ import '../features/carbon_footprint_tracker/presentation/module_destination_scr
     as carbon;
 import '../features/carbon_footprint_tracker/data/activity_log_repository.dart';
 import '../features/eco_friendly_product_suggestions/data/product_catalog.dart';
+import '../features/community_journal/data/community_post_repository.dart';
 import '../features/eco_travel_suggestions/data/travel_guide_catalog.dart';
 import '../features/eco_travel_suggestions/data/travel_trip_repository.dart';
 import '../features/sustainable_living_challenges/data/challenge_catalog.dart';
@@ -89,6 +90,7 @@ GoRouter createAppRouter({
   ChallengeProgressRepository? challengeProgressRepository,
   WasteLogRepository? wasteLogRepository,
   TravelTripRepository? travelTripRepository,
+  CommunityPostRepository? communityPostRepository,
   RegionDataPack? selectedRegionPack,
   EstimateDemoRegion? demoRegion,
   Future<void> Function()? onGuestReturn,
@@ -195,6 +197,7 @@ GoRouter createAppRouter({
             challengeProgressRepository: challengeProgressRepository,
             wasteLogRepository: wasteLogRepository,
             travelTripRepository: travelTripRepository,
+            communityPostRepository: communityPostRepository,
             userPreferencesRepository: userPreferencesRepository,
             trackerRegionId: selectedRegionPack?.region.regionId,
             trackerFactors: selectedRegionPack == null
@@ -248,6 +251,7 @@ Widget _moduleScreen(
   required ChallengeProgressRepository? challengeProgressRepository,
   required WasteLogRepository? wasteLogRepository,
   required TravelTripRepository? travelTripRepository,
+  required CommunityPostRepository? communityPostRepository,
   required UserPreferencesRepository? userPreferencesRepository,
   required String? trackerRegionId,
   required List<EmissionFactor> trackerFactors,
@@ -291,7 +295,10 @@ Widget _moduleScreen(
             repository: travelTripRepository,
             catalog: travelGuideCatalog,
           ),
-  'communityJournal' => const journal.CommunityJournalScreen(),
+  'communityJournal' =>
+    communityPostRepository == null
+        ? _RoutePlaceholder(title: (l10n) => l10n.communityJournal)
+        : journal.CommunityJournalScreen(repository: communityPostRepository),
   'progressDashboard' => const progress.ProgressDashboardScreen(),
   'educationalContent' => const education.EducationalContentScreen(),
   _ => throw ArgumentError.value(

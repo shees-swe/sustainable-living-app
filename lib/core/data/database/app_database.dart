@@ -8,6 +8,7 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 import 'tables/credential_verifiers.dart';
+import 'tables/community_journal_posts.dart';
 import 'tables/challenge_day_completions.dart';
 import 'tables/challenge_progress_records.dart';
 import 'tables/planned_trips.dart';
@@ -30,6 +31,7 @@ part 'app_database.g.dart';
     ChallengeDayCompletions,
     WasteLogEntries,
     PlannedTrips,
+    CommunityJournalPosts,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -43,7 +45,7 @@ class AppDatabase extends _$AppDatabase {
   );
 
   @override
-  int get schemaVersion => 6;
+  int get schemaVersion => 7;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -76,6 +78,9 @@ class AppDatabase extends _$AppDatabase {
       }
       if (from < 6) {
         await migrator.createTable(plannedTrips);
+      }
+      if (from < 7) {
+        await migrator.createTable(communityJournalPosts);
       }
     },
     beforeOpen: (_) async {
@@ -123,6 +128,7 @@ class AppDatabase extends _$AppDatabase {
       await delete(activityLogEntries).go();
       await delete(wasteLogEntries).go();
       await delete(plannedTrips).go();
+      await delete(communityJournalPosts).go();
       await delete(challengeDayCompletions).go();
       await delete(challengeProgressRecords).go();
       await delete(localAccounts).go();

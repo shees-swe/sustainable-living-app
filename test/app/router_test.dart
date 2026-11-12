@@ -7,6 +7,7 @@ import 'package:sustainable_living_app/app/router.dart';
 import 'package:sustainable_living_app/core/data/database/app_database.dart';
 import 'package:sustainable_living_app/core/theme/app_theme.dart';
 import 'package:sustainable_living_app/features/certifications_guide/data/certification_catalog.dart';
+import 'package:sustainable_living_app/features/community_journal/data/community_post_repository.dart';
 import 'package:sustainable_living_app/features/eco_friendly_product_suggestions/data/product_catalog.dart';
 import 'package:sustainable_living_app/features/eco_travel_suggestions/data/travel_guide_catalog.dart';
 import 'package:sustainable_living_app/features/eco_travel_suggestions/data/travel_trip_repository.dart';
@@ -31,6 +32,7 @@ void main() {
   late WasteLogRepository wasteLogRepository;
   late UserPreferencesRepository wastePreferencesRepository;
   late TravelTripRepository travelTripRepository;
+  late CommunityPostRepository communityPostRepository;
 
   setUpAll(() async {
     productCatalog = await ProductCatalog.loadBundled();
@@ -48,6 +50,9 @@ void main() {
       supportedRegionIds: const {},
     );
     travelTripRepository = TravelTripRepository(database: challengeDatabase);
+    communityPostRepository = CommunityPostRepository(
+      database: challengeDatabase,
+    );
   });
 
   tearDownAll(() async {
@@ -142,6 +147,7 @@ void main() {
         challengeProgressRepository: challengeProgressRepository,
         wasteLogRepository: wasteLogRepository,
         travelTripRepository: travelTripRepository,
+        communityPostRepository: communityPostRepository,
         userPreferencesRepository: wastePreferencesRepository,
       );
       addTearDown(router.dispose);
@@ -153,6 +159,13 @@ void main() {
         await _pumpUntilVisible(tester, find.text('No waste logged yet.'));
       } else if (destination.id == 'ecoTravelSuggestions') {
         await _pumpUntilVisible(tester, find.text('No trips planned yet.'));
+      } else if (destination.id == 'communityJournal') {
+        await _pumpUntilVisible(
+          tester,
+          find.text(
+            'No posts yet. Add your first post to start your personal record.',
+          ),
+        );
       } else if (destination.id == 'energyConservationTips') {
         await _pumpUntilVisible(
           tester,
@@ -194,6 +207,19 @@ void main() {
           scrollable: find.byType(Scrollable).first,
         );
         expect(guideHeading, findsOneWidget);
+      } else if (destination.id == 'communityJournal') {
+        expect(
+          find.text(
+            'No posts yet. Add your first post to start your personal record.',
+          ),
+          findsOneWidget,
+        );
+        expect(
+          find.text(
+            'Your posts are stored only on this device. Nothing is uploaded or shared.',
+          ),
+          findsOneWidget,
+        );
       } else if (destination.id == 'energyConservationTips') {
         expect(find.text('Search by title or text'), findsOneWidget);
         expect(find.text('Use fans before air conditioning'), findsOneWidget);

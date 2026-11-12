@@ -95,6 +95,16 @@ void main() {
               createdAt: DateTime.utc(2026, 3, 5),
             ),
           );
+      await database
+          .into(database.communityJournalPosts)
+          .insert(
+            CommunityJournalPostsCompanion.insert(
+              postId: 'post-1',
+              title: 'Repaired a lamp',
+              body: 'I fixed a loose wire instead of replacing it.',
+              createdAt: DateTime.utc(2026, 3, 6),
+            ),
+          );
       await database.savePreferences(
         UserPreferencesCompanion(
           preferenceId: const Value(1),
@@ -111,7 +121,7 @@ void main() {
       final userData = exported['userData']! as Map<String, Object?>;
       final encoded = jsonEncode(exported);
 
-      expect(exported['exportSchemaVersion'], 6);
+      expect(exported['exportSchemaVersion'], 7);
       expect(exported['createdAt'], '2026-11-07T00:00:00.000Z');
       expect((userData['accounts']! as List).single, {
         'accountId': 'account-1',
@@ -146,6 +156,12 @@ void main() {
         'tripDate': '2026-04-12T00:00:00.000Z',
         'notes': 'Pack light.',
         'createdAt': '2026-03-05T00:00:00.000Z',
+      });
+      expect((userData['communityPosts']! as List).single, {
+        'postId': 'post-1',
+        'title': 'Repaired a lamp',
+        'body': 'I fixed a loose wire instead of replacing it.',
+        'createdAt': '2026-03-06T00:00:00.000Z',
       });
       expect((userData['preferences']! as List).single, {
         'displayLanguageTag': 'en',

@@ -4016,6 +4016,317 @@ class PlannedTripsCompanion extends UpdateCompanion<PlannedTrip> {
   }
 }
 
+class $CommunityJournalPostsTable extends CommunityJournalPosts
+    with TableInfo<$CommunityJournalPostsTable, CommunityJournalPost> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $CommunityJournalPostsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _postIdMeta = const VerificationMeta('postId');
+  @override
+  late final GeneratedColumn<String> postId = GeneratedColumn<String>(
+    'post_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+    'title',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _bodyMeta = const VerificationMeta('body');
+  @override
+  late final GeneratedColumn<String> body = GeneratedColumn<String>(
+    'body',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [postId, title, body, createdAt];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'community_journal_posts';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<CommunityJournalPost> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('post_id')) {
+      context.handle(
+        _postIdMeta,
+        postId.isAcceptableOrUnknown(data['post_id']!, _postIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_postIdMeta);
+    }
+    if (data.containsKey('title')) {
+      context.handle(
+        _titleMeta,
+        title.isAcceptableOrUnknown(data['title']!, _titleMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_titleMeta);
+    }
+    if (data.containsKey('body')) {
+      context.handle(
+        _bodyMeta,
+        body.isAcceptableOrUnknown(data['body']!, _bodyMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_bodyMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {postId};
+  @override
+  CommunityJournalPost map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return CommunityJournalPost(
+      postId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}post_id'],
+      )!,
+      title: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}title'],
+      )!,
+      body: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}body'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+    );
+  }
+
+  @override
+  $CommunityJournalPostsTable createAlias(String alias) {
+    return $CommunityJournalPostsTable(attachedDatabase, alias);
+  }
+}
+
+class CommunityJournalPost extends DataClass
+    implements Insertable<CommunityJournalPost> {
+  final String postId;
+  final String title;
+  final String body;
+  final DateTime createdAt;
+  const CommunityJournalPost({
+    required this.postId,
+    required this.title,
+    required this.body,
+    required this.createdAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['post_id'] = Variable<String>(postId);
+    map['title'] = Variable<String>(title);
+    map['body'] = Variable<String>(body);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  CommunityJournalPostsCompanion toCompanion(bool nullToAbsent) {
+    return CommunityJournalPostsCompanion(
+      postId: Value(postId),
+      title: Value(title),
+      body: Value(body),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory CommunityJournalPost.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return CommunityJournalPost(
+      postId: serializer.fromJson<String>(json['postId']),
+      title: serializer.fromJson<String>(json['title']),
+      body: serializer.fromJson<String>(json['body']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'postId': serializer.toJson<String>(postId),
+      'title': serializer.toJson<String>(title),
+      'body': serializer.toJson<String>(body),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  CommunityJournalPost copyWith({
+    String? postId,
+    String? title,
+    String? body,
+    DateTime? createdAt,
+  }) => CommunityJournalPost(
+    postId: postId ?? this.postId,
+    title: title ?? this.title,
+    body: body ?? this.body,
+    createdAt: createdAt ?? this.createdAt,
+  );
+  CommunityJournalPost copyWithCompanion(CommunityJournalPostsCompanion data) {
+    return CommunityJournalPost(
+      postId: data.postId.present ? data.postId.value : this.postId,
+      title: data.title.present ? data.title.value : this.title,
+      body: data.body.present ? data.body.value : this.body,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CommunityJournalPost(')
+          ..write('postId: $postId, ')
+          ..write('title: $title, ')
+          ..write('body: $body, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(postId, title, body, createdAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is CommunityJournalPost &&
+          other.postId == this.postId &&
+          other.title == this.title &&
+          other.body == this.body &&
+          other.createdAt == this.createdAt);
+}
+
+class CommunityJournalPostsCompanion
+    extends UpdateCompanion<CommunityJournalPost> {
+  final Value<String> postId;
+  final Value<String> title;
+  final Value<String> body;
+  final Value<DateTime> createdAt;
+  final Value<int> rowid;
+  const CommunityJournalPostsCompanion({
+    this.postId = const Value.absent(),
+    this.title = const Value.absent(),
+    this.body = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  CommunityJournalPostsCompanion.insert({
+    required String postId,
+    required String title,
+    required String body,
+    required DateTime createdAt,
+    this.rowid = const Value.absent(),
+  }) : postId = Value(postId),
+       title = Value(title),
+       body = Value(body),
+       createdAt = Value(createdAt);
+  static Insertable<CommunityJournalPost> custom({
+    Expression<String>? postId,
+    Expression<String>? title,
+    Expression<String>? body,
+    Expression<DateTime>? createdAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (postId != null) 'post_id': postId,
+      if (title != null) 'title': title,
+      if (body != null) 'body': body,
+      if (createdAt != null) 'created_at': createdAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  CommunityJournalPostsCompanion copyWith({
+    Value<String>? postId,
+    Value<String>? title,
+    Value<String>? body,
+    Value<DateTime>? createdAt,
+    Value<int>? rowid,
+  }) {
+    return CommunityJournalPostsCompanion(
+      postId: postId ?? this.postId,
+      title: title ?? this.title,
+      body: body ?? this.body,
+      createdAt: createdAt ?? this.createdAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (postId.present) {
+      map['post_id'] = Variable<String>(postId.value);
+    }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    if (body.present) {
+      map['body'] = Variable<String>(body.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CommunityJournalPostsCompanion(')
+          ..write('postId: $postId, ')
+          ..write('title: $title, ')
+          ..write('body: $body, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -4037,6 +4348,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     this,
   );
   late final $PlannedTripsTable plannedTrips = $PlannedTripsTable(this);
+  late final $CommunityJournalPostsTable communityJournalPosts =
+      $CommunityJournalPostsTable(this);
   late final Index localAccountsLoginIdentifierUnique = Index(
     'local_accounts_login_identifier_unique',
     'CREATE UNIQUE INDEX local_accounts_login_identifier_unique ON local_accounts (login_identifier)',
@@ -4055,6 +4368,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     challengeDayCompletions,
     wasteLogEntries,
     plannedTrips,
+    communityJournalPosts,
     localAccountsLoginIdentifierUnique,
   ];
   @override
@@ -6979,6 +7293,218 @@ typedef $$PlannedTripsTableProcessedTableManager =
       PlannedTrip,
       PrefetchHooks Function()
     >;
+typedef $$CommunityJournalPostsTableCreateCompanionBuilder =
+    CommunityJournalPostsCompanion Function({
+      required String postId,
+      required String title,
+      required String body,
+      required DateTime createdAt,
+      Value<int> rowid,
+    });
+typedef $$CommunityJournalPostsTableUpdateCompanionBuilder =
+    CommunityJournalPostsCompanion Function({
+      Value<String> postId,
+      Value<String> title,
+      Value<String> body,
+      Value<DateTime> createdAt,
+      Value<int> rowid,
+    });
+
+class $$CommunityJournalPostsTableFilterComposer
+    extends Composer<_$AppDatabase, $CommunityJournalPostsTable> {
+  $$CommunityJournalPostsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get postId => $composableBuilder(
+    column: $table.postId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get title => $composableBuilder(
+    column: $table.title,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get body => $composableBuilder(
+    column: $table.body,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$CommunityJournalPostsTableOrderingComposer
+    extends Composer<_$AppDatabase, $CommunityJournalPostsTable> {
+  $$CommunityJournalPostsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get postId => $composableBuilder(
+    column: $table.postId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get title => $composableBuilder(
+    column: $table.title,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get body => $composableBuilder(
+    column: $table.body,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$CommunityJournalPostsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $CommunityJournalPostsTable> {
+  $$CommunityJournalPostsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get postId =>
+      $composableBuilder(column: $table.postId, builder: (column) => column);
+
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
+
+  GeneratedColumn<String> get body =>
+      $composableBuilder(column: $table.body, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+}
+
+class $$CommunityJournalPostsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $CommunityJournalPostsTable,
+          CommunityJournalPost,
+          $$CommunityJournalPostsTableFilterComposer,
+          $$CommunityJournalPostsTableOrderingComposer,
+          $$CommunityJournalPostsTableAnnotationComposer,
+          $$CommunityJournalPostsTableCreateCompanionBuilder,
+          $$CommunityJournalPostsTableUpdateCompanionBuilder,
+          (
+            CommunityJournalPost,
+            BaseReferences<
+              _$AppDatabase,
+              $CommunityJournalPostsTable,
+              CommunityJournalPost
+            >,
+          ),
+          CommunityJournalPost,
+          PrefetchHooks Function()
+        > {
+  $$CommunityJournalPostsTableTableManager(
+    _$AppDatabase db,
+    $CommunityJournalPostsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$CommunityJournalPostsTableFilterComposer(
+                $db: db,
+                $table: table,
+              ),
+          createOrderingComposer: () =>
+              $$CommunityJournalPostsTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$CommunityJournalPostsTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> postId = const Value.absent(),
+                Value<String> title = const Value.absent(),
+                Value<String> body = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => CommunityJournalPostsCompanion(
+                postId: postId,
+                title: title,
+                body: body,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String postId,
+                required String title,
+                required String body,
+                required DateTime createdAt,
+                Value<int> rowid = const Value.absent(),
+              }) => CommunityJournalPostsCompanion.insert(
+                postId: postId,
+                title: title,
+                body: body,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<
+                    $CommunityJournalPostsTable,
+                    CommunityJournalPost
+                  >(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $CommunityJournalPostsTable,
+                    CommunityJournalPost
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$CommunityJournalPostsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $CommunityJournalPostsTable,
+      CommunityJournalPost,
+      $$CommunityJournalPostsTableFilterComposer,
+      $$CommunityJournalPostsTableOrderingComposer,
+      $$CommunityJournalPostsTableAnnotationComposer,
+      $$CommunityJournalPostsTableCreateCompanionBuilder,
+      $$CommunityJournalPostsTableUpdateCompanionBuilder,
+      (
+        CommunityJournalPost,
+        BaseReferences<
+          _$AppDatabase,
+          $CommunityJournalPostsTable,
+          CommunityJournalPost
+        >,
+      ),
+      CommunityJournalPost,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -7007,4 +7533,6 @@ class $AppDatabaseManager {
       $$WasteLogEntriesTableTableManager(_db, _db.wasteLogEntries);
   $$PlannedTripsTableTableManager get plannedTrips =>
       $$PlannedTripsTableTableManager(_db, _db.plannedTrips);
+  $$CommunityJournalPostsTableTableManager get communityJournalPosts =>
+      $$CommunityJournalPostsTableTableManager(_db, _db.communityJournalPosts);
 }

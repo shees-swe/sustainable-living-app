@@ -9,7 +9,7 @@ void main() {
     addTearDown(database.close);
 
     await database.select(database.userPreferences).get();
-    expect(database.schemaVersion, 6);
+    expect(database.schemaVersion, 7);
 
     await database.validateDatabaseSchema();
 
@@ -55,7 +55,7 @@ void main() {
             ),
           );
 
-      expect(database.schemaVersion, 6);
+      expect(database.schemaVersion, 7);
       expect(
         await database.select(database.challengeProgressRecords).get(),
         hasLength(1),
@@ -96,7 +96,7 @@ void main() {
           ),
         );
 
-    expect(database.schemaVersion, 6);
+    expect(database.schemaVersion, 7);
     final entry = await database.select(database.wasteLogEntries).getSingle();
     expect(entry.entryId, 'waste-1');
     expect(entry.category, 'Plastic');
@@ -125,7 +125,7 @@ void main() {
     final preference = await database
         .select(database.userPreferences)
         .getSingle();
-    expect(database.schemaVersion, 6);
+    expect(database.schemaVersion, 7);
     expect(preference.displayLanguageTag, 'fr');
     expect(preference.selectedRegionId, 'PK');
     expect(preference.reducedMotion, isTrue);
@@ -162,11 +162,51 @@ void main() {
           ),
         );
 
-    expect(database.schemaVersion, 6);
+    expect(database.schemaVersion, 7);
     final trip = await database.select(database.plannedTrips).getSingle();
     expect(trip.tripId, 'trip-1');
     expect(trip.title, 'Weekend by train');
     expect(trip.tripDate, isNull);
     expect(trip.notes, isNull);
   });
+
+  test(
+    'upgrades a version 6 database with the community journal table',
+    () async {
+      final executor = NativeDatabase.memory(
+        setup: (database) {
+          database.execute(
+            'CREATE TABLE user_preferences ('
+            'preference_id INTEGER NOT NULL CHECK (preference_id = 1), '
+            "display_language_tag TEXT NOT NULL DEFAULT 'en', "
+            'selected_region_id TEXT, reduced_motion INTEGER, '
+            'recycling_collection_day INTEGER, compost_day INTEGER, '
+            'updated_at INTEGER NOT NULL, PRIMARY KEY (preference_id))',
+          );
+          database.execute('PRAGMA user_version = 6');
+        },
+      );
+      final database = AppDatabase.forTesting(executor);
+      addTearDown(database.close);
+
+      await database
+          .into(database.communityJournalPosts)
+          .insert(
+            CommunityJournalPostsCompanion.insert(
+              postId: 'post-1',
+              title: 'A first step',
+              body: 'I tried repairing a lamp.',
+              createdAt: DateTime.utc(2026, 11, 12),
+            ),
+          );
+
+      expect(database.schemaVersion, 7);
+      final post = await database
+          .select(database.communityJournalPosts)
+          .getSingle();
+      expect(post.postId, 'post-1');
+      expect(post.title, 'A first step');
+      expect(post.body, 'I tried repairing a lamp.');
+    },
+  );
 }

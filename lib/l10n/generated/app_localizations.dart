@@ -1785,6 +1785,168 @@ abstract class AppLocalizations {
   /// **'Community Journal'**
   String get communityJournal;
 
+  /// No description provided for @communityLocalOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Your posts are stored only on this device. Nothing is uploaded or shared.'**
+  String get communityLocalOnly;
+
+  /// No description provided for @communityFeedHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Your journal'**
+  String get communityFeedHeading;
+
+  /// No description provided for @communityNoPosts.
+  ///
+  /// In en, this message translates to:
+  /// **'No posts yet. Add your first post to start your personal record.'**
+  String get communityNoPosts;
+
+  /// No description provided for @communityAddPost.
+  ///
+  /// In en, this message translates to:
+  /// **'Write a post'**
+  String get communityAddPost;
+
+  /// No description provided for @communityNewPostTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New journal post'**
+  String get communityNewPostTitle;
+
+  /// No description provided for @communityEditPostTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit journal post'**
+  String get communityEditPostTitle;
+
+  /// No description provided for @communityPostTitleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get communityPostTitleLabel;
+
+  /// No description provided for @communityPostBodyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'What did you try?'**
+  String get communityPostBodyLabel;
+
+  /// No description provided for @communityTitleRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a title.'**
+  String get communityTitleRequired;
+
+  /// No description provided for @communityBodyRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the post text.'**
+  String get communityBodyRequired;
+
+  /// No description provided for @communitySavePost.
+  ///
+  /// In en, this message translates to:
+  /// **'Save post'**
+  String get communitySavePost;
+
+  /// No description provided for @communityUpdatePost.
+  ///
+  /// In en, this message translates to:
+  /// **'Update post'**
+  String get communityUpdatePost;
+
+  /// No description provided for @communityEditPostTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit post'**
+  String get communityEditPostTooltip;
+
+  /// No description provided for @communityDeletePostTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete post'**
+  String get communityDeletePostTooltip;
+
+  /// No description provided for @communityLoadFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'Your journal could not be loaded.'**
+  String get communityLoadFailure;
+
+  /// No description provided for @communitySaveFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'The post could not be saved.'**
+  String get communitySaveFailure;
+
+  /// No description provided for @communityUpdateFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'The post could not be updated.'**
+  String get communityUpdateFailure;
+
+  /// No description provided for @communityDeleteFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'The post could not be deleted.'**
+  String get communityDeleteFailure;
+
+  /// No description provided for @communityGuidelinesHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Community guidelines'**
+  String get communityGuidelinesHeading;
+
+  /// No description provided for @communityGuidelineShareTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Share what you tried'**
+  String get communityGuidelineShareTitle;
+
+  /// No description provided for @communityGuidelineShareText.
+  ///
+  /// In en, this message translates to:
+  /// **'Posts about your own efforts, challenges, and results help you see your own progress over time.'**
+  String get communityGuidelineShareText;
+
+  /// No description provided for @communityGuidelineSpecificTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Be specific'**
+  String get communityGuidelineSpecificTitle;
+
+  /// No description provided for @communityGuidelineSpecificText.
+  ///
+  /// In en, this message translates to:
+  /// **'What you changed, for how long, and what happened — specific posts are the ones worth re-reading.'**
+  String get communityGuidelineSpecificText;
+
+  /// No description provided for @communityGuidelineHonestTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Be honest about results'**
+  String get communityGuidelineHonestTitle;
+
+  /// No description provided for @communityGuidelineHonestText.
+  ///
+  /// In en, this message translates to:
+  /// **'A challenge that did not work is as useful a record as one that did.'**
+  String get communityGuidelineHonestText;
+
+  /// No description provided for @communityGuidelineDeviceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your journal, your device'**
+  String get communityGuidelineDeviceTitle;
+
+  /// No description provided for @communityGuidelineDeviceText.
+  ///
+  /// In en, this message translates to:
+  /// **'In this version the forum is a personal, on-device feed. A shared community would arrive in a later version.'**
+  String get communityGuidelineDeviceText;
+
   /// No description provided for @progressDashboard.
   ///
   /// In en, this message translates to:

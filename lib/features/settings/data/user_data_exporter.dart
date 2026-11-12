@@ -11,7 +11,7 @@ class UserDataExporter {
   UserDataExporter._(this._database, DateTime Function()? clock)
     : _clock = clock ?? DateTime.now;
 
-  static const int exportSchemaVersion = 6;
+  static const int exportSchemaVersion = 7;
 
   final AppDatabase _database;
   final DateTime Function() _clock;
@@ -30,6 +30,9 @@ class UserDataExporter {
           .select(_database.wasteLogEntries)
           .get();
       final plannedTrips = await _database.select(_database.plannedTrips).get();
+      final communityPosts = await _database
+          .select(_database.communityJournalPosts)
+          .get();
       final challengeProgressRecords = await _database
           .select(_database.challengeProgressRecords)
           .get();
@@ -102,6 +105,15 @@ class UserDataExporter {
                 'tripDate': trip.tripDate?.toUtc().toIso8601String(),
                 'notes': trip.notes,
                 'createdAt': trip.createdAt.toUtc().toIso8601String(),
+              },
+          ],
+          'communityPosts': [
+            for (final post in communityPosts)
+              {
+                'postId': post.postId,
+                'title': post.title,
+                'body': post.body,
+                'createdAt': post.createdAt.toUtc().toIso8601String(),
               },
           ],
           'challengeProgress': [

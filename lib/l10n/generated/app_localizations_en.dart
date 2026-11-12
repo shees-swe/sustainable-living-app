@@ -963,6 +963,93 @@ class AppLocalizationsEn extends AppLocalizations {
   String get communityJournal => 'Community Journal';
 
   @override
+  String get communityLocalOnly =>
+      'Your posts are stored only on this device. Nothing is uploaded or shared.';
+
+  @override
+  String get communityFeedHeading => 'Your journal';
+
+  @override
+  String get communityNoPosts =>
+      'No posts yet. Add your first post to start your personal record.';
+
+  @override
+  String get communityAddPost => 'Write a post';
+
+  @override
+  String get communityNewPostTitle => 'New journal post';
+
+  @override
+  String get communityEditPostTitle => 'Edit journal post';
+
+  @override
+  String get communityPostTitleLabel => 'Title';
+
+  @override
+  String get communityPostBodyLabel => 'What did you try?';
+
+  @override
+  String get communityTitleRequired => 'Enter a title.';
+
+  @override
+  String get communityBodyRequired => 'Enter the post text.';
+
+  @override
+  String get communitySavePost => 'Save post';
+
+  @override
+  String get communityUpdatePost => 'Update post';
+
+  @override
+  String get communityEditPostTooltip => 'Edit post';
+
+  @override
+  String get communityDeletePostTooltip => 'Delete post';
+
+  @override
+  String get communityLoadFailure => 'Your journal could not be loaded.';
+
+  @override
+  String get communitySaveFailure => 'The post could not be saved.';
+
+  @override
+  String get communityUpdateFailure => 'The post could not be updated.';
+
+  @override
+  String get communityDeleteFailure => 'The post could not be deleted.';
+
+  @override
+  String get communityGuidelinesHeading => 'Community guidelines';
+
+  @override
+  String get communityGuidelineShareTitle => 'Share what you tried';
+
+  @override
+  String get communityGuidelineShareText =>
+      'Posts about your own efforts, challenges, and results help you see your own progress over time.';
+
+  @override
+  String get communityGuidelineSpecificTitle => 'Be specific';
+
+  @override
+  String get communityGuidelineSpecificText =>
+      'What you changed, for how long, and what happened — specific posts are the ones worth re-reading.';
+
+  @override
+  String get communityGuidelineHonestTitle => 'Be honest about results';
+
+  @override
+  String get communityGuidelineHonestText =>
+      'A challenge that did not work is as useful a record as one that did.';
+
+  @override
+  String get communityGuidelineDeviceTitle => 'Your journal, your device';
+
+  @override
+  String get communityGuidelineDeviceText =>
+      'In this version the forum is a personal, on-device feed. A shared community would arrive in a later version.';
+
+  @override
   String get progressDashboard => 'Sustainability Progress Dashboard';
 
   @override
