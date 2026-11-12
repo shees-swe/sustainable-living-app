@@ -299,7 +299,20 @@ Widget _moduleScreen(
     communityPostRepository == null
         ? _RoutePlaceholder(title: (l10n) => l10n.communityJournal)
         : journal.CommunityJournalScreen(repository: communityPostRepository),
-  'progressDashboard' => const progress.ProgressDashboardScreen(),
+  'progressDashboard' =>
+    activityLogRepository == null ||
+            wasteLogRepository == null ||
+            challengeProgressRepository == null ||
+            travelTripRepository == null ||
+            communityPostRepository == null
+        ? _RoutePlaceholder(title: (l10n) => l10n.progressDashboard)
+        : progress.ProgressDashboardScreen(
+            activityLogRepository: activityLogRepository,
+            wasteLogRepository: wasteLogRepository,
+            challengeProgressRepository: challengeProgressRepository,
+            travelTripRepository: travelTripRepository,
+            communityPostRepository: communityPostRepository,
+          ),
   'educationalContent' => const education.EducationalContentScreen(),
   _ => throw ArgumentError.value(
     moduleId,

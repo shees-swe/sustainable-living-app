@@ -1053,6 +1053,76 @@ class AppLocalizationsEn extends AppLocalizations {
   String get progressDashboard => 'Sustainability Progress Dashboard';
 
   @override
+  String get progressOverallEmpty =>
+      'Your progress will appear here as you use the app.';
+
+  @override
+  String get progressCarbonTitle => 'Carbon footprint';
+
+  @override
+  String get progressCarbonEmpty =>
+      'No activity logged yet. Start in Carbon Footprint Tracker.';
+
+  @override
+  String get progressCarbonTotal => 'All-time emissions';
+
+  @override
+  String get progressMonthlyTrendThisYear => 'Monthly trend this year';
+
+  @override
+  String get progressNoCurrentYearTrend => 'No entries recorded this year yet.';
+
+  @override
+  String get progressWasteTitle => 'Waste reduction';
+
+  @override
+  String get progressWasteEmpty =>
+      'No waste logged yet. Start in Waste Reduction Tracker.';
+
+  @override
+  String get progressWasteTotal => 'All-time waste logged';
+
+  @override
+  String get progressChallengesTitle => 'Challenges';
+
+  @override
+  String get progressChallengesEmpty =>
+      'No challenges joined yet. Start in Sustainable Living Challenges.';
+
+  @override
+  String get progressChallengesJoined => 'Challenges joined';
+
+  @override
+  String get progressDaysChecked => 'Days checked off';
+
+  @override
+  String get progressTravelTitle => 'Travel';
+
+  @override
+  String get progressTravelEmpty =>
+      'No trips planned yet. Start in Eco-Travel Suggestions.';
+
+  @override
+  String get progressTripsPlanned => 'Trips planned';
+
+  @override
+  String get progressJournalTitle => 'Journal';
+
+  @override
+  String get progressJournalEmpty =>
+      'No posts written yet. Start in Community Journal.';
+
+  @override
+  String get progressPostsWritten => 'Posts written';
+
+  @override
+  String get progressPurchasesScope =>
+      'Purchases are not tracked in this app, so they do not appear on this dashboard.';
+
+  @override
+  String get progressLoadFailure => 'Your progress could not be loaded.';
+
+  @override
   String get educationalContent => 'Educational Content';
 
   @override

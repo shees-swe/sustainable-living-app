@@ -1953,6 +1953,132 @@ abstract class AppLocalizations {
   /// **'Sustainability Progress Dashboard'**
   String get progressDashboard;
 
+  /// No description provided for @progressOverallEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Your progress will appear here as you use the app.'**
+  String get progressOverallEmpty;
+
+  /// No description provided for @progressCarbonTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Carbon footprint'**
+  String get progressCarbonTitle;
+
+  /// No description provided for @progressCarbonEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No activity logged yet. Start in Carbon Footprint Tracker.'**
+  String get progressCarbonEmpty;
+
+  /// No description provided for @progressCarbonTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'All-time emissions'**
+  String get progressCarbonTotal;
+
+  /// No description provided for @progressMonthlyTrendThisYear.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly trend this year'**
+  String get progressMonthlyTrendThisYear;
+
+  /// No description provided for @progressNoCurrentYearTrend.
+  ///
+  /// In en, this message translates to:
+  /// **'No entries recorded this year yet.'**
+  String get progressNoCurrentYearTrend;
+
+  /// No description provided for @progressWasteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Waste reduction'**
+  String get progressWasteTitle;
+
+  /// No description provided for @progressWasteEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No waste logged yet. Start in Waste Reduction Tracker.'**
+  String get progressWasteEmpty;
+
+  /// No description provided for @progressWasteTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'All-time waste logged'**
+  String get progressWasteTotal;
+
+  /// No description provided for @progressChallengesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Challenges'**
+  String get progressChallengesTitle;
+
+  /// No description provided for @progressChallengesEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No challenges joined yet. Start in Sustainable Living Challenges.'**
+  String get progressChallengesEmpty;
+
+  /// No description provided for @progressChallengesJoined.
+  ///
+  /// In en, this message translates to:
+  /// **'Challenges joined'**
+  String get progressChallengesJoined;
+
+  /// No description provided for @progressDaysChecked.
+  ///
+  /// In en, this message translates to:
+  /// **'Days checked off'**
+  String get progressDaysChecked;
+
+  /// No description provided for @progressTravelTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Travel'**
+  String get progressTravelTitle;
+
+  /// No description provided for @progressTravelEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No trips planned yet. Start in Eco-Travel Suggestions.'**
+  String get progressTravelEmpty;
+
+  /// No description provided for @progressTripsPlanned.
+  ///
+  /// In en, this message translates to:
+  /// **'Trips planned'**
+  String get progressTripsPlanned;
+
+  /// No description provided for @progressJournalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Journal'**
+  String get progressJournalTitle;
+
+  /// No description provided for @progressJournalEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No posts written yet. Start in Community Journal.'**
+  String get progressJournalEmpty;
+
+  /// No description provided for @progressPostsWritten.
+  ///
+  /// In en, this message translates to:
+  /// **'Posts written'**
+  String get progressPostsWritten;
+
+  /// No description provided for @progressPurchasesScope.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchases are not tracked in this app, so they do not appear on this dashboard.'**
+  String get progressPurchasesScope;
+
+  /// No description provided for @progressLoadFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'Your progress could not be loaded.'**
+  String get progressLoadFailure;
+
   /// No description provided for @educationalContent.
   ///
   /// In en, this message translates to:

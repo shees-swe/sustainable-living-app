@@ -7,6 +7,7 @@ import 'package:sustainable_living_app/app/router.dart';
 import 'package:sustainable_living_app/core/data/database/app_database.dart';
 import 'package:sustainable_living_app/core/theme/app_theme.dart';
 import 'package:sustainable_living_app/features/certifications_guide/data/certification_catalog.dart';
+import 'package:sustainable_living_app/features/carbon_footprint_tracker/data/activity_log_repository.dart';
 import 'package:sustainable_living_app/features/community_journal/data/community_post_repository.dart';
 import 'package:sustainable_living_app/features/eco_friendly_product_suggestions/data/product_catalog.dart';
 import 'package:sustainable_living_app/features/eco_travel_suggestions/data/travel_guide_catalog.dart';
@@ -33,6 +34,7 @@ void main() {
   late UserPreferencesRepository wastePreferencesRepository;
   late TravelTripRepository travelTripRepository;
   late CommunityPostRepository communityPostRepository;
+  late ActivityLogRepository activityLogRepository;
 
   setUpAll(() async {
     productCatalog = await ProductCatalog.loadBundled();
@@ -53,6 +55,7 @@ void main() {
     communityPostRepository = CommunityPostRepository(
       database: challengeDatabase,
     );
+    activityLogRepository = ActivityLogRepository(database: challengeDatabase);
   });
 
   tearDownAll(() async {
@@ -148,6 +151,7 @@ void main() {
         wasteLogRepository: wasteLogRepository,
         travelTripRepository: travelTripRepository,
         communityPostRepository: communityPostRepository,
+        activityLogRepository: activityLogRepository,
         userPreferencesRepository: wastePreferencesRepository,
       );
       addTearDown(router.dispose);
@@ -165,6 +169,11 @@ void main() {
           find.text(
             'No posts yet. Add your first post to start your personal record.',
           ),
+        );
+      } else if (destination.id == 'progressDashboard') {
+        await _pumpUntilVisible(
+          tester,
+          find.text('Your progress will appear here as you use the app.'),
         );
       } else if (destination.id == 'energyConservationTips') {
         await _pumpUntilVisible(
@@ -220,6 +229,21 @@ void main() {
           ),
           findsOneWidget,
         );
+      } else if (destination.id == 'progressDashboard') {
+        expect(find.text('Sustainability Progress Dashboard'), findsOneWidget);
+        expect(
+          find.text('Your progress will appear here as you use the app.'),
+          findsOneWidget,
+        );
+        final scope = find.text(
+          'Purchases are not tracked in this app, so they do not appear on this dashboard.',
+        );
+        await tester.scrollUntilVisible(
+          scope,
+          200,
+          scrollable: find.byType(Scrollable).first,
+        );
+        expect(scope, findsOneWidget);
       } else if (destination.id == 'energyConservationTips') {
         expect(find.text('Search by title or text'), findsOneWidget);
         expect(find.text('Use fans before air conditioning'), findsOneWidget);
