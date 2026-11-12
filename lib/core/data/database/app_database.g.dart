@@ -1961,6 +1961,582 @@ class FootprintEstimatesCompanion extends UpdateCompanion<FootprintEstimate> {
   }
 }
 
+class $ActivityLogEntriesTable extends ActivityLogEntries
+    with TableInfo<$ActivityLogEntriesTable, ActivityLogEntry> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ActivityLogEntriesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _activityIdMeta = const VerificationMeta(
+    'activityId',
+  );
+  @override
+  late final GeneratedColumn<String> activityId = GeneratedColumn<String>(
+    'activity_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _activityDateMeta = const VerificationMeta(
+    'activityDate',
+  );
+  @override
+  late final GeneratedColumn<DateTime> activityDate = GeneratedColumn<DateTime>(
+    'activity_date',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _categoryMeta = const VerificationMeta(
+    'category',
+  );
+  @override
+  late final GeneratedColumn<String> category = GeneratedColumn<String>(
+    'category',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _amountMeta = const VerificationMeta('amount');
+  @override
+  late final GeneratedColumn<double> amount = GeneratedColumn<double>(
+    'amount',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL CHECK (amount >= 0)',
+  );
+  static const VerificationMeta _unitMeta = const VerificationMeta('unit');
+  @override
+  late final GeneratedColumn<String> unit = GeneratedColumn<String>(
+    'unit',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _emissionsKgMeta = const VerificationMeta(
+    'emissionsKg',
+  );
+  @override
+  late final GeneratedColumn<double> emissionsKg = GeneratedColumn<double>(
+    'emissions_kg',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL CHECK (emissions_kg >= 0)',
+  );
+  static const VerificationMeta _regionIdMeta = const VerificationMeta(
+    'regionId',
+  );
+  @override
+  late final GeneratedColumn<String> regionId = GeneratedColumn<String>(
+    'region_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _factorIdMeta = const VerificationMeta(
+    'factorId',
+  );
+  @override
+  late final GeneratedColumn<String> factorId = GeneratedColumn<String>(
+    'factor_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    activityId,
+    activityDate,
+    createdAt,
+    category,
+    amount,
+    unit,
+    emissionsKg,
+    regionId,
+    factorId,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'activity_log_entries';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<ActivityLogEntry> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('activity_id')) {
+      context.handle(
+        _activityIdMeta,
+        activityId.isAcceptableOrUnknown(data['activity_id']!, _activityIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_activityIdMeta);
+    }
+    if (data.containsKey('activity_date')) {
+      context.handle(
+        _activityDateMeta,
+        activityDate.isAcceptableOrUnknown(
+          data['activity_date']!,
+          _activityDateMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_activityDateMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('category')) {
+      context.handle(
+        _categoryMeta,
+        category.isAcceptableOrUnknown(data['category']!, _categoryMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_categoryMeta);
+    }
+    if (data.containsKey('amount')) {
+      context.handle(
+        _amountMeta,
+        amount.isAcceptableOrUnknown(data['amount']!, _amountMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_amountMeta);
+    }
+    if (data.containsKey('unit')) {
+      context.handle(
+        _unitMeta,
+        unit.isAcceptableOrUnknown(data['unit']!, _unitMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_unitMeta);
+    }
+    if (data.containsKey('emissions_kg')) {
+      context.handle(
+        _emissionsKgMeta,
+        emissionsKg.isAcceptableOrUnknown(
+          data['emissions_kg']!,
+          _emissionsKgMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_emissionsKgMeta);
+    }
+    if (data.containsKey('region_id')) {
+      context.handle(
+        _regionIdMeta,
+        regionId.isAcceptableOrUnknown(data['region_id']!, _regionIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_regionIdMeta);
+    }
+    if (data.containsKey('factor_id')) {
+      context.handle(
+        _factorIdMeta,
+        factorId.isAcceptableOrUnknown(data['factor_id']!, _factorIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_factorIdMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {activityId};
+  @override
+  ActivityLogEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ActivityLogEntry(
+      activityId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}activity_id'],
+      )!,
+      activityDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}activity_date'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      category: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}category'],
+      )!,
+      amount: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}amount'],
+      )!,
+      unit: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}unit'],
+      )!,
+      emissionsKg: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}emissions_kg'],
+      )!,
+      regionId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}region_id'],
+      )!,
+      factorId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}factor_id'],
+      )!,
+    );
+  }
+
+  @override
+  $ActivityLogEntriesTable createAlias(String alias) {
+    return $ActivityLogEntriesTable(attachedDatabase, alias);
+  }
+}
+
+class ActivityLogEntry extends DataClass
+    implements Insertable<ActivityLogEntry> {
+  final String activityId;
+  final DateTime activityDate;
+  final DateTime createdAt;
+  final String category;
+  final double amount;
+  final String unit;
+  final double emissionsKg;
+  final String regionId;
+  final String factorId;
+  const ActivityLogEntry({
+    required this.activityId,
+    required this.activityDate,
+    required this.createdAt,
+    required this.category,
+    required this.amount,
+    required this.unit,
+    required this.emissionsKg,
+    required this.regionId,
+    required this.factorId,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['activity_id'] = Variable<String>(activityId);
+    map['activity_date'] = Variable<DateTime>(activityDate);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    map['category'] = Variable<String>(category);
+    map['amount'] = Variable<double>(amount);
+    map['unit'] = Variable<String>(unit);
+    map['emissions_kg'] = Variable<double>(emissionsKg);
+    map['region_id'] = Variable<String>(regionId);
+    map['factor_id'] = Variable<String>(factorId);
+    return map;
+  }
+
+  ActivityLogEntriesCompanion toCompanion(bool nullToAbsent) {
+    return ActivityLogEntriesCompanion(
+      activityId: Value(activityId),
+      activityDate: Value(activityDate),
+      createdAt: Value(createdAt),
+      category: Value(category),
+      amount: Value(amount),
+      unit: Value(unit),
+      emissionsKg: Value(emissionsKg),
+      regionId: Value(regionId),
+      factorId: Value(factorId),
+    );
+  }
+
+  factory ActivityLogEntry.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ActivityLogEntry(
+      activityId: serializer.fromJson<String>(json['activityId']),
+      activityDate: serializer.fromJson<DateTime>(json['activityDate']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      category: serializer.fromJson<String>(json['category']),
+      amount: serializer.fromJson<double>(json['amount']),
+      unit: serializer.fromJson<String>(json['unit']),
+      emissionsKg: serializer.fromJson<double>(json['emissionsKg']),
+      regionId: serializer.fromJson<String>(json['regionId']),
+      factorId: serializer.fromJson<String>(json['factorId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'activityId': serializer.toJson<String>(activityId),
+      'activityDate': serializer.toJson<DateTime>(activityDate),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'category': serializer.toJson<String>(category),
+      'amount': serializer.toJson<double>(amount),
+      'unit': serializer.toJson<String>(unit),
+      'emissionsKg': serializer.toJson<double>(emissionsKg),
+      'regionId': serializer.toJson<String>(regionId),
+      'factorId': serializer.toJson<String>(factorId),
+    };
+  }
+
+  ActivityLogEntry copyWith({
+    String? activityId,
+    DateTime? activityDate,
+    DateTime? createdAt,
+    String? category,
+    double? amount,
+    String? unit,
+    double? emissionsKg,
+    String? regionId,
+    String? factorId,
+  }) => ActivityLogEntry(
+    activityId: activityId ?? this.activityId,
+    activityDate: activityDate ?? this.activityDate,
+    createdAt: createdAt ?? this.createdAt,
+    category: category ?? this.category,
+    amount: amount ?? this.amount,
+    unit: unit ?? this.unit,
+    emissionsKg: emissionsKg ?? this.emissionsKg,
+    regionId: regionId ?? this.regionId,
+    factorId: factorId ?? this.factorId,
+  );
+  ActivityLogEntry copyWithCompanion(ActivityLogEntriesCompanion data) {
+    return ActivityLogEntry(
+      activityId: data.activityId.present
+          ? data.activityId.value
+          : this.activityId,
+      activityDate: data.activityDate.present
+          ? data.activityDate.value
+          : this.activityDate,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      category: data.category.present ? data.category.value : this.category,
+      amount: data.amount.present ? data.amount.value : this.amount,
+      unit: data.unit.present ? data.unit.value : this.unit,
+      emissionsKg: data.emissionsKg.present
+          ? data.emissionsKg.value
+          : this.emissionsKg,
+      regionId: data.regionId.present ? data.regionId.value : this.regionId,
+      factorId: data.factorId.present ? data.factorId.value : this.factorId,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ActivityLogEntry(')
+          ..write('activityId: $activityId, ')
+          ..write('activityDate: $activityDate, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('category: $category, ')
+          ..write('amount: $amount, ')
+          ..write('unit: $unit, ')
+          ..write('emissionsKg: $emissionsKg, ')
+          ..write('regionId: $regionId, ')
+          ..write('factorId: $factorId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    activityId,
+    activityDate,
+    createdAt,
+    category,
+    amount,
+    unit,
+    emissionsKg,
+    regionId,
+    factorId,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ActivityLogEntry &&
+          other.activityId == this.activityId &&
+          other.activityDate == this.activityDate &&
+          other.createdAt == this.createdAt &&
+          other.category == this.category &&
+          other.amount == this.amount &&
+          other.unit == this.unit &&
+          other.emissionsKg == this.emissionsKg &&
+          other.regionId == this.regionId &&
+          other.factorId == this.factorId);
+}
+
+class ActivityLogEntriesCompanion extends UpdateCompanion<ActivityLogEntry> {
+  final Value<String> activityId;
+  final Value<DateTime> activityDate;
+  final Value<DateTime> createdAt;
+  final Value<String> category;
+  final Value<double> amount;
+  final Value<String> unit;
+  final Value<double> emissionsKg;
+  final Value<String> regionId;
+  final Value<String> factorId;
+  final Value<int> rowid;
+  const ActivityLogEntriesCompanion({
+    this.activityId = const Value.absent(),
+    this.activityDate = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.category = const Value.absent(),
+    this.amount = const Value.absent(),
+    this.unit = const Value.absent(),
+    this.emissionsKg = const Value.absent(),
+    this.regionId = const Value.absent(),
+    this.factorId = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  ActivityLogEntriesCompanion.insert({
+    required String activityId,
+    required DateTime activityDate,
+    required DateTime createdAt,
+    required String category,
+    required double amount,
+    required String unit,
+    required double emissionsKg,
+    required String regionId,
+    required String factorId,
+    this.rowid = const Value.absent(),
+  }) : activityId = Value(activityId),
+       activityDate = Value(activityDate),
+       createdAt = Value(createdAt),
+       category = Value(category),
+       amount = Value(amount),
+       unit = Value(unit),
+       emissionsKg = Value(emissionsKg),
+       regionId = Value(regionId),
+       factorId = Value(factorId);
+  static Insertable<ActivityLogEntry> custom({
+    Expression<String>? activityId,
+    Expression<DateTime>? activityDate,
+    Expression<DateTime>? createdAt,
+    Expression<String>? category,
+    Expression<double>? amount,
+    Expression<String>? unit,
+    Expression<double>? emissionsKg,
+    Expression<String>? regionId,
+    Expression<String>? factorId,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (activityId != null) 'activity_id': activityId,
+      if (activityDate != null) 'activity_date': activityDate,
+      if (createdAt != null) 'created_at': createdAt,
+      if (category != null) 'category': category,
+      if (amount != null) 'amount': amount,
+      if (unit != null) 'unit': unit,
+      if (emissionsKg != null) 'emissions_kg': emissionsKg,
+      if (regionId != null) 'region_id': regionId,
+      if (factorId != null) 'factor_id': factorId,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  ActivityLogEntriesCompanion copyWith({
+    Value<String>? activityId,
+    Value<DateTime>? activityDate,
+    Value<DateTime>? createdAt,
+    Value<String>? category,
+    Value<double>? amount,
+    Value<String>? unit,
+    Value<double>? emissionsKg,
+    Value<String>? regionId,
+    Value<String>? factorId,
+    Value<int>? rowid,
+  }) {
+    return ActivityLogEntriesCompanion(
+      activityId: activityId ?? this.activityId,
+      activityDate: activityDate ?? this.activityDate,
+      createdAt: createdAt ?? this.createdAt,
+      category: category ?? this.category,
+      amount: amount ?? this.amount,
+      unit: unit ?? this.unit,
+      emissionsKg: emissionsKg ?? this.emissionsKg,
+      regionId: regionId ?? this.regionId,
+      factorId: factorId ?? this.factorId,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (activityId.present) {
+      map['activity_id'] = Variable<String>(activityId.value);
+    }
+    if (activityDate.present) {
+      map['activity_date'] = Variable<DateTime>(activityDate.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (category.present) {
+      map['category'] = Variable<String>(category.value);
+    }
+    if (amount.present) {
+      map['amount'] = Variable<double>(amount.value);
+    }
+    if (unit.present) {
+      map['unit'] = Variable<String>(unit.value);
+    }
+    if (emissionsKg.present) {
+      map['emissions_kg'] = Variable<double>(emissionsKg.value);
+    }
+    if (regionId.present) {
+      map['region_id'] = Variable<String>(regionId.value);
+    }
+    if (factorId.present) {
+      map['factor_id'] = Variable<String>(factorId.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ActivityLogEntriesCompanion(')
+          ..write('activityId: $activityId, ')
+          ..write('activityDate: $activityDate, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('category: $category, ')
+          ..write('amount: $amount, ')
+          ..write('unit: $unit, ')
+          ..write('emissionsKg: $emissionsKg, ')
+          ..write('regionId: $regionId, ')
+          ..write('factorId: $factorId, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -1972,6 +2548,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   );
   late final $FootprintEstimatesTable footprintEstimates =
       $FootprintEstimatesTable(this);
+  late final $ActivityLogEntriesTable activityLogEntries =
+      $ActivityLogEntriesTable(this);
   late final Index localAccountsLoginIdentifierUnique = Index(
     'local_accounts_login_identifier_unique',
     'CREATE UNIQUE INDEX local_accounts_login_identifier_unique ON local_accounts (login_identifier)',
@@ -1985,6 +2563,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     credentialVerifiers,
     userPreferences,
     footprintEstimates,
+    activityLogEntries,
     localAccountsLoginIdentifierUnique,
   ];
   @override
@@ -3494,6 +4073,312 @@ typedef $$FootprintEstimatesTableProcessedTableManager =
       FootprintEstimate,
       PrefetchHooks Function({bool ownerAccountId})
     >;
+typedef $$ActivityLogEntriesTableCreateCompanionBuilder =
+    ActivityLogEntriesCompanion Function({
+      required String activityId,
+      required DateTime activityDate,
+      required DateTime createdAt,
+      required String category,
+      required double amount,
+      required String unit,
+      required double emissionsKg,
+      required String regionId,
+      required String factorId,
+      Value<int> rowid,
+    });
+typedef $$ActivityLogEntriesTableUpdateCompanionBuilder =
+    ActivityLogEntriesCompanion Function({
+      Value<String> activityId,
+      Value<DateTime> activityDate,
+      Value<DateTime> createdAt,
+      Value<String> category,
+      Value<double> amount,
+      Value<String> unit,
+      Value<double> emissionsKg,
+      Value<String> regionId,
+      Value<String> factorId,
+      Value<int> rowid,
+    });
+
+class $$ActivityLogEntriesTableFilterComposer
+    extends Composer<_$AppDatabase, $ActivityLogEntriesTable> {
+  $$ActivityLogEntriesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get activityId => $composableBuilder(
+    column: $table.activityId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get activityDate => $composableBuilder(
+    column: $table.activityDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get category => $composableBuilder(
+    column: $table.category,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get amount => $composableBuilder(
+    column: $table.amount,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get unit => $composableBuilder(
+    column: $table.unit,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get emissionsKg => $composableBuilder(
+    column: $table.emissionsKg,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get regionId => $composableBuilder(
+    column: $table.regionId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get factorId => $composableBuilder(
+    column: $table.factorId,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$ActivityLogEntriesTableOrderingComposer
+    extends Composer<_$AppDatabase, $ActivityLogEntriesTable> {
+  $$ActivityLogEntriesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get activityId => $composableBuilder(
+    column: $table.activityId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get activityDate => $composableBuilder(
+    column: $table.activityDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get category => $composableBuilder(
+    column: $table.category,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get amount => $composableBuilder(
+    column: $table.amount,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get unit => $composableBuilder(
+    column: $table.unit,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get emissionsKg => $composableBuilder(
+    column: $table.emissionsKg,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get regionId => $composableBuilder(
+    column: $table.regionId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get factorId => $composableBuilder(
+    column: $table.factorId,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$ActivityLogEntriesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ActivityLogEntriesTable> {
+  $$ActivityLogEntriesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get activityId => $composableBuilder(
+    column: $table.activityId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get activityDate => $composableBuilder(
+    column: $table.activityDate,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<String> get category =>
+      $composableBuilder(column: $table.category, builder: (column) => column);
+
+  GeneratedColumn<double> get amount =>
+      $composableBuilder(column: $table.amount, builder: (column) => column);
+
+  GeneratedColumn<String> get unit =>
+      $composableBuilder(column: $table.unit, builder: (column) => column);
+
+  GeneratedColumn<double> get emissionsKg => $composableBuilder(
+    column: $table.emissionsKg,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get regionId =>
+      $composableBuilder(column: $table.regionId, builder: (column) => column);
+
+  GeneratedColumn<String> get factorId =>
+      $composableBuilder(column: $table.factorId, builder: (column) => column);
+}
+
+class $$ActivityLogEntriesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $ActivityLogEntriesTable,
+          ActivityLogEntry,
+          $$ActivityLogEntriesTableFilterComposer,
+          $$ActivityLogEntriesTableOrderingComposer,
+          $$ActivityLogEntriesTableAnnotationComposer,
+          $$ActivityLogEntriesTableCreateCompanionBuilder,
+          $$ActivityLogEntriesTableUpdateCompanionBuilder,
+          (
+            ActivityLogEntry,
+            BaseReferences<
+              _$AppDatabase,
+              $ActivityLogEntriesTable,
+              ActivityLogEntry
+            >,
+          ),
+          ActivityLogEntry,
+          PrefetchHooks Function()
+        > {
+  $$ActivityLogEntriesTableTableManager(
+    _$AppDatabase db,
+    $ActivityLogEntriesTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ActivityLogEntriesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ActivityLogEntriesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ActivityLogEntriesTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> activityId = const Value.absent(),
+                Value<DateTime> activityDate = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<String> category = const Value.absent(),
+                Value<double> amount = const Value.absent(),
+                Value<String> unit = const Value.absent(),
+                Value<double> emissionsKg = const Value.absent(),
+                Value<String> regionId = const Value.absent(),
+                Value<String> factorId = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ActivityLogEntriesCompanion(
+                activityId: activityId,
+                activityDate: activityDate,
+                createdAt: createdAt,
+                category: category,
+                amount: amount,
+                unit: unit,
+                emissionsKg: emissionsKg,
+                regionId: regionId,
+                factorId: factorId,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String activityId,
+                required DateTime activityDate,
+                required DateTime createdAt,
+                required String category,
+                required double amount,
+                required String unit,
+                required double emissionsKg,
+                required String regionId,
+                required String factorId,
+                Value<int> rowid = const Value.absent(),
+              }) => ActivityLogEntriesCompanion.insert(
+                activityId: activityId,
+                activityDate: activityDate,
+                createdAt: createdAt,
+                category: category,
+                amount: amount,
+                unit: unit,
+                emissionsKg: emissionsKg,
+                regionId: regionId,
+                factorId: factorId,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$ActivityLogEntriesTable, ActivityLogEntry>(
+                    table,
+                  ),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $ActivityLogEntriesTable,
+                    ActivityLogEntry
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$ActivityLogEntriesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $ActivityLogEntriesTable,
+      ActivityLogEntry,
+      $$ActivityLogEntriesTableFilterComposer,
+      $$ActivityLogEntriesTableOrderingComposer,
+      $$ActivityLogEntriesTableAnnotationComposer,
+      $$ActivityLogEntriesTableCreateCompanionBuilder,
+      $$ActivityLogEntriesTableUpdateCompanionBuilder,
+      (
+        ActivityLogEntry,
+        BaseReferences<
+          _$AppDatabase,
+          $ActivityLogEntriesTable,
+          ActivityLogEntry
+        >,
+      ),
+      ActivityLogEntry,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -3506,4 +4391,6 @@ class $AppDatabaseManager {
       $$UserPreferencesTableTableManager(_db, _db.userPreferences);
   $$FootprintEstimatesTableTableManager get footprintEstimates =>
       $$FootprintEstimatesTableTableManager(_db, _db.footprintEstimates);
+  $$ActivityLogEntriesTableTableManager get activityLogEntries =>
+      $$ActivityLogEntriesTableTableManager(_db, _db.activityLogEntries);
 }

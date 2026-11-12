@@ -7,6 +7,7 @@ import '../features/account/data/account_repository.dart';
 import '../features/account/presentation/account_screen.dart';
 import '../features/carbon_footprint_tracker/presentation/module_destination_screen.dart'
     as carbon;
+import '../features/carbon_footprint_tracker/data/activity_log_repository.dart';
 import '../features/community_journal/presentation/module_destination_screen.dart'
     as journal;
 import '../features/contact/presentation/contact_screen.dart';
@@ -26,6 +27,7 @@ import '../features/home/presentation/home_screen.dart';
 import '../features/onboarding/presentation/onboarding_screen.dart';
 import '../features/onboarding/data/footprint_estimate_repository.dart';
 import '../features/onboarding/data/estimate_demo_fixtures.dart';
+import '../features/onboarding/domain/footprint_estimate.dart';
 import '../features/onboarding/presentation/estimate_result_screen.dart';
 import '../core/data/regions/foundation_references.dart';
 import '../core/data/regions/region_pack_parser.dart';
@@ -63,6 +65,7 @@ abstract final class AppRoutes {
 GoRouter createAppRouter({
   String initialLocation = AppRoutes.onboarding,
   FootprintEstimateRepository? estimateRepository,
+  ActivityLogRepository? activityLogRepository,
   AccountRepository? accountRepository,
   UserDataExporter? userDataExporter,
   UserDataDeleter? userDataDeleter,
@@ -164,7 +167,14 @@ GoRouter createAppRouter({
         _appRoute(
           path: destination.path,
           name: destination.id,
-          builder: (context, state) => _moduleScreen(destination.id),
+          builder: (context, state) => _moduleScreen(
+            destination.id,
+            activityLogRepository: activityLogRepository,
+            trackerRegionId: selectedRegionPack?.region.regionId,
+            trackerFactors: selectedRegionPack == null
+                ? const []
+                : emissionFactorsFromRegionPack(selectedRegionPack),
+          ),
         ),
     ],
   );
@@ -200,8 +210,17 @@ GoRoute _appRoute({
   );
 }
 
-Widget _moduleScreen(String moduleId) => switch (moduleId) {
-  'carbonFootprintTracker' => const carbon.CarbonFootprintDestinationScreen(),
+Widget _moduleScreen(
+  String moduleId, {
+  required ActivityLogRepository? activityLogRepository,
+  required String? trackerRegionId,
+  required List<EmissionFactor> trackerFactors,
+}) => switch (moduleId) {
+  'carbonFootprintTracker' => carbon.CarbonFootprintDestinationScreen(
+    repository: activityLogRepository,
+    regionId: trackerRegionId,
+    factors: trackerFactors,
+  ),
   'ecoFriendlyProductSuggestions' =>
     const products.EcoFriendlyProductSuggestionsScreen(),
   'sustainableLivingChallenges' =>

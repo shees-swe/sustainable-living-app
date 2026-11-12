@@ -660,7 +660,7 @@ abstract class AppLocalizations {
   /// No description provided for @deleteLocalDataConfirmation.
   ///
   /// In en, this message translates to:
-  /// **'This removes your local account, saved estimates, and preferences from this device. This cannot be undone. Continue?'**
+  /// **'This removes your local account, saved estimates, activity logs, and preferences from this device. This cannot be undone. Continue?'**
   String get deleteLocalDataConfirmation;
 
   /// No description provided for @cancel.
@@ -752,6 +752,120 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Carbon Footprint Tracker'**
   String get carbonFootprintTracker;
+
+  /// No description provided for @trackerPeriodTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'{year} total'**
+  String trackerPeriodTotal(int year);
+
+  /// No description provided for @trackerCoverage.
+  ///
+  /// In en, this message translates to:
+  /// **'Includes logged electricity only. Transport, food, and other activities are not included yet.'**
+  String get trackerCoverage;
+
+  /// No description provided for @trackerNoActivities.
+  ///
+  /// In en, this message translates to:
+  /// **'No activities logged for this period yet.'**
+  String get trackerNoActivities;
+
+  /// No description provided for @trackerAddEntry.
+  ///
+  /// In en, this message translates to:
+  /// **'Add activity'**
+  String get trackerAddEntry;
+
+  /// No description provided for @trackerElectricity.
+  ///
+  /// In en, this message translates to:
+  /// **'Home energy — electricity'**
+  String get trackerElectricity;
+
+  /// No description provided for @trackerElectricityUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter electricity use in kWh.'**
+  String get trackerElectricityUnit;
+
+  /// No description provided for @trackerTransport.
+  ///
+  /// In en, this message translates to:
+  /// **'Transport'**
+  String get trackerTransport;
+
+  /// No description provided for @trackerFood.
+  ///
+  /// In en, this message translates to:
+  /// **'Food'**
+  String get trackerFood;
+
+  /// No description provided for @trackerFactorUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Factor not available yet.'**
+  String get trackerFactorUnavailable;
+
+  /// No description provided for @trackerSelectedRegionFactorUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No cited electricity factor is available for the selected region.'**
+  String get trackerSelectedRegionFactorUnavailable;
+
+  /// No description provided for @trackerAddElectricity.
+  ///
+  /// In en, this message translates to:
+  /// **'Add electricity'**
+  String get trackerAddElectricity;
+
+  /// No description provided for @trackerDateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get trackerDateLabel;
+
+  /// No description provided for @trackerAmountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount'**
+  String get trackerAmountLabel;
+
+  /// No description provided for @trackerInvalidAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a finite, nonnegative amount.'**
+  String get trackerInvalidAmount;
+
+  /// No description provided for @trackerSaveEntry.
+  ///
+  /// In en, this message translates to:
+  /// **'Save activity'**
+  String get trackerSaveEntry;
+
+  /// No description provided for @trackerDeleteEntry.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete activity'**
+  String get trackerDeleteEntry;
+
+  /// No description provided for @trackerLoadFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'Activities could not be loaded.'**
+  String get trackerLoadFailure;
+
+  /// No description provided for @trackerSaveFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'The activity could not be saved.'**
+  String get trackerSaveFailure;
+
+  /// No description provided for @trackerDeleteFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'The activity could not be deleted.'**
+  String get trackerDeleteFailure;
 
   /// No description provided for @ecoFriendlyProductSuggestions.
   ///

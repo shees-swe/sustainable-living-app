@@ -11,7 +11,7 @@ class UserDataExporter {
   UserDataExporter._(this._database, DateTime Function()? clock)
     : _clock = clock ?? DateTime.now;
 
-  static const int exportSchemaVersion = 1;
+  static const int exportSchemaVersion = 2;
 
   final AppDatabase _database;
   final DateTime Function() _clock;
@@ -22,6 +22,9 @@ class UserDataExporter {
       final accounts = await _database.select(_database.localAccounts).get();
       final estimates = await _database
           .select(_database.footprintEstimates)
+          .get();
+      final activityLogEntries = await _database
+          .select(_database.activityLogEntries)
           .get();
       final preferences = await _database
           .select(_database.userPreferences)
@@ -53,6 +56,20 @@ class UserDataExporter {
                 'questionnaireVersion': estimate.questionnaireVersion,
                 'completionState': estimate.completionState,
                 'assumptions': _decodeAssumptions(estimate.assumptions),
+              },
+          ],
+          'activityLogEntries': [
+            for (final entry in activityLogEntries)
+              {
+                'activityId': entry.activityId,
+                'activityDate': entry.activityDate.toUtc().toIso8601String(),
+                'createdAt': entry.createdAt.toUtc().toIso8601String(),
+                'category': entry.category,
+                'amount': entry.amount,
+                'unit': entry.unit,
+                'emissionsKg': entry.emissionsKg,
+                'regionId': entry.regionId,
+                'factorId': entry.factorId,
               },
           ],
           'preferences': [

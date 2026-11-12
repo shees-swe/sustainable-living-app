@@ -61,7 +61,7 @@ void main() {
       final userData = exported['userData']! as Map<String, Object?>;
       final encoded = jsonEncode(exported);
 
-      expect(exported['exportSchemaVersion'], 1);
+      expect(exported['exportSchemaVersion'], 2);
       expect(exported['createdAt'], '2026-11-07T00:00:00.000Z');
       expect((userData['accounts']! as List).single, {
         'accountId': 'account-1',

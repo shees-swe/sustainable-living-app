@@ -57,7 +57,7 @@ void main() {
     await tester.tap(find.text('Carbon Footprint Tracker'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Foundation destination'), findsOneWidget);
+    expect(find.text('Carbon Footprint Tracker'), findsOneWidget);
     await tester.binding.handlePopRoute();
     await tester.pumpAndSettle();
 
@@ -99,11 +99,18 @@ void main() {
         destination.path,
         reason: '${destination.path} should be available without login',
       );
-      expect(find.text('Foundation destination'), findsOneWidget);
-      expect(
-        find.text('Detailed features will be available in a future update.'),
-        findsOneWidget,
-      );
+      if (destination.id == 'carbonFootprintTracker') {
+        expect(
+          find.text('No activities logged for this period yet.'),
+          findsOneWidget,
+        );
+      } else {
+        expect(find.text('Foundation destination'), findsOneWidget);
+        expect(
+          find.text('Detailed features will be available in a future update.'),
+          findsOneWidget,
+        );
+      }
       await tester.pumpWidget(const SizedBox.shrink());
     }
   });

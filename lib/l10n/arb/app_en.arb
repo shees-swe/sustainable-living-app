@@ -226,7 +226,7 @@
   "exportDataDescription": "Create a copy of your app data to share or save.",
   "deleteLocalData": "Delete local data",
   "deleteDataDescription": "Permanently remove personal data stored by this app.",
-  "deleteLocalDataConfirmation": "This removes your local account, saved estimates, and preferences from this device. This cannot be undone. Continue?",
+  "deleteLocalDataConfirmation": "This removes your local account, saved estimates, activity logs, and preferences from this device. This cannot be undone. Continue?",
   "cancel": "Cancel",
   "confirmDeletion": "Delete my data",
   "deletionCancelled": "Deletion cancelled. Your data was not changed.",
@@ -242,6 +242,32 @@
   "exploreModules": "Explore sustainable living",
   "moreNavigation": "More navigation",
   "carbonFootprintTracker": "Carbon Footprint Tracker",
+  "trackerPeriodTotal": "{year} total",
+  "@trackerPeriodTotal": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "trackerCoverage": "Includes logged electricity only. Transport, food, and other activities are not included yet.",
+  "trackerNoActivities": "No activities logged for this period yet.",
+  "trackerAddEntry": "Add activity",
+  "trackerElectricity": "Home energy — electricity",
+  "trackerElectricityUnit": "Enter electricity use in kWh.",
+  "trackerTransport": "Transport",
+  "trackerFood": "Food",
+  "trackerFactorUnavailable": "Factor not available yet.",
+  "trackerSelectedRegionFactorUnavailable": "No cited electricity factor is available for the selected region.",
+  "trackerAddElectricity": "Add electricity",
+  "trackerDateLabel": "Date",
+  "trackerAmountLabel": "Amount",
+  "trackerInvalidAmount": "Enter a finite, nonnegative amount.",
+  "trackerSaveEntry": "Save activity",
+  "trackerDeleteEntry": "Delete activity",
+  "trackerLoadFailure": "Activities could not be loaded.",
+  "trackerSaveFailure": "The activity could not be saved.",
+  "trackerDeleteFailure": "The activity could not be deleted.",
   "ecoFriendlyProductSuggestions": "Eco-Friendly Product Suggestions",
   "sustainableLivingChallenges": "Sustainable Living Challenges",
   "certificationsGuide": "Green Certifications & Labels Guide",

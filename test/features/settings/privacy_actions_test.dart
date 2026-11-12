@@ -158,7 +158,7 @@ void main() {
           (userData['footprintEstimates'] as List).single
               as Map<String, Object?>;
 
-      expect(exported['exportSchemaVersion'], 1);
+      expect(exported['exportSchemaVersion'], 2);
       expect(account['loginIdentifier'], 'member@example.test');
       expect(estimate['estimateValue'], 12.5);
       expect(encoded, isNot(contains('credentialVerifiers')));

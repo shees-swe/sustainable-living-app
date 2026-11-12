@@ -350,7 +350,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get deleteLocalDataConfirmation =>
-      'This removes your local account, saved estimates, and preferences from this device. This cannot be undone. Continue?';
+      'This removes your local account, saved estimates, activity logs, and preferences from this device. This cannot be undone. Continue?';
 
   @override
   String get cancel => 'Cancel';
@@ -401,6 +401,67 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get carbonFootprintTracker => 'Carbon Footprint Tracker';
+
+  @override
+  String trackerPeriodTotal(int year) {
+    return '$year total';
+  }
+
+  @override
+  String get trackerCoverage =>
+      'Includes logged electricity only. Transport, food, and other activities are not included yet.';
+
+  @override
+  String get trackerNoActivities => 'No activities logged for this period yet.';
+
+  @override
+  String get trackerAddEntry => 'Add activity';
+
+  @override
+  String get trackerElectricity => 'Home energy — electricity';
+
+  @override
+  String get trackerElectricityUnit => 'Enter electricity use in kWh.';
+
+  @override
+  String get trackerTransport => 'Transport';
+
+  @override
+  String get trackerFood => 'Food';
+
+  @override
+  String get trackerFactorUnavailable => 'Factor not available yet.';
+
+  @override
+  String get trackerSelectedRegionFactorUnavailable =>
+      'No cited electricity factor is available for the selected region.';
+
+  @override
+  String get trackerAddElectricity => 'Add electricity';
+
+  @override
+  String get trackerDateLabel => 'Date';
+
+  @override
+  String get trackerAmountLabel => 'Amount';
+
+  @override
+  String get trackerInvalidAmount => 'Enter a finite, nonnegative amount.';
+
+  @override
+  String get trackerSaveEntry => 'Save activity';
+
+  @override
+  String get trackerDeleteEntry => 'Delete activity';
+
+  @override
+  String get trackerLoadFailure => 'Activities could not be loaded.';
+
+  @override
+  String get trackerSaveFailure => 'The activity could not be saved.';
+
+  @override
+  String get trackerDeleteFailure => 'The activity could not be deleted.';
 
   @override
   String get ecoFriendlyProductSuggestions =>

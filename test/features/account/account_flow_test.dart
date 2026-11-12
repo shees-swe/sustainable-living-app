@@ -117,7 +117,11 @@ void main() {
         router.routeInformationProvider.value.uri.path,
         '/carbon-footprint',
       );
-      expect(find.text('Foundation destination'), findsOneWidget);
+      expect(find.text('Carbon Footprint Tracker'), findsOneWidget);
+      expect(
+        find.text('No activities logged for this period yet.'),
+        findsOneWidget,
+      );
     },
   );
 

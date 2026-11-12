@@ -8,6 +8,7 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 import 'tables/credential_verifiers.dart';
+import 'tables/activity_log_entries.dart';
 import 'tables/footprint_estimates.dart';
 import 'tables/local_accounts.dart';
 import 'tables/user_preferences.dart';
@@ -20,6 +21,7 @@ part 'app_database.g.dart';
     CredentialVerifiers,
     UserPreferences,
     FootprintEstimates,
+    ActivityLogEntries,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -33,7 +35,7 @@ class AppDatabase extends _$AppDatabase {
   );
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -45,6 +47,11 @@ class AppDatabase extends _$AppDatabase {
           updatedAt: DateTime.now().toUtc(),
         ),
       );
+    },
+    onUpgrade: (migrator, from, to) async {
+      if (from < 2) {
+        await migrator.createTable(activityLogEntries);
+      }
     },
     beforeOpen: (_) async {
       await customStatement('PRAGMA foreign_keys = ON');
@@ -88,6 +95,7 @@ class AppDatabase extends _$AppDatabase {
   Future<void> clearAllUserData() {
     return transaction(() async {
       await delete(footprintEstimates).go();
+      await delete(activityLogEntries).go();
       await delete(localAccounts).go();
       await into(userPreferences).insertOnConflictUpdate(
         UserPreferencesCompanion.insert(

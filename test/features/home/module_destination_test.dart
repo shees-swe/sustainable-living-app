@@ -18,16 +18,24 @@ void main() {
       await tester.pumpWidget(_TestApp(router: router, textScale: 2));
       await tester.pumpAndSettle();
 
-      expect(
-        find.text('Foundation destination'),
-        findsOneWidget,
-        reason: '${destination.path} must show its destination title',
-      );
-      expect(
-        find.text('Detailed features will be available in a future update.'),
-        findsOneWidget,
-        reason: '${destination.path} must show its existing details',
-      );
+      if (destination.id == 'carbonFootprintTracker') {
+        expect(find.text('Carbon Footprint Tracker'), findsOneWidget);
+        expect(
+          find.text('No activities logged for this period yet.'),
+          findsOneWidget,
+        );
+      } else {
+        expect(
+          find.text('Foundation destination'),
+          findsOneWidget,
+          reason: '${destination.path} must show its destination title',
+        );
+        expect(
+          find.text('Detailed features will be available in a future update.'),
+          findsOneWidget,
+          reason: '${destination.path} must show its existing details',
+        );
+      }
       expectNoTextOverlapOrClipping(tester, destination.path);
       expect(
         tester.takeException(),

@@ -13,6 +13,7 @@ import '../core/accessibility/motion_aware_progress_indicator.dart';
 import '../core/theme/app_theme.dart';
 import '../features/account/data/account_repository.dart';
 import '../features/account/data/password_hasher.dart';
+import '../features/carbon_footprint_tracker/data/activity_log_repository.dart';
 import '../features/onboarding/data/estimate_demo_fixtures.dart';
 import '../features/onboarding/data/footprint_estimate_repository.dart';
 import '../features/settings/data/user_data_deleter.dart';
@@ -42,6 +43,7 @@ class _SustainableLivingAppState extends State<SustainableLivingApp> {
   late AppDatabase _database;
   late final bool _ownsDatabase = widget.database == null;
   late FootprintEstimateRepository _estimateRepository;
+  late ActivityLogRepository _activityLogRepository;
   late AccountRepository _accountRepository;
   late Future<GoRouter> _router;
   GoRouter? _resolvedRouter;
@@ -56,6 +58,7 @@ class _SustainableLivingAppState extends State<SustainableLivingApp> {
   void _initializeStorage(AppDatabase database) {
     _database = database;
     _estimateRepository = FootprintEstimateRepository(database: database);
+    _activityLogRepository = ActivityLogRepository(database: database);
     _accountRepository = AccountRepository(
       database: database,
       passwordHasher: const PasswordHasher(),
@@ -99,6 +102,7 @@ class _SustainableLivingAppState extends State<SustainableLivingApp> {
           initialLocation ??
           (savedEstimate == null ? AppRoutes.onboarding : AppRoutes.home),
       estimateRepository: _estimateRepository,
+      activityLogRepository: _activityLogRepository,
       accountRepository: _accountRepository,
       userDataExporter: UserDataExporter(database: _database),
       userPreferencesRepository: preferences,

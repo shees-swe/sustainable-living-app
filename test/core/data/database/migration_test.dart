@@ -9,12 +9,13 @@ void main() {
     addTearDown(database.close);
 
     await database.select(database.userPreferences).get();
-    expect(database.schemaVersion, 1);
+    expect(database.schemaVersion, 2);
 
     await database.validateDatabaseSchema();
 
-    final foreignKeyViolations =
-        await database.customSelect('PRAGMA foreign_key_check').get();
+    final foreignKeyViolations = await database
+        .customSelect('PRAGMA foreign_key_check')
+        .get();
     expect(foreignKeyViolations, isEmpty);
   });
 }

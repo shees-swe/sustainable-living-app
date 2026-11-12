@@ -73,9 +73,9 @@ void main() {
     await tester.tap(carbonEntry);
     await tester.pumpAndSettle();
 
-    expect(find.text('Foundation destination'), findsOneWidget);
+    expect(find.text('Carbon Footprint Tracker'), findsOneWidget);
     expect(
-      find.text('Detailed features will be available in a future update.'),
+      find.text('No activities logged for this period yet.'),
       findsOneWidget,
     );
   });
