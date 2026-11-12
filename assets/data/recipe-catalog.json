@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 1,
+  "recipes": [
+    {
+      "name": "Red Lentil & Vegetable Soup",
+      "preparationTime": "30 min",
+      "servings": "4 servings",
+      "season": "All seasons",
+      "seasonalNote": "Red lentils need no soaking and cook fast, saving both energy and time.",
+      "ingredients": [
+        "200 g red lentils, rinsed",
+        "1 onion, chopped",
+        "2 carrots, diced",
+        "2 tomatoes, chopped",
+        "2 garlic cloves, crushed",
+        "1 tsp cumin",
+        "1 litre water or vegetable stock",
+        "salt to taste",
+        "lemon wedges to serve"
+      ],
+      "steps": [
+        "1. Soften the onion and garlic in a little oil for 3 minutes.",
+        "2. Add carrots, tomatoes, and cumin; cook 2 minutes.",
+        "3. Add lentils and stock; simmer 20 minutes until soft.",
+        "4. Season, blend part of the soup if you like it thicker, and serve with lemon."
+      ]
+    },
+    {
+      "name": "Chickpea Curry",
+      "preparationTime": "35 min",
+      "servings": "4 servings",
+      "season": "All seasons",
+      "seasonalNote": "Chickpeas are a low-impact protein that store dried for months.",
+      "ingredients": [
+        "400 g cooked chickpeas (or 1 tin, drained)",
+        "1 onion, chopped",
+        "2 tomatoes, chopped",
+        "1 tbsp grated ginger",
+        "2 garlic cloves",
+        "1 tsp turmeric",
+        "1 tsp garam masala",
+        "fresh coriander to serve",
+        "rice or flatbread to serve"
+      ],
+      "steps": [
+        "1. Soften onion, ginger, and garlic for 4 minutes.",
+        "2. Add tomatoes and spices; cook until thick, about 8 minutes.",
+        "3. Add chickpeas with a splash of water; simmer 15 minutes.",
+        "4. Scatter coriander and serve with rice or flatbread."
+      ]
+    },
+    {
+      "name": "Vegetable Stir-Fry with Rice",
+      "preparationTime": "20 min",
+      "servings": "2 servings",
+      "season": "Summer",
+      "seasonalNote": "Uses whatever vegetables are in season and cooks in minutes on high heat.",
+      "ingredients": [
+        "150 g rice",
+        "1 pepper, sliced",
+        "1 courgette, sliced",
+        "100 g green beans, cut",
+        "2 spring onions",
+        "1 tbsp soy sauce",
+        "1 tsp sesame or plain oil",
+        "1 garlic clove, crushed"
+      ],
+      "steps": [
+        "1. Cook the rice and keep warm.",
+        "2. Heat the oil on high; add garlic and the firmest vegetables first.",
+        "3. Add remaining vegetables; toss for 4–5 minutes, keeping them crisp.",
+        "4. Add soy sauce and spring onions; serve over rice."
+      ]
+    },
+    {
+      "name": "Spinach & Potato Curry",
+      "preparationTime": "30 min",
+      "servings": "3 servings",
+      "season": "Winter",
+      "seasonalNote": "Spinach and potatoes are hardy winter staples in many regions.",
+      "ingredients": [
+        "500 g potatoes, cubed",
+        "300 g spinach, washed",
+        "1 onion, chopped",
+        "1 tsp mustard seeds or cumin seeds",
+        "2 garlic cloves",
+        "1 tsp turmeric",
+        "chilli to taste",
+        "salt to taste"
+      ],
+      "steps": [
+        "1. Boil or steam potatoes until just tender; drain.",
+        "2. Soften onion with the seeds and garlic.",
+        "3. Add turmeric, chilli, and potatoes; cook 5 minutes.",
+        "4. Fold in spinach until wilted; season and serve."
+      ]
+    },
+    {
+      "name": "Seasonal Fruit Bowl with Mint & Lime",
+      "preparationTime": "10 min",
+      "servings": "2 servings",
+      "season": "Summer",
+      "seasonalNote": "Built on whichever fruit is ripe and local right now — the recipe changes with the market.",
+      "ingredients": [
+        "2–3 ripe seasonal fruits (such as mango, melon, peach, or berries), cut into chunks",
+        "a handful of mint leaves, torn",
+        "juice of half a lime",
+        "a pinch of salt"
+      ],
+      "steps": [
+        "1. Cut the fruit into bite-size pieces.",
+        "2. Toss gently with lime juice and salt.",
+        "3. Rest 5 minutes, scatter mint, and serve cool."
+      ]
+    },
+    {
+      "name": "Bean & Vegetable Patties",
+      "preparationTime": "25 min",
+      "servings": "4 servings",
+      "season": "All seasons",
+      "seasonalNote": "A good home for leftover cooked beans and vegetables.",
+      "ingredients": [
+        "400 g cooked beans, drained",
+        "1 carrot, grated",
+        "1 small onion, finely chopped",
+        "50 g oats or breadcrumbs",
+        "1 tsp smoked paprika or cumin",
+        "salt to taste",
+        "oil for the pan"
+      ],
+      "steps": [
+        "1. Mash the beans roughly with a fork, leaving some texture.",
+        "2. Mix in carrot, onion, oats, and spices; rest 5 minutes.",
+        "3. Shape into 8 patties.",
+        "4. Pan-cook 4 minutes per side until crisp; serve in buns or with salad."
+      ]
+    },
+    {
+      "name": "Tomato & Basil Pasta",
+      "preparationTime": "25 min",
+      "servings": "3 servings",
+      "season": "Summer",
+      "seasonalNote": "Best with ripe summer tomatoes, when they need little cooking.",
+      "ingredients": [
+        "250 g whole-wheat pasta",
+        "500 g ripe tomatoes, chopped",
+        "2 garlic cloves, sliced",
+        "a handful of basil leaves",
+        "2 tbsp olive oil",
+        "salt and black pepper"
+      ],
+      "steps": [
+        "1. Cook pasta in salted water; save a cup of the water.",
+        "2. Soften garlic in the oil for 1 minute.",
+        "3. Add tomatoes; cook 8 minutes until saucy.",
+        "4. Toss pasta through with a splash of its water, tear in basil, and season."
+      ]
+    },
+    {
+      "name": "Overnight Oats with Seasonal Fruit",
+      "preparationTime": "10 min + overnight",
+      "servings": "1 serving",
+      "season": "All seasons",
+      "seasonalNote": "No cooking at all — the fridge does the work overnight.",
+      "ingredients": [
+        "50 g rolled oats",
+        "150 ml milk or plant alternative, or water",
+        "2 tbsp yogurt (optional)",
+        "1 tsp honey or sugar (optional)",
+        "a handful of seasonal fruit, chopped"
+      ],
+      "steps": [
+        "1. Stir oats, liquid, and yogurt in a jar or bowl.",
+        "2. Cover and refrigerate overnight (at least 6 hours).",
+        "3. Top with the fruit and sweetener in the morning and eat cold."
+      ]
+    }
+  ]
+}

@@ -41,6 +41,7 @@ import '../features/progress_dashboard/presentation/module_destination_screen.da
     as progress;
 import '../features/recipes_meal_planning/presentation/module_destination_screen.dart'
     as recipes;
+import '../features/recipes_meal_planning/data/recipe_catalog.dart';
 import '../features/settings/data/user_data_deleter.dart';
 import '../features/settings/data/user_data_exporter.dart';
 import '../features/settings/data/user_preferences_repository.dart';
@@ -81,6 +82,7 @@ GoRouter createAppRouter({
   ProductCatalog? productCatalog,
   ChallengeCatalog? challengeCatalog,
   CertificationCatalog? certificationCatalog,
+  RecipeCatalog? recipeCatalog,
   ChallengeProgressRepository? challengeProgressRepository,
   WasteLogRepository? wasteLogRepository,
   RegionDataPack? selectedRegionPack,
@@ -184,6 +186,7 @@ GoRouter createAppRouter({
             productCatalog: productCatalog,
             challengeCatalog: challengeCatalog,
             certificationCatalog: certificationCatalog,
+            recipeCatalog: recipeCatalog,
             challengeProgressRepository: challengeProgressRepository,
             wasteLogRepository: wasteLogRepository,
             userPreferencesRepository: userPreferencesRepository,
@@ -234,6 +237,7 @@ Widget _moduleScreen(
   required ProductCatalog? productCatalog,
   required ChallengeCatalog? challengeCatalog,
   required CertificationCatalog? certificationCatalog,
+  required RecipeCatalog? recipeCatalog,
   required ChallengeProgressRepository? challengeProgressRepository,
   required WasteLogRepository? wasteLogRepository,
   required UserPreferencesRepository? userPreferencesRepository,
@@ -268,7 +272,9 @@ Widget _moduleScreen(
             repository: wasteLogRepository,
             preferences: userPreferencesRepository,
           ),
-  'recipesMealPlanning' => const recipes.RecipesMealPlanningScreen(),
+  'recipesMealPlanning' => recipes.RecipesMealPlanningScreen(
+    catalog: recipeCatalog,
+  ),
   'energyConservationTips' => const energy.EnergyConservationTipsScreen(),
   'ecoTravelSuggestions' => const travel.EcoTravelSuggestionsScreen(),
   'communityJournal' => const journal.CommunityJournalScreen(),

@@ -1497,6 +1497,78 @@ abstract class AppLocalizations {
   /// **'Keep a \"donate or repair\" box — items you no longer use leave the house useful instead of becoming waste.'**
   String get wasteTipDonateRepairText;
 
+  /// No description provided for @recipeSearchLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by recipe name or ingredient'**
+  String get recipeSearchLabel;
+
+  /// No description provided for @recipeClearSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear recipe search'**
+  String get recipeClearSearch;
+
+  /// No description provided for @recipeSeasonFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Season'**
+  String get recipeSeasonFilter;
+
+  /// No description provided for @recipeNoMatches.
+  ///
+  /// In en, this message translates to:
+  /// **'No recipes match your search and season.'**
+  String get recipeNoMatches;
+
+  /// No description provided for @recipeClearFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear search and season'**
+  String get recipeClearFilters;
+
+  /// No description provided for @recipeCatalogLoadFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'Recipes could not be loaded.'**
+  String get recipeCatalogLoadFailure;
+
+  /// No description provided for @recipeDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Recipe details'**
+  String get recipeDetail;
+
+  /// No description provided for @recipePreparationTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Preparation time'**
+  String get recipePreparationTime;
+
+  /// No description provided for @recipeServings.
+  ///
+  /// In en, this message translates to:
+  /// **'Servings'**
+  String get recipeServings;
+
+  /// No description provided for @recipeSeasonalNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Seasonal note'**
+  String get recipeSeasonalNote;
+
+  /// No description provided for @recipeIngredients.
+  ///
+  /// In en, this message translates to:
+  /// **'Ingredients'**
+  String get recipeIngredients;
+
+  /// No description provided for @recipeSteps.
+  ///
+  /// In en, this message translates to:
+  /// **'Steps'**
+  String get recipeSteps;
+
   /// No description provided for @recipesMealPlanning.
   ///
   /// In en, this message translates to:

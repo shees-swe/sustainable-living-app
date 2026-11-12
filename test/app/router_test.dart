@@ -12,6 +12,7 @@ import 'package:sustainable_living_app/features/sustainable_living_challenges/da
 import 'package:sustainable_living_app/features/sustainable_living_challenges/data/challenge_progress_repository.dart';
 import 'package:sustainable_living_app/features/settings/data/user_preferences_repository.dart';
 import 'package:sustainable_living_app/features/waste_reduction_tracker/data/waste_log_repository.dart';
+import 'package:sustainable_living_app/features/recipes_meal_planning/data/recipe_catalog.dart';
 import 'package:sustainable_living_app/features/home/domain/module_destination.dart';
 import 'package:sustainable_living_app/l10n/generated/app_localizations.dart';
 
@@ -21,6 +22,7 @@ void main() {
   late ProductCatalog productCatalog;
   late ChallengeCatalog challengeCatalog;
   late CertificationCatalog certificationCatalog;
+  late RecipeCatalog recipeCatalog;
   late AppDatabase challengeDatabase;
   late ChallengeProgressRepository challengeProgressRepository;
   late WasteLogRepository wasteLogRepository;
@@ -30,6 +32,7 @@ void main() {
     productCatalog = await ProductCatalog.loadBundled();
     challengeCatalog = await ChallengeCatalog.loadBundled();
     certificationCatalog = await CertificationCatalog.loadBundled();
+    recipeCatalog = await RecipeCatalog.loadBundled();
     challengeDatabase = AppDatabase.forTesting(NativeDatabase.memory());
     challengeProgressRepository = ChallengeProgressRepository(
       database: challengeDatabase,
@@ -128,6 +131,7 @@ void main() {
         productCatalog: productCatalog,
         challengeCatalog: challengeCatalog,
         certificationCatalog: certificationCatalog,
+        recipeCatalog: recipeCatalog,
         challengeProgressRepository: challengeProgressRepository,
         wasteLogRepository: wasteLogRepository,
         userPreferencesRepository: wastePreferencesRepository,
@@ -159,6 +163,11 @@ void main() {
         expect(find.text('Plastic-Free Week'), findsOneWidget);
       } else if (destination.id == 'certificationsGuide') {
         expect(find.text('Search by name or meaning'), findsOneWidget);
+      } else if (destination.id == 'recipesMealPlanning') {
+        expect(
+          find.text('Search by recipe name or ingredient'),
+          findsOneWidget,
+        );
       } else if (destination.id == 'wasteReductionTracker') {
         expect(find.text('No waste logged yet.'), findsOneWidget);
       } else {

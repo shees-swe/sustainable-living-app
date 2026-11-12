@@ -818,6 +818,42 @@ class AppLocalizationsEn extends AppLocalizations {
       'Keep a \"donate or repair\" box — items you no longer use leave the house useful instead of becoming waste.';
 
   @override
+  String get recipeSearchLabel => 'Search by recipe name or ingredient';
+
+  @override
+  String get recipeClearSearch => 'Clear recipe search';
+
+  @override
+  String get recipeSeasonFilter => 'Season';
+
+  @override
+  String get recipeNoMatches => 'No recipes match your search and season.';
+
+  @override
+  String get recipeClearFilters => 'Clear search and season';
+
+  @override
+  String get recipeCatalogLoadFailure => 'Recipes could not be loaded.';
+
+  @override
+  String get recipeDetail => 'Recipe details';
+
+  @override
+  String get recipePreparationTime => 'Preparation time';
+
+  @override
+  String get recipeServings => 'Servings';
+
+  @override
+  String get recipeSeasonalNote => 'Seasonal note';
+
+  @override
+  String get recipeIngredients => 'Ingredients';
+
+  @override
+  String get recipeSteps => 'Steps';
+
+  @override
   String get recipesMealPlanning => 'Sustainable Recipes & Meal Planning';
 
   @override
