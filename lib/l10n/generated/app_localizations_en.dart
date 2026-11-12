@@ -412,6 +412,40 @@ class AppLocalizationsEn extends AppLocalizations {
       'Includes logged electricity only. Transport, food, and other activities are not included yet.';
 
   @override
+  String get trackerViewInsights => 'View insights';
+
+  @override
+  String get trackerInsights => 'Insights';
+
+  @override
+  String get trackerInsightsCoverage =>
+      'These insights include logged electricity only. Transport, food, and other activities are not included yet.';
+
+  @override
+  String trackerInsightsYear(int year) {
+    return '$year insights total';
+  }
+
+  @override
+  String get trackerMonthlyTotals => 'Monthly totals';
+
+  @override
+  String trackerShareOfYear(String value) {
+    return '$value% of year';
+  }
+
+  @override
+  String get trackerShareUnavailable => 'Share unavailable when total is zero.';
+
+  @override
+  String trackerHighestMonth(String month, String value) {
+    return 'Highest month: $month — $value kg CO2';
+  }
+
+  @override
+  String get trackerLargestContributions => 'Largest contributions';
+
+  @override
   String get trackerNoActivities => 'No activities logged for this period yet.';
 
   @override

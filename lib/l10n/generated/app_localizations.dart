@@ -765,6 +765,60 @@ abstract class AppLocalizations {
   /// **'Includes logged electricity only. Transport, food, and other activities are not included yet.'**
   String get trackerCoverage;
 
+  /// No description provided for @trackerViewInsights.
+  ///
+  /// In en, this message translates to:
+  /// **'View insights'**
+  String get trackerViewInsights;
+
+  /// No description provided for @trackerInsights.
+  ///
+  /// In en, this message translates to:
+  /// **'Insights'**
+  String get trackerInsights;
+
+  /// No description provided for @trackerInsightsCoverage.
+  ///
+  /// In en, this message translates to:
+  /// **'These insights include logged electricity only. Transport, food, and other activities are not included yet.'**
+  String get trackerInsightsCoverage;
+
+  /// No description provided for @trackerInsightsYear.
+  ///
+  /// In en, this message translates to:
+  /// **'{year} insights total'**
+  String trackerInsightsYear(int year);
+
+  /// No description provided for @trackerMonthlyTotals.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly totals'**
+  String get trackerMonthlyTotals;
+
+  /// No description provided for @trackerShareOfYear.
+  ///
+  /// In en, this message translates to:
+  /// **'{value}% of year'**
+  String trackerShareOfYear(String value);
+
+  /// No description provided for @trackerShareUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Share unavailable when total is zero.'**
+  String get trackerShareUnavailable;
+
+  /// No description provided for @trackerHighestMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Highest month: {month} — {value} kg CO2'**
+  String trackerHighestMonth(String month, String value);
+
+  /// No description provided for @trackerLargestContributions.
+  ///
+  /// In en, this message translates to:
+  /// **'Largest contributions'**
+  String get trackerLargestContributions;
+
   /// No description provided for @trackerNoActivities.
   ///
   /// In en, this message translates to:

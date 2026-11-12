@@ -20,10 +20,17 @@ void main() {
 
       if (destination.id == 'carbonFootprintTracker') {
         expect(find.text('Carbon Footprint Tracker'), findsOneWidget);
-        expect(
-          find.text('No activities logged for this period yet.'),
-          findsOneWidget,
+        expectNoTextOverlapOrClipping(tester, destination.path);
+        final emptyState = find.text(
+          'No activities logged for this period yet.',
         );
+        await tester.scrollUntilVisible(
+          emptyState,
+          200,
+          scrollable: find.byType(Scrollable).first,
+        );
+        await tester.pumpAndSettle();
+        expect(emptyState, findsOneWidget);
       } else {
         expect(
           find.text('Foundation destination'),
@@ -36,7 +43,9 @@ void main() {
           reason: '${destination.path} must show its existing details',
         );
       }
-      expectNoTextOverlapOrClipping(tester, destination.path);
+      if (destination.id != 'carbonFootprintTracker') {
+        expectNoTextOverlapOrClipping(tester, destination.path);
+      }
       expect(
         tester.takeException(),
         isNull,

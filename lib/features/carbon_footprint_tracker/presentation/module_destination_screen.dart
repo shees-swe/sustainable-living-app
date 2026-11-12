@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/data/database/app_database.dart';
+import '../../../core/accessibility/reduced_motion.dart';
+import '../../../core/motion/motion_spec.dart';
 import '../../../core/motion/numeric_tick.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../onboarding/domain/footprint_estimate.dart';
 import '../../onboarding/presentation/estimate_factor_disclosure.dart';
 import '../data/activity_log_repository.dart';
+import 'activity_log_insights_screen.dart';
 
 class CarbonFootprintDestinationScreen extends StatelessWidget {
   const CarbonFootprintDestinationScreen({
@@ -112,6 +115,35 @@ class _ActivityLogBody extends StatelessWidget {
         const SizedBox(height: ClimateSpacing.space8),
         Text(l10n.trackerCoverage),
         const SizedBox(height: ClimateSpacing.space24),
+        OutlinedButton(
+          onPressed: () => Navigator.of(context).push<void>(
+            PageRouteBuilder<void>(
+              pageBuilder: (context, animation, secondaryAnimation) =>
+                  ActivityLogInsightsScreen(
+                    repository: repository,
+                    year: periodYear,
+                  ),
+              transitionDuration: ReducedMotion.duration(
+                context,
+                MotionSpec.optionalFade,
+              ),
+              reverseTransitionDuration: ReducedMotion.duration(
+                context,
+                MotionSpec.optionalFade,
+              ),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) =>
+                      FadeTransition(
+                        opacity: animation.drive(
+                          CurveTween(curve: MotionSpec.optionalFadeCurve),
+                        ),
+                        child: child,
+                      ),
+            ),
+          ),
+          child: Text(l10n.trackerViewInsights),
+        ),
+        const SizedBox(height: ClimateSpacing.space16),
         FilledButton.icon(
           onPressed: () => _showCategoryPicker(context),
           icon: const Icon(Icons.add),

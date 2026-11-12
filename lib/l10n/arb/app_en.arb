@@ -251,6 +251,39 @@
     }
   },
   "trackerCoverage": "Includes logged electricity only. Transport, food, and other activities are not included yet.",
+  "trackerViewInsights": "View insights",
+  "trackerInsights": "Insights",
+  "trackerInsightsCoverage": "These insights include logged electricity only. Transport, food, and other activities are not included yet.",
+  "trackerInsightsYear": "{year} insights total",
+  "@trackerInsightsYear": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "trackerMonthlyTotals": "Monthly totals",
+  "trackerShareOfYear": "{value}% of year",
+  "@trackerShareOfYear": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "trackerShareUnavailable": "Share unavailable when total is zero.",
+  "trackerHighestMonth": "Highest month: {month} — {value} kg CO2",
+  "@trackerHighestMonth": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "trackerLargestContributions": "Largest contributions",
   "trackerNoActivities": "No activities logged for this period yet.",
   "trackerAddEntry": "Add activity",
   "trackerElectricity": "Home energy — electricity",
