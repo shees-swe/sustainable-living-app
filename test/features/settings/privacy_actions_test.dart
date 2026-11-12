@@ -11,6 +11,7 @@ import 'package:sustainable_living_app/core/data/database/app_database.dart';
 import 'package:sustainable_living_app/core/theme/app_theme.dart';
 import 'package:sustainable_living_app/features/settings/data/user_data_deleter.dart';
 import 'package:sustainable_living_app/features/settings/data/user_data_exporter.dart';
+import 'package:sustainable_living_app/features/settings/data/user_data_importer.dart';
 import 'package:sustainable_living_app/features/settings/presentation/privacy_policy_screen.dart';
 import 'package:sustainable_living_app/features/settings/presentation/settings_screen.dart';
 import 'package:sustainable_living_app/l10n/generated/app_localizations.dart';
@@ -89,6 +90,7 @@ void main() {
   ) async {
     final settings = SettingsScreen(
       exporter: UserDataExporter(database: database),
+      importer: UserDataImporter(database: database),
       deleter: UserDataDeleter(
         database: database,
         closeDatabase: () async {},
@@ -96,6 +98,7 @@ void main() {
         onGuestReset: () async {},
       ),
       onGuestReturn: () async {},
+      onImportComplete: () async {},
     );
     await tester.pumpWidget(_TestApp(textScale: 2, child: settings));
     await tester.pumpAndSettle();

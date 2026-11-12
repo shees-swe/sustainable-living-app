@@ -3,6 +3,8 @@ import UIKit
 
 @main
 @objc class AppDelegate: FlutterAppDelegate, FlutterImplicitEngineDelegate {
+  private var userDataImportDelegate: UserDataImportPicker?
+
   override func application(
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
@@ -63,5 +65,86 @@ import UIKit
         ))
       }
     }
+
+    let importChannel = FlutterMethodChannel(
+      name: "app.sustainablelivingguide/user_data_import",
+      binaryMessenger: engineBridge.applicationRegistrar.messenger()
+    )
+    importChannel.setMethodCallHandler { [weak self] call, result in
+      guard call.method == "pickJsonFile" else {
+        result(FlutterMethodNotImplemented)
+        return
+      }
+      guard let self else {
+        result(FlutterError(
+          code: "PICKER_UNAVAILABLE",
+          message: "The document picker is unavailable.",
+          details: nil
+        ))
+        return
+      }
+      let rootViewController = UIApplication.shared.connectedScenes
+        .compactMap { $0 as? UIWindowScene }
+        .flatMap { $0.windows }
+        .first(where: { $0.isKeyWindow })?
+        .rootViewController ?? self.window?.rootViewController
+      guard let rootViewController else {
+        result(FlutterError(
+          code: "PICKER_UNAVAILABLE",
+          message: "The document picker is unavailable.",
+          details: nil
+        ))
+        return
+      }
+
+      let picker = UIDocumentPickerViewController(
+        documentTypes: ["public.json"],
+        in: .import
+      )
+      let pickerDelegate = UserDataImportPicker { [weak self] value in
+        self?.userDataImportDelegate = nil
+        result(value)
+      }
+      self.userDataImportDelegate = pickerDelegate
+      picker.delegate = pickerDelegate
+      rootViewController.present(picker, animated: true)
+    }
+  }
+}
+
+private final class UserDataImportPicker: NSObject, UIDocumentPickerDelegate {
+  private let completion: (Any?) -> Void
+
+  init(completion: @escaping (Any?) -> Void) {
+    self.completion = completion
+  }
+
+  func documentPicker(
+    _ controller: UIDocumentPickerViewController,
+    didPickDocumentsAt urls: [URL]
+  ) {
+    guard let url = urls.first else {
+      completion(nil)
+      return
+    }
+    let hasAccess = url.startAccessingSecurityScopedResource()
+    defer {
+      if hasAccess {
+        url.stopAccessingSecurityScopedResource()
+      }
+    }
+    do {
+      completion(FlutterStandardTypedData(bytes: try Data(contentsOf: url)))
+    } catch {
+      completion(FlutterError(
+        code: "FILE_READ_FAILED",
+        message: error.localizedDescription,
+        details: nil
+      ))
+    }
+  }
+
+  func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
+    completion(nil)
   }
 }

@@ -123,27 +123,36 @@ class AppDatabase extends _$AppDatabase {
   }
 
   Future<void> clearAllUserData() {
+    return transaction(_clearAllUserData);
+  }
+
+  Future<T> replaceAllUserData<T>(Future<T> Function() restore) {
     return transaction(() async {
-      await delete(footprintEstimates).go();
-      await delete(activityLogEntries).go();
-      await delete(wasteLogEntries).go();
-      await delete(plannedTrips).go();
-      await delete(communityJournalPosts).go();
-      await delete(challengeDayCompletions).go();
-      await delete(challengeProgressRecords).go();
-      await delete(localAccounts).go();
-      await into(userPreferences).insertOnConflictUpdate(
-        UserPreferencesCompanion.insert(
-          preferenceId: const Value(1),
-          displayLanguageTag: const Value('en'),
-          selectedRegionId: const Value(null),
-          reducedMotion: const Value(null),
-          recyclingCollectionDay: const Value(null),
-          compostDay: const Value(null),
-          updatedAt: DateTime.now().toUtc(),
-        ),
-      );
+      await _clearAllUserData();
+      return restore();
     });
+  }
+
+  Future<void> _clearAllUserData() async {
+    await delete(footprintEstimates).go();
+    await delete(activityLogEntries).go();
+    await delete(wasteLogEntries).go();
+    await delete(plannedTrips).go();
+    await delete(communityJournalPosts).go();
+    await delete(challengeDayCompletions).go();
+    await delete(challengeProgressRecords).go();
+    await delete(localAccounts).go();
+    await into(userPreferences).insertOnConflictUpdate(
+      UserPreferencesCompanion.insert(
+        preferenceId: const Value(1),
+        displayLanguageTag: const Value('en'),
+        selectedRegionId: const Value(null),
+        reducedMotion: const Value(null),
+        recyclingCollectionDay: const Value(null),
+        compostDay: const Value(null),
+        updatedAt: DateTime.now().toUtc(),
+      ),
+    );
   }
 
   static Future<void> deleteDatabaseFiles() async {

@@ -47,6 +47,7 @@ import '../features/recipes_meal_planning/presentation/module_destination_screen
 import '../features/recipes_meal_planning/data/recipe_catalog.dart';
 import '../features/settings/data/user_data_deleter.dart';
 import '../features/settings/data/user_data_exporter.dart';
+import '../features/settings/data/user_data_importer.dart';
 import '../features/settings/data/user_preferences_repository.dart';
 import '../features/settings/presentation/privacy_policy_screen.dart';
 import '../features/settings/presentation/settings_screen.dart';
@@ -78,6 +79,7 @@ GoRouter createAppRouter({
   AccountRepository? accountRepository,
   UserDataExporter? userDataExporter,
   UserDataDeleter? userDataDeleter,
+  UserDataImporter? userDataImporter,
   UserPreferencesRepository? userPreferencesRepository,
   RegionCatalog? regionCatalog,
   RegionRepository? regionRepository,
@@ -94,6 +96,7 @@ GoRouter createAppRouter({
   RegionDataPack? selectedRegionPack,
   EstimateDemoRegion? demoRegion,
   Future<void> Function()? onGuestReturn,
+  Future<void> Function()? onImportComplete,
   Future<ShareResult> Function(Map<String, Object?> export)? shareUserData,
   bool hasSavedEstimate = false,
 }) {
@@ -154,12 +157,15 @@ GoRouter createAppRouter({
         builder: (context, state) =>
             userDataExporter == null ||
                 userDataDeleter == null ||
+                userDataImporter == null ||
                 onGuestReturn == null
             ? _RoutePlaceholder(title: (l10n) => l10n.settings)
             : SettingsScreen(
                 exporter: userDataExporter,
                 deleter: userDataDeleter,
+                importer: userDataImporter,
                 onGuestReturn: onGuestReturn,
+                onImportComplete: onImportComplete ?? () async {},
                 shareExport: shareUserData,
                 preferences: userPreferencesRepository,
                 regionCatalog: regionCatalog,

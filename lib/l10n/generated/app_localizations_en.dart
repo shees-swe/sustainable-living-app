@@ -342,6 +342,38 @@ class AppLocalizationsEn extends AppLocalizations {
       'Create a copy of your app data to share or save.';
 
   @override
+  String get importMyData => 'Import my data';
+
+  @override
+  String get importDataDescription =>
+      'Restore your app data from a saved export file.';
+
+  @override
+  String get replaceAllDataTitle => 'Replace all app data?';
+
+  @override
+  String get replaceAllDataConfirmation =>
+      'Importing replaces everything currently in this app with the contents of the selected file. Continue?';
+
+  @override
+  String get confirmImport => 'Replace and import';
+
+  @override
+  String get userDataImportCancelled =>
+      'Import cancelled. Your data was not changed.';
+
+  @override
+  String get userDataImportSuccess => 'Your data was imported.';
+
+  @override
+  String get userDataImportFailure =>
+      'That file is not a valid supported export. Your data was not changed.';
+
+  @override
+  String get userDataImportUnavailableFailure =>
+      'Data could not be imported. Your existing data was not changed.';
+
+  @override
   String get deleteLocalData => 'Delete local data';
 
   @override

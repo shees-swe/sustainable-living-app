@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -7,6 +10,7 @@ import 'package:sustainable_living_app/core/data/database/app_database.dart';
 import 'package:sustainable_living_app/core/theme/app_theme.dart';
 import 'package:sustainable_living_app/features/settings/data/user_data_deleter.dart';
 import 'package:sustainable_living_app/features/settings/data/user_data_exporter.dart';
+import 'package:sustainable_living_app/features/settings/data/user_data_importer.dart';
 import 'package:sustainable_living_app/features/settings/presentation/settings_screen.dart';
 import 'package:sustainable_living_app/l10n/generated/app_localizations.dart';
 
@@ -69,6 +73,134 @@ void main() {
     expect(sharedExport?['exportSchemaVersion'], 7);
     expect(sharedExport?['userData'], isA<Map<String, Object?>>());
     expect(find.text('The data export was shared.'), findsOneWidget);
+  });
+
+  testWidgets('import is reachable and confirms replacement at 200% text', (
+    tester,
+  ) async {
+    final exported = await UserDataExporter(database: database).exportData();
+    await tester.pumpWidget(
+      _TestApp(
+        settings: _settings(
+          database: database,
+          onGuestReset: () async => guestResetCalls++,
+          onGuestReturn: () async => guestReturnCalls++,
+          pickImportFile: () async =>
+              Uint8List.fromList(utf8.encode(jsonEncode(exported))),
+        ),
+        textScale: 2,
+      ),
+    );
+
+    await tester.scrollUntilVisible(
+      find.text('Import my data'),
+      250,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.tap(find.text('Import my data'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+
+    expect(find.text('Replace all app data?'), findsOneWidget);
+    expect(
+      find.text(
+        'Importing replaces everything currently in this app with the contents of the selected file. Continue?',
+      ),
+      findsOneWidget,
+    );
+    expectNoTextOverlapOrClipping(
+      tester,
+      'Import confirmation',
+      within: find.byType(AlertDialog),
+    );
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('cancelling import confirmation leaves data unchanged', (
+    tester,
+  ) async {
+    await database
+        .into(database.localAccounts)
+        .insert(
+          LocalAccountsCompanion.insert(
+            accountId: 'account-1',
+            loginIdentifier: 'member@example.test',
+            createdAt: DateTime.utc(2026),
+          ),
+        );
+    final exported = await UserDataExporter(database: database).exportData();
+    final before = exported['userData'];
+    await tester.pumpWidget(
+      _TestApp(
+        settings: _settings(
+          database: database,
+          onGuestReset: () async => guestResetCalls++,
+          onGuestReturn: () async => guestReturnCalls++,
+          pickImportFile: () async =>
+              Uint8List.fromList(utf8.encode(jsonEncode(exported))),
+        ),
+      ),
+    );
+
+    await tester.tap(find.text('Import my data'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    await tester.tap(find.text('Cancel'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+
+    expect(
+      (await UserDataExporter(database: database).exportData())['userData'],
+      before,
+    );
+    expect(
+      find.text('Import cancelled. Your data was not changed.'),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('invalid import shows an error and preserves existing data', (
+    tester,
+  ) async {
+    await database
+        .into(database.localAccounts)
+        .insert(
+          LocalAccountsCompanion.insert(
+            accountId: 'account-1',
+            loginIdentifier: 'member@example.test',
+            createdAt: DateTime.utc(2026),
+          ),
+        );
+    await tester.pumpWidget(
+      _TestApp(
+        settings: _settings(
+          database: database,
+          onGuestReset: () async => guestResetCalls++,
+          onGuestReturn: () async => guestReturnCalls++,
+          pickImportFile: () async =>
+              Uint8List.fromList(utf8.encode('not JSON')),
+        ),
+      ),
+    );
+
+    await tester.tap(find.text('Import my data'));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(
+      find.text(
+        'That file is not a valid supported export. Your data was not changed.',
+      ),
+      250,
+      scrollable: find.byType(Scrollable).first,
+    );
+
+    expect(await database.select(database.localAccounts).get(), hasLength(1));
+    expect(
+      find.text(
+        'That file is not a valid supported export. Your data was not changed.',
+      ),
+      findsOneWidget,
+    );
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets(
@@ -150,9 +282,11 @@ SettingsScreen _settings({
   required Future<void> Function() onGuestReset,
   required Future<void> Function() onGuestReturn,
   Future<ShareResult> Function(Map<String, Object?> export)? shareExport,
+  Future<Uint8List?> Function()? pickImportFile,
 }) {
   return SettingsScreen(
     exporter: UserDataExporter(database: database),
+    importer: UserDataImporter(database: database),
     deleter: UserDataDeleter(
       database: database,
       closeDatabase: () async {},
@@ -160,6 +294,8 @@ SettingsScreen _settings({
       onGuestReset: onGuestReset,
     ),
     onGuestReturn: onGuestReturn,
+    onImportComplete: () async {},
+    pickImportFile: pickImportFile,
     shareExport: shareExport,
   );
 }

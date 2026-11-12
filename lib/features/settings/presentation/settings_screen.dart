@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,7 +13,9 @@ import '../../../core/theme/app_theme.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../data/user_data_deleter.dart';
 import '../data/user_data_exporter.dart';
+import '../data/user_data_file_picker.dart';
 import '../data/user_data_file_sharer.dart';
+import '../data/user_data_importer.dart';
 import '../data/user_preferences_repository.dart';
 import 'region_picker.dart';
 
@@ -20,7 +23,10 @@ class SettingsScreen extends StatefulWidget {
   const SettingsScreen({
     required this.exporter,
     required this.deleter,
+    required this.importer,
     required this.onGuestReturn,
+    required this.onImportComplete,
+    this.pickImportFile,
     this.shareExport,
     this.preferences,
     this.regionCatalog,
@@ -29,7 +35,10 @@ class SettingsScreen extends StatefulWidget {
 
   final UserDataExporter exporter;
   final UserDataDeleter deleter;
+  final UserDataImporter importer;
   final Future<void> Function() onGuestReturn;
+  final Future<void> Function() onImportComplete;
+  final Future<Uint8List?> Function()? pickImportFile;
   final Future<ShareResult> Function(Map<String, Object?> export)? shareExport;
   final UserPreferencesRepository? preferences;
   final RegionCatalog? regionCatalog;
@@ -41,6 +50,7 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   bool _isExporting = false;
   bool _isDeleting = false;
+  bool _isImporting = false;
   String? _status;
   bool _statusIsError = false;
 
@@ -126,6 +136,64 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
   }
 
+  Future<void> _importData() async {
+    if (_isExporting || _isDeleting || _isImporting) return;
+    final l10n = AppLocalizations.of(context)!;
+    setState(() {
+      _isImporting = true;
+      _status = null;
+    });
+    try {
+      final pickFile =
+          widget.pickImportFile ?? const UserDataFilePicker().pickJsonFile;
+      final bytes = await pickFile();
+      if (!mounted) return;
+      if (bytes == null) {
+        _setStatus(l10n.userDataImportCancelled);
+        return;
+      }
+
+      final prepared = widget.importer.prepareImport(utf8.decode(bytes));
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(l10n.replaceAllDataTitle),
+          content: Text(l10n.replaceAllDataConfirmation),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(l10n.cancel),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text(l10n.confirmImport),
+            ),
+          ],
+        ),
+      );
+      if (!mounted) return;
+      if (confirmed != true) {
+        _setStatus(l10n.userDataImportCancelled);
+        return;
+      }
+
+      await widget.importer.applyImport(prepared);
+      if (!mounted) return;
+      _setStatus(l10n.userDataImportSuccess);
+      await widget.onImportComplete();
+    } on FormatException {
+      _setStatus(l10n.userDataImportFailure, isError: true);
+    } on FileSystemException {
+      _setStatus(l10n.userDataImportUnavailableFailure, isError: true);
+    } on PlatformException {
+      _setStatus(l10n.userDataImportUnavailableFailure, isError: true);
+    } on MissingPluginException {
+      _setStatus(l10n.userDataImportUnavailableFailure, isError: true);
+    } finally {
+      if (mounted) setState(() => _isImporting = false);
+    }
+  }
+
   void _setStatus(String message, {bool isError = false}) {
     if (!mounted) return;
     setState(() {
@@ -137,7 +205,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final busy = _isExporting || _isDeleting;
+    final busy = _isExporting || _isDeleting || _isImporting;
 
     return Scaffold(
       appBar: AppBar(
@@ -169,6 +237,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
               l10n.privacyControls,
               style: Theme.of(context).textTheme.titleMedium,
             ),
+          ),
+          const Divider(height: 1),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: const Icon(Icons.file_download_outlined),
+            title: Text(l10n.importMyData),
+            subtitle: Text(l10n.importDataDescription),
+            trailing: _isImporting
+                ? MotionAwareProgressIndicator(
+                    semanticsLabel: l10n.loading,
+                    size: 24,
+                    strokeWidth: 2,
+                  )
+                : const Icon(Icons.chevron_right),
+            onTap: busy ? null : _importData,
           ),
           const Divider(height: 1),
           ListTile(

@@ -645,6 +645,60 @@ abstract class AppLocalizations {
   /// **'Create a copy of your app data to share or save.'**
   String get exportDataDescription;
 
+  /// No description provided for @importMyData.
+  ///
+  /// In en, this message translates to:
+  /// **'Import my data'**
+  String get importMyData;
+
+  /// No description provided for @importDataDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore your app data from a saved export file.'**
+  String get importDataDescription;
+
+  /// No description provided for @replaceAllDataTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace all app data?'**
+  String get replaceAllDataTitle;
+
+  /// No description provided for @replaceAllDataConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Importing replaces everything currently in this app with the contents of the selected file. Continue?'**
+  String get replaceAllDataConfirmation;
+
+  /// No description provided for @confirmImport.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace and import'**
+  String get confirmImport;
+
+  /// No description provided for @userDataImportCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Import cancelled. Your data was not changed.'**
+  String get userDataImportCancelled;
+
+  /// No description provided for @userDataImportSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Your data was imported.'**
+  String get userDataImportSuccess;
+
+  /// No description provided for @userDataImportFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'That file is not a valid supported export. Your data was not changed.'**
+  String get userDataImportFailure;
+
+  /// No description provided for @userDataImportUnavailableFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'Data could not be imported. Your existing data was not changed.'**
+  String get userDataImportUnavailableFailure;
+
   /// No description provided for @deleteLocalData.
   ///
   /// In en, this message translates to:

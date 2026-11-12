@@ -26,6 +26,7 @@ import '../features/onboarding/data/estimate_demo_fixtures.dart';
 import '../features/onboarding/data/footprint_estimate_repository.dart';
 import '../features/settings/data/user_data_deleter.dart';
 import '../features/settings/data/user_data_exporter.dart';
+import '../features/settings/data/user_data_importer.dart';
 import '../features/settings/data/user_data_file_sharer.dart';
 import '../features/settings/data/user_preferences_repository.dart';
 import '../l10n/generated/app_localizations.dart';
@@ -137,6 +138,7 @@ class _SustainableLivingAppState extends State<SustainableLivingApp> {
       activityLogRepository: _activityLogRepository,
       accountRepository: _accountRepository,
       userDataExporter: UserDataExporter(database: _database),
+      userDataImporter: UserDataImporter(database: _database),
       userPreferencesRepository: preferences,
       regionCatalog: regionCatalog,
       regionRepository: regionRepository,
@@ -158,6 +160,7 @@ class _SustainableLivingAppState extends State<SustainableLivingApp> {
         onGuestReset: _resetToGuest,
       ),
       onGuestReturn: () async {},
+      onImportComplete: _refreshRouterAfterImport,
       shareUserData: const UserDataFileSharer().shareExport,
       hasSavedEstimate: savedEstimate != null,
     );
@@ -167,6 +170,18 @@ class _SustainableLivingAppState extends State<SustainableLivingApp> {
     }
     _resolvedRouter = router;
     return router;
+  }
+
+  Future<void> _refreshRouterAfterImport() async {
+    if (!mounted) return;
+    final location =
+        _resolvedRouter?.routeInformationProvider.value.uri.toString() ??
+        AppRoutes.settings;
+    _resolvedRouter?.dispose();
+    _resolvedRouter = null;
+    setState(() {
+      _router = _createRouter(initialLocation: location);
+    });
   }
 
   Future<void> _resetToGuest() async {
