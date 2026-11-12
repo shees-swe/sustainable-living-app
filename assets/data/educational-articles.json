@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "articles": [
+    {
+      "title": "Why Small Emissions Add Up",
+      "topic": "Climate Basics",
+      "body": "Almost everything that burns fuel or uses electricity releases greenhouse gases: driving a car, heating a room, cooking a meal, charging a phone. One trip or one meal is tiny. The catch is repetition — a small emission repeated every day for a year becomes one of the largest numbers in a person's footprint.\n\nThat is why footprint trackers use emission factors: a standard amount of emissions per unit of activity, such as per kilowatt-hour of electricity. Your total is mostly a few habits repeated often, not the rare big event.\n\nTracking is not about guilt. It is about seeing clearly which two or three habits dominate your total, because those are the only ones worth changing first.",
+      "takeaway": "Measure first — your biggest source is usually one or two daily habits."
+    },
+    {
+      "title": "What a Carbon Budget Means for One Person",
+      "topic": "Climate Basics",
+      "body": "Climate scientists describe a global carbon budget: the total emissions compatible with keeping warming near 1.5 degrees. Divided fairly across everyone on Earth, lifestyle research puts the per-person share at about 2.5 tonnes of CO2 equivalent per year by 2030.\n\nMost people in high-consumption countries are well above that today, and the global average footprint is higher still. The gap is exactly why the budget is a direction, not a verdict — it shows the scale of change needed, spread across homes, transport, food, and goods.\n\nUsed well, a budget turns a vague worry into a number you can steer by, the same way a money budget does.",
+      "takeaway": "A carbon budget is a steering number, not a score to feel bad about."
+    },
+    {
+      "title": "Reading Your Electricity Use Like an Instrument",
+      "topic": "Home Energy",
+      "body": "Your electricity use is measured in kilowatt-hours (kWh): one kilowatt of power running for one hour. A small lamp might use 0.01 kWh in an hour; an electric heater can use 2 kWh in the same time. The rating printed on an appliance tells you its appetite.\n\nTwo patterns matter. Baseload is what runs all day — fridges, routers, standby lights. Peaks are short and heavy — heaters, kettles, ovens, air conditioning. Bills grow from both, but they need different fixes.\n\nOnce you can guess which devices own your baseload and which own your peaks, saving stops being guesswork: you fix the always-on waste first, then use the heavy devices more carefully.",
+      "takeaway": "Find your always-on loads before chasing the big appliances."
+    },
+    {
+      "title": "Reduce, Reuse, Recycle — In That Order",
+      "topic": "Waste",
+      "body": "The three Rs are a ranking, not a slogan. Reduce comes first because an item never bought creates no waste at all. Reuse is second: every extra use of a container, bag, or tool delays a new one being made. Recycling is third — valuable, but it still costs energy to collect, sort, and remake.\n\nRecycling works best when material is clean and correctly sorted. Food-soiled paper and mixed materials are common reasons loads get rejected, so a quick rinse and honest sorting genuinely help.\n\nWhen you judge a purchase, run the order backwards in your head: can I skip it, can I use what I have, and only then — can it be recycled at the end?",
+      "takeaway": "The best recycling decision happens before you buy."
+    },
+    {
+      "title": "Composting Without the Smell",
+      "topic": "Waste",
+      "body": "Compost fails usually smell for one reason: too much wet, nitrogen-rich material — fruit and vegetable scraps, coffee grounds — and not enough dry, carbon-rich material like leaves, shredded paper, or straw. Composters call these greens and browns.\n\nA simple rhythm works: every time you add a bucket of kitchen scraps, add roughly two buckets of browns on top. Keep the pile damp, not soaked, and turn it when you can; air is the difference between composting and rotting.\n\nOpen piles should skip meat, dairy, and oils, which attract pests. A sealed bin handles more, but the greens-and-browns balance stays the same.",
+      "takeaway": "Smell means add browns — about two parts browns to one part scraps."
+    },
+    {
+      "title": "Where Home Water Really Goes",
+      "topic": "Water",
+      "body": "Indoors, the biggest water uses are usually showers, toilet flushing, and laundry — not the kitchen tap. That surprises people, because taps feel wasteful while a long shower feels harmless. A dripping tap still matters: a slow, steady leak runs all day and night.\n\nThe fixes follow the ranking. Shorter showers and full laundry loads move the big numbers. Aerators and a cistern check fix the quiet ones. None of them needs new habits every hour — most are set once and forgotten.\n\nIf your home has a meter, read it morning and night for one week. The pattern tells you more than any general tip.",
+      "takeaway": "Showers, flushing, and laundry first — leaks always."
+    },
+    {
+      "title": "Seasonal Eating, Simply Explained",
+      "topic": "Food",
+      "body": "Food grown in season near you usually travels less and spends less time in heated greenhouses or cold storage. It also tends to taste better and cost less, because it is abundant when it is picked.\n\nSeasonal does not mean strict. Frozen vegetables are picked ripe and frozen quickly, and they often beat fresh produce that has travelled for weeks. Tinned staples travel well too. The real target is the opposite extreme: delicate produce flown in from another hemisphere out of season.\n\nA practical rule: learn the seasons for five foods you buy often, and let those five carry the habit.",
+      "takeaway": "Start with five foods and learn their seasons."
+    },
+    {
+      "title": "Plant-Based, Most of the Time",
+      "topic": "Food",
+      "body": "Animal products generally carry a heavier footprint than plant foods, because feed, land, and the animals themselves are part of the chain. That is the whole claim — no single meal makes or breaks anything.\n\nThe workable version of this idea is \"most of the time\": beans, lentils, chickpeas, and grains as the default base, with animal products as the smaller, occasional part. Millions of ordinary kitchens already cook this way for budget reasons alone.\n\nStart where it costs you nothing: one regular meal you already like, made plant-based, once a week. Habits you enjoy are the ones still there in a year.",
+      "takeaway": "Make plants the default base, not an all-or-nothing rule."
+    },
+    {
+      "title": "Trips: The Mode Matters More Than the Miles",
+      "topic": "Travel",
+      "body": "Two trips of the same distance can have very different footprints, because the mode of travel matters more than the miles. Walking and cycling produce no direct emissions at all. Buses and trains spread their fuel across many passengers, so each person's share stays low.\n\nCars sit in the middle: a full car shares its fuel four ways, while a solo driver carries the whole footprint alone. Short flights are the heavy end — aircraft burn a great deal of fuel per passenger, especially taking off, so short hops are costly for the distance covered.\n\nThe practical move is not to stop travelling. It is to pick the mode deliberately for each trip, and share rides when a car is the realistic option.",
+      "takeaway": "Choose the mode per trip — and fill the car when you drive."
+    },
+    {
+      "title": "Before You Buy: A Four-Question Check",
+      "topic": "Shopping",
+      "body": "Most footprint advice is about using less energy. A quieter share sits in the things we buy, because every product carries the emissions of its materials, factory, and shipping. A four-question check takes ten seconds before checkout.\n\nDo I need it, or just want it today? How often will I honestly use it? What is it made of, and can it be repaired? What happens to it when I am done — reuse, recycle, or landfill?\n\nYou will still buy most things. The check is not a ban; it catches the purchases that were never going to be used, which are pure footprint with no benefit at all.",
+      "takeaway": "Ten seconds of questions beats a month of regret-buying."
+    }
+  ]
+}

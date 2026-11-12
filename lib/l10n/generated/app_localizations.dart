@@ -2085,6 +2085,90 @@ abstract class AppLocalizations {
   /// **'Educational Content'**
   String get educationalContent;
 
+  /// No description provided for @educationalSearchLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by title or body'**
+  String get educationalSearchLabel;
+
+  /// No description provided for @educationalClearSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear article search'**
+  String get educationalClearSearch;
+
+  /// No description provided for @educationalTopicFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Topic'**
+  String get educationalTopicFilter;
+
+  /// No description provided for @educationalAllTopics.
+  ///
+  /// In en, this message translates to:
+  /// **'All topics'**
+  String get educationalAllTopics;
+
+  /// No description provided for @educationalSortLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Sort'**
+  String get educationalSortLabel;
+
+  /// No description provided for @educationalSortTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Title (A–Z)'**
+  String get educationalSortTitle;
+
+  /// No description provided for @educationalSortShortestRead.
+  ///
+  /// In en, this message translates to:
+  /// **'Shortest read'**
+  String get educationalSortShortestRead;
+
+  /// No description provided for @educationalNoMatches.
+  ///
+  /// In en, this message translates to:
+  /// **'No articles match your search and topic.'**
+  String get educationalNoMatches;
+
+  /// No description provided for @educationalClearFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear search and filters'**
+  String get educationalClearFilters;
+
+  /// No description provided for @educationalMinuteUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'min'**
+  String get educationalMinuteUnit;
+
+  /// No description provided for @educationalReadLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'read'**
+  String get educationalReadLabel;
+
+  /// No description provided for @educationalArticle.
+  ///
+  /// In en, this message translates to:
+  /// **'Article'**
+  String get educationalArticle;
+
+  /// No description provided for @educationalTakeaway.
+  ///
+  /// In en, this message translates to:
+  /// **'Takeaway'**
+  String get educationalTakeaway;
+
+  /// No description provided for @educationalCatalogLoadFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'Educational articles could not be loaded.'**
+  String get educationalCatalogLoadFailure;
+
   /// No description provided for @moduleDetailsComingSoon.
   ///
   /// In en, this message translates to:

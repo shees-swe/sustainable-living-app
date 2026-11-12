@@ -1126,6 +1126,49 @@ class AppLocalizationsEn extends AppLocalizations {
   String get educationalContent => 'Educational Content';
 
   @override
+  String get educationalSearchLabel => 'Search by title or body';
+
+  @override
+  String get educationalClearSearch => 'Clear article search';
+
+  @override
+  String get educationalTopicFilter => 'Topic';
+
+  @override
+  String get educationalAllTopics => 'All topics';
+
+  @override
+  String get educationalSortLabel => 'Sort';
+
+  @override
+  String get educationalSortTitle => 'Title (A–Z)';
+
+  @override
+  String get educationalSortShortestRead => 'Shortest read';
+
+  @override
+  String get educationalNoMatches => 'No articles match your search and topic.';
+
+  @override
+  String get educationalClearFilters => 'Clear search and filters';
+
+  @override
+  String get educationalMinuteUnit => 'min';
+
+  @override
+  String get educationalReadLabel => 'read';
+
+  @override
+  String get educationalArticle => 'Article';
+
+  @override
+  String get educationalTakeaway => 'Takeaway';
+
+  @override
+  String get educationalCatalogLoadFailure =>
+      'Educational articles could not be loaded.';
+
+  @override
   String get moduleDetailsComingSoon =>
       'Detailed features will be available in a future update.';
 

@@ -102,6 +102,8 @@ void main() {
             'No posts yet. Add your first post to start your personal record.',
           ),
         );
+      } else if (destination.id == 'educationalContent') {
+        await _pumpUntilVisible(tester, find.text('Search by title or body'));
       } else {
         await tester.pumpAndSettle();
       }
@@ -202,6 +204,17 @@ void main() {
           scrollable: find.byType(Scrollable).first,
         );
         expect(lastTip, findsOneWidget);
+      } else if (destination.id == 'educationalContent') {
+        expect(find.text('Search by title or body'), findsOneWidget);
+        expect(
+          find.byKey(const ValueKey('educationalArticleList')),
+          findsOneWidget,
+        );
+        expectNoTextOverlapOrClipping(
+          tester,
+          destination.path,
+          within: find.byKey(const ValueKey('educationalArticleList')),
+        );
       } else {
         expect(
           find.text('Foundation destination'),

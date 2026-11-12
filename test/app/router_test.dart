@@ -180,6 +180,8 @@ void main() {
           tester,
           find.text('Use fans before air conditioning'),
         );
+      } else if (destination.id == 'educationalContent') {
+        await _pumpUntilVisible(tester, find.text('Search by title or body'));
       } else {
         await tester.pumpAndSettle();
       }
@@ -247,6 +249,12 @@ void main() {
       } else if (destination.id == 'energyConservationTips') {
         expect(find.text('Search by title or text'), findsOneWidget);
         expect(find.text('Use fans before air conditioning'), findsOneWidget);
+      } else if (destination.id == 'educationalContent') {
+        expect(find.text('Search by title or body'), findsOneWidget);
+        expect(
+          find.byKey(const ValueKey('educationalArticleList')),
+          findsOneWidget,
+        );
       } else {
         expect(find.text('Foundation destination'), findsOneWidget);
         expect(
