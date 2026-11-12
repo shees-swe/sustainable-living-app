@@ -170,6 +170,7 @@ GoRouter createAppRouter({
           builder: (context, state) => _moduleScreen(
             destination.id,
             activityLogRepository: activityLogRepository,
+            foundationReferences: foundationReferences,
             trackerRegionId: selectedRegionPack?.region.regionId,
             trackerFactors: selectedRegionPack == null
                 ? const []
@@ -213,6 +214,7 @@ GoRoute _appRoute({
 Widget _moduleScreen(
   String moduleId, {
   required ActivityLogRepository? activityLogRepository,
+  required FoundationReferences? foundationReferences,
   required String? trackerRegionId,
   required List<EmissionFactor> trackerFactors,
 }) => switch (moduleId) {
@@ -220,6 +222,7 @@ Widget _moduleScreen(
     repository: activityLogRepository,
     regionId: trackerRegionId,
     factors: trackerFactors,
+    references: foundationReferences,
   ),
   'ecoFriendlyProductSuggestions' =>
     const products.EcoFriendlyProductSuggestionsScreen(),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/data/database/app_database.dart';
+import '../../../core/data/regions/foundation_references.dart';
 import '../../../core/accessibility/reduced_motion.dart';
 import '../../../core/motion/motion_spec.dart';
 import '../../../core/motion/numeric_tick.dart';
@@ -11,18 +12,21 @@ import '../../onboarding/domain/footprint_estimate.dart';
 import '../../onboarding/presentation/estimate_factor_disclosure.dart';
 import '../data/activity_log_repository.dart';
 import 'activity_log_insights_screen.dart';
+import 'activity_log_recommendations_screen.dart';
 
 class CarbonFootprintDestinationScreen extends StatelessWidget {
   const CarbonFootprintDestinationScreen({
     this.repository,
     this.regionId,
     this.factors = const [],
+    this.references,
     super.key,
   });
 
   final ActivityLogRepository? repository;
   final String? regionId;
   final List<EmissionFactor> factors;
+  final FoundationReferences? references;
 
   EmissionFactor? get _electricityFactor {
     final matches = factors
@@ -64,6 +68,7 @@ class CarbonFootprintDestinationScreen extends StatelessWidget {
             regionId: regionId,
             factors: factors,
             electricityFactor: _electricityFactor,
+            references: references,
           );
         },
       ),
@@ -80,6 +85,7 @@ class _ActivityLogBody extends StatelessWidget {
     required this.regionId,
     required this.factors,
     required this.electricityFactor,
+    required this.references,
   });
 
   final List<ActivityLogEntry> entries;
@@ -89,6 +95,7 @@ class _ActivityLogBody extends StatelessWidget {
   final String? regionId;
   final List<EmissionFactor> factors;
   final EmissionFactor? electricityFactor;
+  final FoundationReferences? references;
 
   @override
   Widget build(BuildContext context) {
@@ -142,6 +149,37 @@ class _ActivityLogBody extends StatelessWidget {
             ),
           ),
           child: Text(l10n.trackerViewInsights),
+        ),
+        const SizedBox(height: ClimateSpacing.space8),
+        OutlinedButton(
+          onPressed: () => Navigator.of(context).push<void>(
+            PageRouteBuilder<void>(
+              pageBuilder: (context, animation, secondaryAnimation) =>
+                  ActivityLogRecommendationsScreen(
+                    repository: repository,
+                    year: periodYear,
+                    factors: factors,
+                    references: references,
+                  ),
+              transitionDuration: ReducedMotion.duration(
+                context,
+                MotionSpec.optionalFade,
+              ),
+              reverseTransitionDuration: ReducedMotion.duration(
+                context,
+                MotionSpec.optionalFade,
+              ),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) =>
+                      FadeTransition(
+                        opacity: animation.drive(
+                          CurveTween(curve: MotionSpec.optionalFadeCurve),
+                        ),
+                        child: child,
+                      ),
+            ),
+          ),
+          child: Text(l10n.trackerViewRecommendations),
         ),
         const SizedBox(height: ClimateSpacing.space16),
         FilledButton.icon(

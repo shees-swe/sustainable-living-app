@@ -12,6 +12,7 @@ import '../data/estimate_demo_fixtures.dart';
 import '../data/footprint_estimate_repository.dart';
 import '../domain/footprint_calculator.dart';
 import '../domain/footprint_estimate.dart';
+import '../domain/lifestyle_budget_share.dart';
 import 'estimate_factor_disclosure.dart';
 
 class EstimateResultScreen extends StatefulWidget {
@@ -242,15 +243,16 @@ class _EstimateResultScreenState extends State<EstimateResultScreen> {
     final estimate = data.estimate;
     final benchmark = data.benchmark;
     final reference = benchmark.reference;
-    if (reference.referenceId != 'temperature-budget-1-5c' ||
-        reference.unit != 't CO2e/person/year' ||
-        reference.period != benchmark.targetYear.toString() ||
-        estimate.unit != 'kg CO2e/year' ||
-        !estimate.assumptions.contains('annualizedPerPerson') ||
-        reference.value <= 0) {
-      return null;
-    }
-    return estimate.value / (reference.value * 1000);
+    return lifestyleBudgetShare(
+      referenceId: reference.referenceId,
+      referenceValue: reference.value,
+      referenceUnit: reference.unit,
+      referencePeriod: reference.period,
+      targetYear: benchmark.targetYear,
+      estimateValue: estimate.value,
+      estimateUnit: estimate.unit,
+      assumptions: estimate.assumptions,
+    );
   }
 
   List<_DisplayCategoryTotal> _displayCategoryTotals(

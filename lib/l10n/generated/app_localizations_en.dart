@@ -415,11 +415,63 @@ class AppLocalizationsEn extends AppLocalizations {
   String get trackerViewInsights => 'View insights';
 
   @override
+  String get trackerViewRecommendations => 'View recommendations';
+
+  @override
   String get trackerInsights => 'Insights';
+
+  @override
+  String get trackerRecommendations => 'Recommendations';
 
   @override
   String get trackerInsightsCoverage =>
       'These insights include logged electricity only. Transport, food, and other activities are not included yet.';
+
+  @override
+  String get trackerRecommendationsCoverage =>
+      'These recommendations use your logged electricity only. They are scenarios based on your entries, not promises.';
+
+  @override
+  String get trackerRecommendationScenarioLabel => 'Scenario — not a promise';
+
+  @override
+  String trackerRecommendationPeakMonth(String month) {
+    return 'Peak month: $month';
+  }
+
+  @override
+  String get trackerRecommendationCutPrefix => 'A ';
+
+  @override
+  String trackerRecommendationCutSuffix(String month) {
+    return '% cut in $month would have saved';
+  }
+
+  @override
+  String get trackerRecommendationAverageMonth =>
+      'Average across months with entries';
+
+  @override
+  String trackerRecommendationLowestMonth(String month) {
+    return 'Lowest month: $month';
+  }
+
+  @override
+  String get trackerRecommendationMonthlyGap =>
+      'Gap from average to lowest month';
+
+  @override
+  String get trackerRecommendationBudgetPrefix => 'At least ';
+
+  @override
+  String get trackerRecommendationBudgetMiddle => '% of the ';
+
+  @override
+  String get trackerRecommendationBudgetSuffix =>
+      ' t CO2e/person/year budget by ';
+
+  @override
+  String get trackerRecommendationBudgetEnd => ' — from electricity alone.';
 
   @override
   String trackerInsightsYear(int year) {

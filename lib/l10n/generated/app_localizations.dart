@@ -771,17 +771,101 @@ abstract class AppLocalizations {
   /// **'View insights'**
   String get trackerViewInsights;
 
+  /// No description provided for @trackerViewRecommendations.
+  ///
+  /// In en, this message translates to:
+  /// **'View recommendations'**
+  String get trackerViewRecommendations;
+
   /// No description provided for @trackerInsights.
   ///
   /// In en, this message translates to:
   /// **'Insights'**
   String get trackerInsights;
 
+  /// No description provided for @trackerRecommendations.
+  ///
+  /// In en, this message translates to:
+  /// **'Recommendations'**
+  String get trackerRecommendations;
+
   /// No description provided for @trackerInsightsCoverage.
   ///
   /// In en, this message translates to:
   /// **'These insights include logged electricity only. Transport, food, and other activities are not included yet.'**
   String get trackerInsightsCoverage;
+
+  /// No description provided for @trackerRecommendationsCoverage.
+  ///
+  /// In en, this message translates to:
+  /// **'These recommendations use your logged electricity only. They are scenarios based on your entries, not promises.'**
+  String get trackerRecommendationsCoverage;
+
+  /// No description provided for @trackerRecommendationScenarioLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Scenario — not a promise'**
+  String get trackerRecommendationScenarioLabel;
+
+  /// No description provided for @trackerRecommendationPeakMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Peak month: {month}'**
+  String trackerRecommendationPeakMonth(String month);
+
+  /// No description provided for @trackerRecommendationCutPrefix.
+  ///
+  /// In en, this message translates to:
+  /// **'A '**
+  String get trackerRecommendationCutPrefix;
+
+  /// No description provided for @trackerRecommendationCutSuffix.
+  ///
+  /// In en, this message translates to:
+  /// **'% cut in {month} would have saved'**
+  String trackerRecommendationCutSuffix(String month);
+
+  /// No description provided for @trackerRecommendationAverageMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Average across months with entries'**
+  String get trackerRecommendationAverageMonth;
+
+  /// No description provided for @trackerRecommendationLowestMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Lowest month: {month}'**
+  String trackerRecommendationLowestMonth(String month);
+
+  /// No description provided for @trackerRecommendationMonthlyGap.
+  ///
+  /// In en, this message translates to:
+  /// **'Gap from average to lowest month'**
+  String get trackerRecommendationMonthlyGap;
+
+  /// No description provided for @trackerRecommendationBudgetPrefix.
+  ///
+  /// In en, this message translates to:
+  /// **'At least '**
+  String get trackerRecommendationBudgetPrefix;
+
+  /// No description provided for @trackerRecommendationBudgetMiddle.
+  ///
+  /// In en, this message translates to:
+  /// **'% of the '**
+  String get trackerRecommendationBudgetMiddle;
+
+  /// No description provided for @trackerRecommendationBudgetSuffix.
+  ///
+  /// In en, this message translates to:
+  /// **' t CO2e/person/year budget by '**
+  String get trackerRecommendationBudgetSuffix;
+
+  /// No description provided for @trackerRecommendationBudgetEnd.
+  ///
+  /// In en, this message translates to:
+  /// **' — from electricity alone.'**
+  String get trackerRecommendationBudgetEnd;
 
   /// No description provided for @trackerInsightsYear.
   ///

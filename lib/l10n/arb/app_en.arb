@@ -252,8 +252,43 @@
   },
   "trackerCoverage": "Includes logged electricity only. Transport, food, and other activities are not included yet.",
   "trackerViewInsights": "View insights",
+  "trackerViewRecommendations": "View recommendations",
   "trackerInsights": "Insights",
+  "trackerRecommendations": "Recommendations",
   "trackerInsightsCoverage": "These insights include logged electricity only. Transport, food, and other activities are not included yet.",
+  "trackerRecommendationsCoverage": "These recommendations use your logged electricity only. They are scenarios based on your entries, not promises.",
+  "trackerRecommendationScenarioLabel": "Scenario — not a promise",
+  "trackerRecommendationPeakMonth": "Peak month: {month}",
+  "@trackerRecommendationPeakMonth": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      }
+    }
+  },
+  "trackerRecommendationCutPrefix": "A ",
+  "trackerRecommendationCutSuffix": "% cut in {month} would have saved",
+  "@trackerRecommendationCutSuffix": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      }
+    }
+  },
+  "trackerRecommendationAverageMonth": "Average across months with entries",
+  "trackerRecommendationLowestMonth": "Lowest month: {month}",
+  "@trackerRecommendationLowestMonth": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      }
+    }
+  },
+  "trackerRecommendationMonthlyGap": "Gap from average to lowest month",
+  "trackerRecommendationBudgetPrefix": "At least ",
+  "trackerRecommendationBudgetMiddle": "% of the ",
+  "trackerRecommendationBudgetSuffix": " t CO2e/person/year budget by ",
+  "trackerRecommendationBudgetEnd": " — from electricity alone.",
   "trackerInsightsYear": "{year} insights total",
   "@trackerInsightsYear": {
     "placeholders": {
