@@ -186,6 +186,7 @@ GoRouter createAppRouter({
             certificationCatalog: certificationCatalog,
             challengeProgressRepository: challengeProgressRepository,
             wasteLogRepository: wasteLogRepository,
+            userPreferencesRepository: userPreferencesRepository,
             trackerRegionId: selectedRegionPack?.region.regionId,
             trackerFactors: selectedRegionPack == null
                 ? const []
@@ -235,6 +236,7 @@ Widget _moduleScreen(
   required CertificationCatalog? certificationCatalog,
   required ChallengeProgressRepository? challengeProgressRepository,
   required WasteLogRepository? wasteLogRepository,
+  required UserPreferencesRepository? userPreferencesRepository,
   required String? trackerRegionId,
   required List<EmissionFactor> trackerFactors,
 }) => switch (moduleId) {
@@ -260,9 +262,12 @@ Widget _moduleScreen(
             catalog: certificationCatalog,
           ),
   'wasteReductionTracker' =>
-    wasteLogRepository == null
+    wasteLogRepository == null || userPreferencesRepository == null
         ? _RoutePlaceholder(title: (l10n) => l10n.wasteReductionTracker)
-        : waste.WasteReductionTrackerScreen(repository: wasteLogRepository),
+        : waste.WasteReductionTrackerScreen(
+            repository: wasteLogRepository,
+            preferences: userPreferencesRepository,
+          ),
   'recipesMealPlanning' => const recipes.RecipesMealPlanningScreen(),
   'energyConservationTips' => const energy.EnergyConservationTipsScreen(),
   'ecoTravelSuggestions' => const travel.EcoTravelSuggestionsScreen(),

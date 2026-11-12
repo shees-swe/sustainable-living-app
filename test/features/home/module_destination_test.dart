@@ -10,6 +10,7 @@ import 'package:sustainable_living_app/features/certifications_guide/data/certif
 import 'package:sustainable_living_app/features/eco_friendly_product_suggestions/data/product_catalog.dart';
 import 'package:sustainable_living_app/features/sustainable_living_challenges/data/challenge_catalog.dart';
 import 'package:sustainable_living_app/features/sustainable_living_challenges/data/challenge_progress_repository.dart';
+import 'package:sustainable_living_app/features/settings/data/user_preferences_repository.dart';
 import 'package:sustainable_living_app/features/waste_reduction_tracker/data/waste_log_repository.dart';
 import 'package:sustainable_living_app/features/home/domain/module_destination.dart';
 import 'package:sustainable_living_app/l10n/generated/app_localizations.dart';
@@ -23,6 +24,7 @@ void main() {
   late AppDatabase challengeDatabase;
   late ChallengeProgressRepository challengeProgressRepository;
   late WasteLogRepository wasteLogRepository;
+  late UserPreferencesRepository wastePreferencesRepository;
 
   setUpAll(() async {
     productCatalog = await ProductCatalog.loadBundled();
@@ -33,6 +35,10 @@ void main() {
       database: challengeDatabase,
     );
     wasteLogRepository = WasteLogRepository(database: challengeDatabase);
+    wastePreferencesRepository = UserPreferencesRepository(
+      database: challengeDatabase,
+      supportedRegionIds: const {},
+    );
   });
 
   tearDownAll(() async {
@@ -50,6 +56,7 @@ void main() {
         certificationCatalog: certificationCatalog,
         challengeProgressRepository: challengeProgressRepository,
         wasteLogRepository: wasteLogRepository,
+        userPreferencesRepository: wastePreferencesRepository,
       );
       await tester.pumpWidget(_TestApp(router: router, textScale: 2));
       if (destination.id == 'sustainableLivingChallenges') {

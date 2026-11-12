@@ -148,6 +148,14 @@ void main() {
           assumptions: '[]',
         ),
       );
+      await database.savePreferences(
+        UserPreferencesCompanion(
+          preferenceId: const Value(1),
+          recyclingCollectionDay: const Value(DateTime.tuesday),
+          compostDay: const Value(DateTime.friday),
+          updatedAt: Value(DateTime.utc(2026)),
+        ),
+      );
 
       final exported = await UserDataExporter(database: database).exportData();
       final encoded = jsonEncode(exported);
@@ -158,9 +166,13 @@ void main() {
           (userData['footprintEstimates'] as List).single
               as Map<String, Object?>;
 
-      expect(exported['exportSchemaVersion'], 4);
+      expect(exported['exportSchemaVersion'], 5);
       expect(account['loginIdentifier'], 'member@example.test');
       expect(estimate['estimateValue'], 12.5);
+      final preference =
+          (userData['preferences'] as List).single as Map<String, Object?>;
+      expect(preference['recyclingCollectionDay'], DateTime.tuesday);
+      expect(preference['compostDay'], DateTime.friday);
       expect(encoded, isNot(contains('credentialVerifiers')));
       expect(encoded, isNot(contains('"salt"')));
       expect(encoded, isNot(contains('"verifier"')));
@@ -218,6 +230,8 @@ void main() {
     expect(preferences.displayLanguageTag, 'en');
     expect(preferences.selectedRegionId, isNull);
     expect(preferences.reducedMotion, isNull);
+    expect(preferences.recyclingCollectionDay, isNull);
+    expect(preferences.compostDay, isNull);
     expect(closeCalls, 1);
     expect(fileDeletionCalls, 1);
     expect(guestResetCalls, 1);
@@ -263,6 +277,8 @@ Future<void> _insertAccountWithData(AppDatabase database) async {
       displayLanguageTag: const Value('fr'),
       selectedRegionId: const Value('region-test'),
       reducedMotion: const Value(true),
+      recyclingCollectionDay: const Value(DateTime.tuesday),
+      compostDay: const Value(DateTime.friday),
       updatedAt: Value(DateTime.utc(2026)),
     ),
   );

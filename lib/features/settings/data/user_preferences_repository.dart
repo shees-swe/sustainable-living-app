@@ -34,6 +34,9 @@ class UserPreferencesRepository {
     return UserPreferencesSettings(
       displayLanguageTag: row.displayLanguageTag,
       selectedRegionId: row.selectedRegionId,
+      reducedMotion: row.reducedMotion,
+      recyclingCollectionDay: row.recyclingCollectionDay,
+      compostDay: row.compostDay,
     );
   }
 
@@ -47,6 +50,9 @@ class UserPreferencesRepository {
         preferenceId: const Value(1),
         displayLanguageTag: Value(current.displayLanguageTag),
         selectedRegionId: Value(regionId),
+        reducedMotion: Value(current.reducedMotion),
+        recyclingCollectionDay: Value(current.recyclingCollectionDay),
+        compostDay: Value(current.compostDay),
         updatedAt: Value(_clock().toUtc()),
       ),
     );
@@ -67,9 +73,42 @@ class UserPreferencesRepository {
         preferenceId: const Value(1),
         displayLanguageTag: Value(normalized),
         selectedRegionId: Value(current.selectedRegionId),
+        reducedMotion: Value(current.reducedMotion),
+        recyclingCollectionDay: Value(current.recyclingCollectionDay),
+        compostDay: Value(current.compostDay),
         updatedAt: Value(_clock().toUtc()),
       ),
     );
+  }
+
+  Future<void> setWastePlannerDays({
+    required int? recyclingCollectionDay,
+    required int? compostDay,
+  }) async {
+    _validateWeekday(recyclingCollectionDay, 'recyclingCollectionDay');
+    _validateWeekday(compostDay, 'compostDay');
+    final current = await load();
+    await _database.savePreferences(
+      UserPreferencesCompanion(
+        preferenceId: const Value(1),
+        displayLanguageTag: Value(current.displayLanguageTag),
+        selectedRegionId: Value(current.selectedRegionId),
+        reducedMotion: Value(current.reducedMotion),
+        recyclingCollectionDay: Value(recyclingCollectionDay),
+        compostDay: Value(compostDay),
+        updatedAt: Value(_clock().toUtc()),
+      ),
+    );
+  }
+
+  void _validateWeekday(int? day, String argumentName) {
+    if (day != null && (day < DateTime.monday || day > DateTime.sunday)) {
+      throw ArgumentError.value(
+        day,
+        argumentName,
+        'Must be a weekday from Monday through Sunday, or null.',
+      );
+    }
   }
 }
 
@@ -77,10 +116,16 @@ class UserPreferencesSettings {
   const UserPreferencesSettings({
     required this.displayLanguageTag,
     required this.selectedRegionId,
+    required this.reducedMotion,
+    required this.recyclingCollectionDay,
+    required this.compostDay,
   });
 
   final String displayLanguageTag;
   final String? selectedRegionId;
+  final bool? reducedMotion;
+  final int? recyclingCollectionDay;
+  final int? compostDay;
 }
 
 class UnsupportedRegionSelection implements Exception {

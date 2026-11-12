@@ -21,6 +21,8 @@ void main() {
     expect(preferences.single.displayLanguageTag, 'en');
     expect(preferences.single.selectedRegionId, isNull);
     expect(preferences.single.reducedMotion, isNull);
+    expect(preferences.single.recyclingCollectionDay, isNull);
+    expect(preferences.single.compostDay, isNull);
   });
 
   test('enforces unique local account identifiers', () async {

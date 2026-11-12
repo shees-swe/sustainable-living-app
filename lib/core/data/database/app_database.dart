@@ -41,7 +41,7 @@ class AppDatabase extends _$AppDatabase {
   );
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 5;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -64,6 +64,13 @@ class AppDatabase extends _$AppDatabase {
       }
       if (from < 4) {
         await migrator.createTable(wasteLogEntries);
+      }
+      if (from < 5) {
+        await migrator.addColumn(
+          userPreferences,
+          userPreferences.recyclingCollectionDay,
+        );
+        await migrator.addColumn(userPreferences, userPreferences.compostDay);
       }
     },
     beforeOpen: (_) async {
@@ -119,6 +126,8 @@ class AppDatabase extends _$AppDatabase {
           displayLanguageTag: const Value('en'),
           selectedRegionId: const Value(null),
           reducedMotion: const Value(null),
+          recyclingCollectionDay: const Value(null),
+          compostDay: const Value(null),
           updatedAt: DateTime.now().toUtc(),
         ),
       );

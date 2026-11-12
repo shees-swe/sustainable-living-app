@@ -738,6 +738,86 @@ class AppLocalizationsEn extends AppLocalizations {
   String get wasteOther => 'Other';
 
   @override
+  String get wasteWeeklyPlanner => 'Weekly planner';
+
+  @override
+  String get wastePlannerOwnScheduleNote =>
+      'These are your settings only; the app does not know your local collection schedule.';
+
+  @override
+  String wastePlannerSummary(String recyclingDay, String compostDay) {
+    return 'Recycling: $recyclingDay · Compost: $compostDay';
+  }
+
+  @override
+  String get wasteRecyclingDay => 'Recycling collection day';
+
+  @override
+  String get wasteCompostDay => 'Compost day';
+
+  @override
+  String get wasteNotSet => 'Not set';
+
+  @override
+  String get wasteSetRecyclingDay => 'Set your recycling collection day.';
+
+  @override
+  String get wasteSetCompostDay => 'Set your compost day.';
+
+  @override
+  String get wastePlannerLoadFailure =>
+      'Your weekly planner settings could not be loaded.';
+
+  @override
+  String get wastePlannerSaveFailure =>
+      'Your weekly planner settings could not be saved.';
+
+  @override
+  String get wasteTipsSection => 'Tips';
+
+  @override
+  String get wasteTipKeepBinsCloseTitle => 'Keep both bins close';
+
+  @override
+  String get wasteTipKeepBinsCloseText =>
+      'Keep a small recycling bin beside the main bin — sorting is easier when both are within reach.';
+
+  @override
+  String get wasteTipCompostScrapsTitle => 'Compost the right scraps';
+
+  @override
+  String get wasteTipCompostScrapsText =>
+      'Compost fruit and vegetable scraps, eggshells, and coffee grounds — keep meat and dairy out of a home compost pile.';
+
+  @override
+  String get wasteTipRinseRecyclingTitle => 'Rinse before recycling';
+
+  @override
+  String get wasteTipRinseRecyclingText =>
+      'Rinse containers before recycling — food residue can spoil a whole batch of recyclables.';
+
+  @override
+  String get wasteTipFlattenCardboardTitle => 'Flatten cardboard';
+
+  @override
+  String get wasteTipFlattenCardboardText =>
+      'Flatten cardboard boxes — they take a fraction of the space and are easier to store until collection day.';
+
+  @override
+  String get wasteTipBuyLooseTitle => 'Buy loose where you can';
+
+  @override
+  String get wasteTipBuyLooseText =>
+      'Buy loose produce instead of pre-packed where you can — less packaging enters the house in the first place.';
+
+  @override
+  String get wasteTipDonateRepairTitle => 'Donate or repair first';
+
+  @override
+  String get wasteTipDonateRepairText =>
+      'Keep a \"donate or repair\" box — items you no longer use leave the house useful instead of becoming waste.';
+
+  @override
   String get recipesMealPlanning => 'Sustainable Recipes & Meal Planning';
 
   @override

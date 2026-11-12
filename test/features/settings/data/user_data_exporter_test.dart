@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:drift/drift.dart' show Value;
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sustainable_living_app/core/data/database/app_database.dart';
@@ -81,6 +82,14 @@ void main() {
               amountKg: 1.25,
             ),
           );
+      await database.savePreferences(
+        UserPreferencesCompanion(
+          preferenceId: const Value(1),
+          recyclingCollectionDay: const Value(DateTime.tuesday),
+          compostDay: const Value(DateTime.friday),
+          updatedAt: Value(DateTime.utc(2026, 3, 5)),
+        ),
+      );
 
       final exported = await UserDataExporter(
         database: database,
@@ -89,7 +98,7 @@ void main() {
       final userData = exported['userData']! as Map<String, Object?>;
       final encoded = jsonEncode(exported);
 
-      expect(exported['exportSchemaVersion'], 4);
+      expect(exported['exportSchemaVersion'], 5);
       expect(exported['createdAt'], '2026-11-07T00:00:00.000Z');
       expect((userData['accounts']! as List).single, {
         'accountId': 'account-1',
@@ -115,6 +124,14 @@ void main() {
         'createdAt': '2026-03-04T00:00:00.000Z',
         'category': 'Plastic',
         'amountKg': 1.25,
+      });
+      expect((userData['preferences']! as List).single, {
+        'displayLanguageTag': 'en',
+        'selectedRegionId': null,
+        'reducedMotion': null,
+        'recyclingCollectionDay': DateTime.tuesday,
+        'compostDay': DateTime.friday,
+        'updatedAt': '2026-03-05T00:00:00.000Z',
       });
       expect(encoded, isNot(contains('credentialVerifiers')));
       expect(encoded, isNot(contains('"salt"')));

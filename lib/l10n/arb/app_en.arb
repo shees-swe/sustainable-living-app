@@ -412,6 +412,39 @@
   "wasteMetal": "Metal",
   "wasteOrganic": "Organic",
   "wasteOther": "Other",
+  "wasteWeeklyPlanner": "Weekly planner",
+  "wastePlannerOwnScheduleNote": "These are your settings only; the app does not know your local collection schedule.",
+  "wastePlannerSummary": "Recycling: {recyclingDay} · Compost: {compostDay}",
+  "@wastePlannerSummary": {
+    "placeholders": {
+      "recyclingDay": {
+        "type": "String"
+      },
+      "compostDay": {
+        "type": "String"
+      }
+    }
+  },
+  "wasteRecyclingDay": "Recycling collection day",
+  "wasteCompostDay": "Compost day",
+  "wasteNotSet": "Not set",
+  "wasteSetRecyclingDay": "Set your recycling collection day.",
+  "wasteSetCompostDay": "Set your compost day.",
+  "wastePlannerLoadFailure": "Your weekly planner settings could not be loaded.",
+  "wastePlannerSaveFailure": "Your weekly planner settings could not be saved.",
+  "wasteTipsSection": "Tips",
+  "wasteTipKeepBinsCloseTitle": "Keep both bins close",
+  "wasteTipKeepBinsCloseText": "Keep a small recycling bin beside the main bin — sorting is easier when both are within reach.",
+  "wasteTipCompostScrapsTitle": "Compost the right scraps",
+  "wasteTipCompostScrapsText": "Compost fruit and vegetable scraps, eggshells, and coffee grounds — keep meat and dairy out of a home compost pile.",
+  "wasteTipRinseRecyclingTitle": "Rinse before recycling",
+  "wasteTipRinseRecyclingText": "Rinse containers before recycling — food residue can spoil a whole batch of recyclables.",
+  "wasteTipFlattenCardboardTitle": "Flatten cardboard",
+  "wasteTipFlattenCardboardText": "Flatten cardboard boxes — they take a fraction of the space and are easier to store until collection day.",
+  "wasteTipBuyLooseTitle": "Buy loose where you can",
+  "wasteTipBuyLooseText": "Buy loose produce instead of pre-packed where you can — less packaging enters the house in the first place.",
+  "wasteTipDonateRepairTitle": "Donate or repair first",
+  "wasteTipDonateRepairText": "Keep a \"donate or repair\" box — items you no longer use leave the house useful instead of becoming waste.",
   "recipesMealPlanning": "Sustainable Recipes & Meal Planning",
   "energyConservationTips": "Energy Conservation Tips",
   "ecoTravelSuggestions": "Eco-Travel Suggestions",

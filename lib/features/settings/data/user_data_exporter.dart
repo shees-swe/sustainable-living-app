@@ -11,7 +11,7 @@ class UserDataExporter {
   UserDataExporter._(this._database, DateTime Function()? clock)
     : _clock = clock ?? DateTime.now;
 
-  static const int exportSchemaVersion = 4;
+  static const int exportSchemaVersion = 5;
 
   final AppDatabase _database;
   final DateTime Function() _clock;
@@ -114,6 +114,8 @@ class UserDataExporter {
                 'displayLanguageTag': preference.displayLanguageTag,
                 'selectedRegionId': preference.selectedRegionId,
                 'reducedMotion': preference.reducedMotion,
+                'recyclingCollectionDay': preference.recyclingCollectionDay,
+                'compostDay': preference.compostDay,
                 'updatedAt': preference.updatedAt.toUtc().toIso8601String(),
               },
           ],

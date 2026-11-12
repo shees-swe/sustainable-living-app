@@ -920,6 +920,27 @@ class $UserPreferencesTable extends UserPreferences
       'CHECK ("reduced_motion" IN (0, 1))',
     ),
   );
+  static const VerificationMeta _recyclingCollectionDayMeta =
+      const VerificationMeta('recyclingCollectionDay');
+  @override
+  late final GeneratedColumn<int> recyclingCollectionDay = GeneratedColumn<int>(
+    'recycling_collection_day',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _compostDayMeta = const VerificationMeta(
+    'compostDay',
+  );
+  @override
+  late final GeneratedColumn<int> compostDay = GeneratedColumn<int>(
+    'compost_day',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _updatedAtMeta = const VerificationMeta(
     'updatedAt',
   );
@@ -937,6 +958,8 @@ class $UserPreferencesTable extends UserPreferences
     displayLanguageTag,
     selectedRegionId,
     reducedMotion,
+    recyclingCollectionDay,
+    compostDay,
     updatedAt,
   ];
   @override
@@ -987,6 +1010,21 @@ class $UserPreferencesTable extends UserPreferences
         ),
       );
     }
+    if (data.containsKey('recycling_collection_day')) {
+      context.handle(
+        _recyclingCollectionDayMeta,
+        recyclingCollectionDay.isAcceptableOrUnknown(
+          data['recycling_collection_day']!,
+          _recyclingCollectionDayMeta,
+        ),
+      );
+    }
+    if (data.containsKey('compost_day')) {
+      context.handle(
+        _compostDayMeta,
+        compostDay.isAcceptableOrUnknown(data['compost_day']!, _compostDayMeta),
+      );
+    }
     if (data.containsKey('updated_at')) {
       context.handle(
         _updatedAtMeta,
@@ -1020,6 +1058,14 @@ class $UserPreferencesTable extends UserPreferences
         DriftSqlType.bool,
         data['${effectivePrefix}reduced_motion'],
       ),
+      recyclingCollectionDay: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}recycling_collection_day'],
+      ),
+      compostDay: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}compost_day'],
+      ),
       updatedAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}updated_at'],
@@ -1038,12 +1084,16 @@ class UserPreference extends DataClass implements Insertable<UserPreference> {
   final String displayLanguageTag;
   final String? selectedRegionId;
   final bool? reducedMotion;
+  final int? recyclingCollectionDay;
+  final int? compostDay;
   final DateTime updatedAt;
   const UserPreference({
     required this.preferenceId,
     required this.displayLanguageTag,
     this.selectedRegionId,
     this.reducedMotion,
+    this.recyclingCollectionDay,
+    this.compostDay,
     required this.updatedAt,
   });
   @override
@@ -1056,6 +1106,12 @@ class UserPreference extends DataClass implements Insertable<UserPreference> {
     }
     if (!nullToAbsent || reducedMotion != null) {
       map['reduced_motion'] = Variable<bool>(reducedMotion);
+    }
+    if (!nullToAbsent || recyclingCollectionDay != null) {
+      map['recycling_collection_day'] = Variable<int>(recyclingCollectionDay);
+    }
+    if (!nullToAbsent || compostDay != null) {
+      map['compost_day'] = Variable<int>(compostDay);
     }
     map['updated_at'] = Variable<DateTime>(updatedAt);
     return map;
@@ -1071,6 +1127,12 @@ class UserPreference extends DataClass implements Insertable<UserPreference> {
       reducedMotion: reducedMotion == null && nullToAbsent
           ? const Value.absent()
           : Value(reducedMotion),
+      recyclingCollectionDay: recyclingCollectionDay == null && nullToAbsent
+          ? const Value.absent()
+          : Value(recyclingCollectionDay),
+      compostDay: compostDay == null && nullToAbsent
+          ? const Value.absent()
+          : Value(compostDay),
       updatedAt: Value(updatedAt),
     );
   }
@@ -1087,6 +1149,10 @@ class UserPreference extends DataClass implements Insertable<UserPreference> {
       ),
       selectedRegionId: serializer.fromJson<String?>(json['selectedRegionId']),
       reducedMotion: serializer.fromJson<bool?>(json['reducedMotion']),
+      recyclingCollectionDay: serializer.fromJson<int?>(
+        json['recyclingCollectionDay'],
+      ),
+      compostDay: serializer.fromJson<int?>(json['compostDay']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
     );
   }
@@ -1098,6 +1164,8 @@ class UserPreference extends DataClass implements Insertable<UserPreference> {
       'displayLanguageTag': serializer.toJson<String>(displayLanguageTag),
       'selectedRegionId': serializer.toJson<String?>(selectedRegionId),
       'reducedMotion': serializer.toJson<bool?>(reducedMotion),
+      'recyclingCollectionDay': serializer.toJson<int?>(recyclingCollectionDay),
+      'compostDay': serializer.toJson<int?>(compostDay),
       'updatedAt': serializer.toJson<DateTime>(updatedAt),
     };
   }
@@ -1107,6 +1175,8 @@ class UserPreference extends DataClass implements Insertable<UserPreference> {
     String? displayLanguageTag,
     Value<String?> selectedRegionId = const Value.absent(),
     Value<bool?> reducedMotion = const Value.absent(),
+    Value<int?> recyclingCollectionDay = const Value.absent(),
+    Value<int?> compostDay = const Value.absent(),
     DateTime? updatedAt,
   }) => UserPreference(
     preferenceId: preferenceId ?? this.preferenceId,
@@ -1117,6 +1187,10 @@ class UserPreference extends DataClass implements Insertable<UserPreference> {
     reducedMotion: reducedMotion.present
         ? reducedMotion.value
         : this.reducedMotion,
+    recyclingCollectionDay: recyclingCollectionDay.present
+        ? recyclingCollectionDay.value
+        : this.recyclingCollectionDay,
+    compostDay: compostDay.present ? compostDay.value : this.compostDay,
     updatedAt: updatedAt ?? this.updatedAt,
   );
   UserPreference copyWithCompanion(UserPreferencesCompanion data) {
@@ -1133,6 +1207,12 @@ class UserPreference extends DataClass implements Insertable<UserPreference> {
       reducedMotion: data.reducedMotion.present
           ? data.reducedMotion.value
           : this.reducedMotion,
+      recyclingCollectionDay: data.recyclingCollectionDay.present
+          ? data.recyclingCollectionDay.value
+          : this.recyclingCollectionDay,
+      compostDay: data.compostDay.present
+          ? data.compostDay.value
+          : this.compostDay,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
     );
   }
@@ -1144,6 +1224,8 @@ class UserPreference extends DataClass implements Insertable<UserPreference> {
           ..write('displayLanguageTag: $displayLanguageTag, ')
           ..write('selectedRegionId: $selectedRegionId, ')
           ..write('reducedMotion: $reducedMotion, ')
+          ..write('recyclingCollectionDay: $recyclingCollectionDay, ')
+          ..write('compostDay: $compostDay, ')
           ..write('updatedAt: $updatedAt')
           ..write(')'))
         .toString();
@@ -1155,6 +1237,8 @@ class UserPreference extends DataClass implements Insertable<UserPreference> {
     displayLanguageTag,
     selectedRegionId,
     reducedMotion,
+    recyclingCollectionDay,
+    compostDay,
     updatedAt,
   );
   @override
@@ -1165,6 +1249,8 @@ class UserPreference extends DataClass implements Insertable<UserPreference> {
           other.displayLanguageTag == this.displayLanguageTag &&
           other.selectedRegionId == this.selectedRegionId &&
           other.reducedMotion == this.reducedMotion &&
+          other.recyclingCollectionDay == this.recyclingCollectionDay &&
+          other.compostDay == this.compostDay &&
           other.updatedAt == this.updatedAt);
 }
 
@@ -1173,12 +1259,16 @@ class UserPreferencesCompanion extends UpdateCompanion<UserPreference> {
   final Value<String> displayLanguageTag;
   final Value<String?> selectedRegionId;
   final Value<bool?> reducedMotion;
+  final Value<int?> recyclingCollectionDay;
+  final Value<int?> compostDay;
   final Value<DateTime> updatedAt;
   const UserPreferencesCompanion({
     this.preferenceId = const Value.absent(),
     this.displayLanguageTag = const Value.absent(),
     this.selectedRegionId = const Value.absent(),
     this.reducedMotion = const Value.absent(),
+    this.recyclingCollectionDay = const Value.absent(),
+    this.compostDay = const Value.absent(),
     this.updatedAt = const Value.absent(),
   });
   UserPreferencesCompanion.insert({
@@ -1186,6 +1276,8 @@ class UserPreferencesCompanion extends UpdateCompanion<UserPreference> {
     this.displayLanguageTag = const Value.absent(),
     this.selectedRegionId = const Value.absent(),
     this.reducedMotion = const Value.absent(),
+    this.recyclingCollectionDay = const Value.absent(),
+    this.compostDay = const Value.absent(),
     required DateTime updatedAt,
   }) : updatedAt = Value(updatedAt);
   static Insertable<UserPreference> custom({
@@ -1193,6 +1285,8 @@ class UserPreferencesCompanion extends UpdateCompanion<UserPreference> {
     Expression<String>? displayLanguageTag,
     Expression<String>? selectedRegionId,
     Expression<bool>? reducedMotion,
+    Expression<int>? recyclingCollectionDay,
+    Expression<int>? compostDay,
     Expression<DateTime>? updatedAt,
   }) {
     return RawValuesInsertable({
@@ -1201,6 +1295,9 @@ class UserPreferencesCompanion extends UpdateCompanion<UserPreference> {
         'display_language_tag': displayLanguageTag,
       if (selectedRegionId != null) 'selected_region_id': selectedRegionId,
       if (reducedMotion != null) 'reduced_motion': reducedMotion,
+      if (recyclingCollectionDay != null)
+        'recycling_collection_day': recyclingCollectionDay,
+      if (compostDay != null) 'compost_day': compostDay,
       if (updatedAt != null) 'updated_at': updatedAt,
     });
   }
@@ -1210,6 +1307,8 @@ class UserPreferencesCompanion extends UpdateCompanion<UserPreference> {
     Value<String>? displayLanguageTag,
     Value<String?>? selectedRegionId,
     Value<bool?>? reducedMotion,
+    Value<int?>? recyclingCollectionDay,
+    Value<int?>? compostDay,
     Value<DateTime>? updatedAt,
   }) {
     return UserPreferencesCompanion(
@@ -1217,6 +1316,9 @@ class UserPreferencesCompanion extends UpdateCompanion<UserPreference> {
       displayLanguageTag: displayLanguageTag ?? this.displayLanguageTag,
       selectedRegionId: selectedRegionId ?? this.selectedRegionId,
       reducedMotion: reducedMotion ?? this.reducedMotion,
+      recyclingCollectionDay:
+          recyclingCollectionDay ?? this.recyclingCollectionDay,
+      compostDay: compostDay ?? this.compostDay,
       updatedAt: updatedAt ?? this.updatedAt,
     );
   }
@@ -1236,6 +1338,14 @@ class UserPreferencesCompanion extends UpdateCompanion<UserPreference> {
     if (reducedMotion.present) {
       map['reduced_motion'] = Variable<bool>(reducedMotion.value);
     }
+    if (recyclingCollectionDay.present) {
+      map['recycling_collection_day'] = Variable<int>(
+        recyclingCollectionDay.value,
+      );
+    }
+    if (compostDay.present) {
+      map['compost_day'] = Variable<int>(compostDay.value);
+    }
     if (updatedAt.present) {
       map['updated_at'] = Variable<DateTime>(updatedAt.value);
     }
@@ -1249,6 +1359,8 @@ class UserPreferencesCompanion extends UpdateCompanion<UserPreference> {
           ..write('displayLanguageTag: $displayLanguageTag, ')
           ..write('selectedRegionId: $selectedRegionId, ')
           ..write('reducedMotion: $reducedMotion, ')
+          ..write('recyclingCollectionDay: $recyclingCollectionDay, ')
+          ..write('compostDay: $compostDay, ')
           ..write('updatedAt: $updatedAt')
           ..write(')'))
         .toString();
@@ -4314,6 +4426,8 @@ typedef $$UserPreferencesTableCreateCompanionBuilder =
       Value<String> displayLanguageTag,
       Value<String?> selectedRegionId,
       Value<bool?> reducedMotion,
+      Value<int?> recyclingCollectionDay,
+      Value<int?> compostDay,
       required DateTime updatedAt,
     });
 typedef $$UserPreferencesTableUpdateCompanionBuilder =
@@ -4322,6 +4436,8 @@ typedef $$UserPreferencesTableUpdateCompanionBuilder =
       Value<String> displayLanguageTag,
       Value<String?> selectedRegionId,
       Value<bool?> reducedMotion,
+      Value<int?> recyclingCollectionDay,
+      Value<int?> compostDay,
       Value<DateTime> updatedAt,
     });
 
@@ -4351,6 +4467,16 @@ class $$UserPreferencesTableFilterComposer
 
   ColumnFilters<bool> get reducedMotion => $composableBuilder(
     column: $table.reducedMotion,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get recyclingCollectionDay => $composableBuilder(
+    column: $table.recyclingCollectionDay,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get compostDay => $composableBuilder(
+    column: $table.compostDay,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -4389,6 +4515,16 @@ class $$UserPreferencesTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<int> get recyclingCollectionDay => $composableBuilder(
+    column: $table.recyclingCollectionDay,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get compostDay => $composableBuilder(
+    column: $table.compostDay,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
     column: $table.updatedAt,
     builder: (column) => ColumnOrderings(column),
@@ -4421,6 +4557,16 @@ class $$UserPreferencesTableAnnotationComposer
 
   GeneratedColumn<bool> get reducedMotion => $composableBuilder(
     column: $table.reducedMotion,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get recyclingCollectionDay => $composableBuilder(
+    column: $table.recyclingCollectionDay,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get compostDay => $composableBuilder(
+    column: $table.compostDay,
     builder: (column) => column,
   );
 
@@ -4469,12 +4615,16 @@ class $$UserPreferencesTableTableManager
                 Value<String> displayLanguageTag = const Value.absent(),
                 Value<String?> selectedRegionId = const Value.absent(),
                 Value<bool?> reducedMotion = const Value.absent(),
+                Value<int?> recyclingCollectionDay = const Value.absent(),
+                Value<int?> compostDay = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
               }) => UserPreferencesCompanion(
                 preferenceId: preferenceId,
                 displayLanguageTag: displayLanguageTag,
                 selectedRegionId: selectedRegionId,
                 reducedMotion: reducedMotion,
+                recyclingCollectionDay: recyclingCollectionDay,
+                compostDay: compostDay,
                 updatedAt: updatedAt,
               ),
           createCompanionCallback:
@@ -4483,12 +4633,16 @@ class $$UserPreferencesTableTableManager
                 Value<String> displayLanguageTag = const Value.absent(),
                 Value<String?> selectedRegionId = const Value.absent(),
                 Value<bool?> reducedMotion = const Value.absent(),
+                Value<int?> recyclingCollectionDay = const Value.absent(),
+                Value<int?> compostDay = const Value.absent(),
                 required DateTime updatedAt,
               }) => UserPreferencesCompanion.insert(
                 preferenceId: preferenceId,
                 displayLanguageTag: displayLanguageTag,
                 selectedRegionId: selectedRegionId,
                 reducedMotion: reducedMotion,
+                recyclingCollectionDay: recyclingCollectionDay,
+                compostDay: compostDay,
                 updatedAt: updatedAt,
               ),
           withReferenceMapper: (p0) => p0

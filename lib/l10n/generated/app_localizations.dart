@@ -1359,6 +1359,144 @@ abstract class AppLocalizations {
   /// **'Other'**
   String get wasteOther;
 
+  /// No description provided for @wasteWeeklyPlanner.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly planner'**
+  String get wasteWeeklyPlanner;
+
+  /// No description provided for @wastePlannerOwnScheduleNote.
+  ///
+  /// In en, this message translates to:
+  /// **'These are your settings only; the app does not know your local collection schedule.'**
+  String get wastePlannerOwnScheduleNote;
+
+  /// No description provided for @wastePlannerSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Recycling: {recyclingDay} · Compost: {compostDay}'**
+  String wastePlannerSummary(String recyclingDay, String compostDay);
+
+  /// No description provided for @wasteRecyclingDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Recycling collection day'**
+  String get wasteRecyclingDay;
+
+  /// No description provided for @wasteCompostDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Compost day'**
+  String get wasteCompostDay;
+
+  /// No description provided for @wasteNotSet.
+  ///
+  /// In en, this message translates to:
+  /// **'Not set'**
+  String get wasteNotSet;
+
+  /// No description provided for @wasteSetRecyclingDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Set your recycling collection day.'**
+  String get wasteSetRecyclingDay;
+
+  /// No description provided for @wasteSetCompostDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Set your compost day.'**
+  String get wasteSetCompostDay;
+
+  /// No description provided for @wastePlannerLoadFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'Your weekly planner settings could not be loaded.'**
+  String get wastePlannerLoadFailure;
+
+  /// No description provided for @wastePlannerSaveFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'Your weekly planner settings could not be saved.'**
+  String get wastePlannerSaveFailure;
+
+  /// No description provided for @wasteTipsSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Tips'**
+  String get wasteTipsSection;
+
+  /// No description provided for @wasteTipKeepBinsCloseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep both bins close'**
+  String get wasteTipKeepBinsCloseTitle;
+
+  /// No description provided for @wasteTipKeepBinsCloseText.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep a small recycling bin beside the main bin — sorting is easier when both are within reach.'**
+  String get wasteTipKeepBinsCloseText;
+
+  /// No description provided for @wasteTipCompostScrapsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Compost the right scraps'**
+  String get wasteTipCompostScrapsTitle;
+
+  /// No description provided for @wasteTipCompostScrapsText.
+  ///
+  /// In en, this message translates to:
+  /// **'Compost fruit and vegetable scraps, eggshells, and coffee grounds — keep meat and dairy out of a home compost pile.'**
+  String get wasteTipCompostScrapsText;
+
+  /// No description provided for @wasteTipRinseRecyclingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Rinse before recycling'**
+  String get wasteTipRinseRecyclingTitle;
+
+  /// No description provided for @wasteTipRinseRecyclingText.
+  ///
+  /// In en, this message translates to:
+  /// **'Rinse containers before recycling — food residue can spoil a whole batch of recyclables.'**
+  String get wasteTipRinseRecyclingText;
+
+  /// No description provided for @wasteTipFlattenCardboardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Flatten cardboard'**
+  String get wasteTipFlattenCardboardTitle;
+
+  /// No description provided for @wasteTipFlattenCardboardText.
+  ///
+  /// In en, this message translates to:
+  /// **'Flatten cardboard boxes — they take a fraction of the space and are easier to store until collection day.'**
+  String get wasteTipFlattenCardboardText;
+
+  /// No description provided for @wasteTipBuyLooseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy loose where you can'**
+  String get wasteTipBuyLooseTitle;
+
+  /// No description provided for @wasteTipBuyLooseText.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy loose produce instead of pre-packed where you can — less packaging enters the house in the first place.'**
+  String get wasteTipBuyLooseText;
+
+  /// No description provided for @wasteTipDonateRepairTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Donate or repair first'**
+  String get wasteTipDonateRepairTitle;
+
+  /// No description provided for @wasteTipDonateRepairText.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep a \"donate or repair\" box — items you no longer use leave the house useful instead of becoming waste.'**
+  String get wasteTipDonateRepairText;
+
   /// No description provided for @recipesMealPlanning.
   ///
   /// In en, this message translates to:

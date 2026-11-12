@@ -11,6 +11,10 @@ class UserPreferences extends Table {
 
   BoolColumn get reducedMotion => boolean().nullable()();
 
+  IntColumn get recyclingCollectionDay => integer().nullable()();
+
+  IntColumn get compostDay => integer().nullable()();
+
   DateTimeColumn get updatedAt => dateTime()();
 
   @override

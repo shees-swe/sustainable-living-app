@@ -7,6 +7,7 @@ import 'package:sustainable_living_app/core/theme/app_theme.dart';
 import 'package:sustainable_living_app/features/waste_reduction_tracker/data/waste_log_repository.dart';
 import 'package:sustainable_living_app/features/waste_reduction_tracker/domain/waste_category.dart';
 import 'package:sustainable_living_app/features/waste_reduction_tracker/presentation/module_destination_screen.dart';
+import 'package:sustainable_living_app/features/settings/data/user_preferences_repository.dart';
 import 'package:sustainable_living_app/l10n/generated/app_localizations.dart';
 
 import '../../support/text_layout_expectations.dart';
@@ -15,7 +16,10 @@ void main() {
   testWidgets('empty state describes a new waste log', (tester) async {
     final database = AppDatabase.forTesting(NativeDatabase.memory());
     final repository = WasteLogRepository(database: database);
-    await tester.pumpWidget(_TestApp(repository: repository));
+    final preferences = _preferences(database);
+    await tester.pumpWidget(
+      _TestApp(repository: repository, preferences: preferences),
+    );
     await _pumpUntilVisible(tester, find.text('No waste logged yet.'));
 
     expect(
@@ -35,18 +39,21 @@ void main() {
         database: database,
         clock: () => DateTime.now().toUtc().add(Duration(seconds: tick++)),
       );
-      await tester.pumpWidget(_TestApp(repository: repository));
+      final preferences = _preferences(database);
+      await tester.pumpWidget(
+        _TestApp(repository: repository, preferences: preferences),
+      );
       await _pumpUntilVisible(tester, find.text('No waste logged yet.'));
 
       await _addWasteEntry(tester, 'Plastic', '1.25');
       expect(find.text('1.25 kg'), findsWidgets);
       await tester.pump(const Duration(milliseconds: 150));
-      expect(_monthTotal(tester), '1.25 kg');
+      expect(await _monthTotal(tester), '1.25 kg');
 
       await _addWasteEntry(tester, 'Paper & cardboard', '2.75');
       expect(find.text('2.75 kg'), findsWidgets);
       await tester.pump(const Duration(milliseconds: 150));
-      expect(_monthTotal(tester), '4.00 kg');
+      expect(await _monthTotal(tester), '4.00 kg');
       final entries = await repository.readEntries();
       expect(entries, hasLength(2));
       expect(entries.first.amountKg, 2.75);
@@ -67,7 +74,7 @@ void main() {
 
       expect(await repository.readEntries(), hasLength(1));
       expect(find.text('2.75 kg'), findsNothing);
-      expect(_monthTotal(tester), '1.25 kg');
+      expect(await _monthTotal(tester), '1.25 kg');
       await _closeWasteTrackerTest(tester, database);
     },
   );
@@ -82,7 +89,10 @@ void main() {
       category: WasteCategory.paperAndCardboard,
       amountKg: 12.5,
     );
-    await tester.pumpWidget(_TestApp(repository: repository, textScale: 2));
+    final preferences = _preferences(database);
+    await tester.pumpWidget(
+      _TestApp(repository: repository, preferences: preferences, textScale: 2),
+    );
     await _pumpUntilVisible(tester, find.text('12.50 kg'));
 
     expectNoTextOverlapOrClipping(tester, 'Waste Tracker');
@@ -114,7 +124,10 @@ void main() {
   testWidgets('category picker presents all six categories', (tester) async {
     final database = AppDatabase.forTesting(NativeDatabase.memory());
     final repository = WasteLogRepository(database: database);
-    await tester.pumpWidget(_TestApp(repository: repository));
+    final preferences = _preferences(database);
+    await tester.pumpWidget(
+      _TestApp(repository: repository, preferences: preferences),
+    );
     await _pumpUntilVisible(tester, find.text('No waste logged yet.'));
 
     await tester.tap(find.byKey(const ValueKey('wasteAddEntryButton')));
@@ -176,17 +189,23 @@ Future<void> _addWasteEntry(
   await _pumpUntilVisible(tester, find.text('$amount kg'));
 }
 
-String _monthTotal(WidgetTester tester) => tester
-    .widget<Text>(find.byKey(const ValueKey('wasteMonthTotalValue')))
-    .textSpan!
-    .toPlainText();
+Future<String> _monthTotal(WidgetTester tester) async {
+  final total = find.byKey(const ValueKey('wasteMonthTotalValue'));
+  await tester.drag(find.byType(Scrollable).first, const Offset(0, 1000));
+  await tester.pump();
+  await _pumpUntilVisible(tester, total);
+  return tester.widget<Text>(total).textSpan!.toPlainText();
+}
 
 Future<void> _pumpUntilMonthTotal(WidgetTester tester, String expected) async {
   for (var attempt = 0; attempt < 30; attempt++) {
     await tester.pump(const Duration(milliseconds: 100));
-    if (_monthTotal(tester) == expected) return;
+    if (await _monthTotal(tester) == expected) return;
   }
-  fail('Month total did not become $expected; actual: ${_monthTotal(tester)}');
+  fail(
+    'Month total did not become $expected; '
+    'actual: ${await _monthTotal(tester)}',
+  );
 }
 
 Future<void> _pumpUntilVisible(WidgetTester tester, Finder finder) async {
@@ -207,9 +226,14 @@ Future<void> _closeWasteTrackerTest(
 }
 
 class _TestApp extends StatelessWidget {
-  const _TestApp({required this.repository, this.textScale = 1});
+  const _TestApp({
+    required this.repository,
+    required this.preferences,
+    this.textScale = 1,
+  });
 
   final WasteLogRepository repository;
+  final UserPreferencesRepository preferences;
   final double textScale;
 
   @override
@@ -217,7 +241,10 @@ class _TestApp extends StatelessWidget {
     theme: AppTheme.light,
     home: MediaQuery(
       data: MediaQueryData(textScaler: TextScaler.linear(textScale)),
-      child: WasteReductionTrackerScreen(repository: repository),
+      child: WasteReductionTrackerScreen(
+        repository: repository,
+        preferences: preferences,
+      ),
     ),
     localizationsDelegates: const [
       AppLocalizations.delegate,
@@ -228,3 +255,6 @@ class _TestApp extends StatelessWidget {
     supportedLocales: AppLocalizations.supportedLocales,
   );
 }
+
+UserPreferencesRepository _preferences(AppDatabase database) =>
+    UserPreferencesRepository(database: database, supportedRegionIds: const {});

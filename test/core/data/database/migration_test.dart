@@ -9,7 +9,7 @@ void main() {
     addTearDown(database.close);
 
     await database.select(database.userPreferences).get();
-    expect(database.schemaVersion, 4);
+    expect(database.schemaVersion, 5);
 
     await database.validateDatabaseSchema();
 
@@ -23,7 +23,16 @@ void main() {
     'upgrades a version 2 database with challenge progress and waste tables',
     () async {
       final executor = NativeDatabase.memory(
-        setup: (database) => database.execute('PRAGMA user_version = 2'),
+        setup: (database) {
+          database.execute(
+            'CREATE TABLE user_preferences ('
+            'preference_id INTEGER NOT NULL CHECK (preference_id = 1), '
+            "display_language_tag TEXT NOT NULL DEFAULT 'en', "
+            'selected_region_id TEXT, reduced_motion INTEGER, '
+            'updated_at INTEGER NOT NULL, PRIMARY KEY (preference_id))',
+          );
+          database.execute('PRAGMA user_version = 2');
+        },
       );
       final database = AppDatabase.forTesting(executor);
       addTearDown(database.close);
@@ -46,7 +55,7 @@ void main() {
             ),
           );
 
-      expect(database.schemaVersion, 4);
+      expect(database.schemaVersion, 5);
       expect(
         await database.select(database.challengeProgressRecords).get(),
         hasLength(1),
@@ -61,7 +70,16 @@ void main() {
 
   test('upgrades a version 3 database with the waste log table', () async {
     final executor = NativeDatabase.memory(
-      setup: (database) => database.execute('PRAGMA user_version = 3'),
+      setup: (database) {
+        database.execute(
+          'CREATE TABLE user_preferences ('
+          'preference_id INTEGER NOT NULL CHECK (preference_id = 1), '
+          "display_language_tag TEXT NOT NULL DEFAULT 'en', "
+          'selected_region_id TEXT, reduced_motion INTEGER, '
+          'updated_at INTEGER NOT NULL, PRIMARY KEY (preference_id))',
+        );
+        database.execute('PRAGMA user_version = 3');
+      },
     );
     final database = AppDatabase.forTesting(executor);
     addTearDown(database.close);
@@ -78,10 +96,40 @@ void main() {
           ),
         );
 
-    expect(database.schemaVersion, 4);
+    expect(database.schemaVersion, 5);
     final entry = await database.select(database.wasteLogEntries).getSingle();
     expect(entry.entryId, 'waste-1');
     expect(entry.category, 'Plastic');
     expect(entry.amountKg, 1.25);
+  });
+
+  test('upgrades version 4 preferences with weekly planner days', () async {
+    final executor = NativeDatabase.memory(
+      setup: (database) {
+        database.execute(
+          'CREATE TABLE user_preferences ('
+          'preference_id INTEGER NOT NULL CHECK (preference_id = 1), '
+          "display_language_tag TEXT NOT NULL DEFAULT 'en', "
+          'selected_region_id TEXT, reduced_motion INTEGER, '
+          'updated_at INTEGER NOT NULL, PRIMARY KEY (preference_id))',
+        );
+        database.execute(
+          "INSERT INTO user_preferences VALUES (1, 'fr', 'PK', 1, 0)",
+        );
+        database.execute('PRAGMA user_version = 4');
+      },
+    );
+    final database = AppDatabase.forTesting(executor);
+    addTearDown(database.close);
+
+    final preference = await database
+        .select(database.userPreferences)
+        .getSingle();
+    expect(database.schemaVersion, 5);
+    expect(preference.displayLanguageTag, 'fr');
+    expect(preference.selectedRegionId, 'PK');
+    expect(preference.reducedMotion, isTrue);
+    expect(preference.recyclingCollectionDay, isNull);
+    expect(preference.compostDay, isNull);
   });
 }
