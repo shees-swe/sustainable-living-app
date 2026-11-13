@@ -6,7 +6,7 @@ abstract final class DesignTokens {
   static const double space5 = 24;
   static const double space6 = 32;
 
-  static const double radiusSmall = 12;
+  static const double radiusSmall = 8;
   static const double radiusMedium = 16;
-  static const double radiusLarge = 20;
+  static const double radiusLarge = 24;
 }

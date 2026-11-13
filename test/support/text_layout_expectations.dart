@@ -20,14 +20,9 @@ void expectNoTextOverlapOrClipping(
   final textFinder = find.byWidgetPredicate(
     (widget) => widget is Text || widget is SelectableText,
   );
-  final content =
-      within ??
-      (find.byType(Scrollable).evaluate().isNotEmpty
-          ? find.byType(Scrollable).first
-          : null);
-  final paragraphFinder = content == null
+  final paragraphFinder = within == null
       ? textFinder
-      : find.descendant(of: content, matching: textFinder);
+      : find.descendant(of: within, matching: textFinder);
   final paragraphs = paragraphFinder
       .evaluate()
       .map((element) => element.findRenderObject())

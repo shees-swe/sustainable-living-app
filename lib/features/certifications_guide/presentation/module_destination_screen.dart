@@ -65,7 +65,7 @@ class _CertificationsGuideScreenState extends State<CertificationsGuideScreen> {
             controller: _searchController,
             onChanged: (value) => setState(() => _query = value),
             decoration: InputDecoration(
-              label: Text(l10n.certificationSearchLabel, maxLines: 2),
+              labelText: l10n.certificationSearchLabel,
               suffixIcon: _query.isEmpty
                   ? null
                   : IconButton(
@@ -124,14 +124,11 @@ class _CertificationsGuideScreenState extends State<CertificationsGuideScreen> {
             ),
           ] else ...[
             for (var index = 0; index < certifications.length; index++) ...[
-              Card(
-                child: _CertificationRow(
-                  certification: certifications[index],
-                  onTap: () => _openDetails(context, certifications[index]),
-                ),
+              _CertificationRow(
+                certification: certifications[index],
+                onTap: () => _openDetails(context, certifications[index]),
               ),
-              if (index < certifications.length - 1)
-                const SizedBox(height: ClimateSpacing.space8),
+              if (index < certifications.length - 1) const Divider(height: 1),
             ],
           ],
           const SizedBox(height: ClimateSpacing.space32),

@@ -47,130 +47,48 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(
-          ClimateSpacing.space16,
-          ClimateSpacing.space16,
-          ClimateSpacing.space16,
-          112,
+        padding: const EdgeInsets.symmetric(
+          horizontal: ClimateSpacing.space16,
+          vertical: ClimateSpacing.space8,
         ),
         children: [
-          Card(
-            color: ClimateColors.surfaceSecondary,
-            child: Padding(
-              padding: const EdgeInsets.all(ClimateSpacing.space16),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Icon(
-                    AppIcons.leaf,
-                    color: Theme.of(context).colorScheme.primary,
-                    size: 28,
-                  ),
-                  const SizedBox(width: ClimateSpacing.space16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          l10n.onboardingIntro,
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
           if (onViewEstimate != null) ...[
-            const SizedBox(height: ClimateSpacing.space16),
-            Card(
-              child: ListTile(
-                leading: const Icon(AppIcons.chartLineUp),
-                title: Text(l10n.viewEstimate),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: onViewEstimate,
-              ),
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: const Icon(AppIcons.chartLineUp),
+              title: Text(l10n.viewEstimate),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: onViewEstimate,
             ),
+            const Divider(height: 1),
           ],
           Padding(
-            padding: const EdgeInsets.only(
-              top: ClimateSpacing.space24,
-              bottom: ClimateSpacing.space16,
+            padding: const EdgeInsets.symmetric(
+              vertical: ClimateSpacing.space16,
             ),
             child: Text(
               l10n.exploreModules,
-              style: Theme.of(context).textTheme.headlineMedium,
+              style: Theme.of(context).textTheme.titleMedium,
             ),
           ),
-          for (final destination in ModuleDestination.modules.take(2)) ...[
-            Card(
-              child: ListTile(
-                minVerticalPadding: ClimateSpacing.space16,
-                leading: Icon(
-                  _moduleIcon(destination.id),
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                title: Text(
-                  _moduleTitle(l10n, destination.titleKey),
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () => context.push(destination.path),
-              ),
-            ),
-            const SizedBox(height: ClimateSpacing.space8),
-          ],
-          Wrap(
-            spacing: ClimateSpacing.space8,
-            runSpacing: ClimateSpacing.space8,
-            children: [
-              for (final destination in ModuleDestination.modules.skip(2))
-                _moduleCard(context, l10n, destination),
-            ],
-          ),
-          const SizedBox(height: ClimateSpacing.space8),
-          Card(
-            child: ListTile(
-              leading: const Icon(AppIcons.info),
-              title: Text(l10n.aboutUs),
+          for (final destination in ModuleDestination.modules) ...[
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: Icon(_moduleIcon(destination.id)),
+              title: Text(_moduleTitle(l10n, destination.titleKey)),
               trailing: const Icon(Icons.chevron_right),
-              onTap: () => context.push(AppRoutes.about),
+              onTap: () => context.push(destination.path),
             ),
+            const Divider(height: 1),
+          ],
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: const Icon(AppIcons.info),
+            title: Text(l10n.aboutUs),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => context.push(AppRoutes.about),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _moduleCard(
-    BuildContext context,
-    AppLocalizations l10n,
-    ModuleDestination destination,
-  ) {
-    final size = MediaQuery.sizeOf(context).width;
-    final columns = MediaQuery.textScalerOf(context).scale(1) > 1.3 ? 1 : 2;
-    final width = columns == 1 ? size - 32 : (size - 40) / 2;
-    return SizedBox(
-      width: width,
-      child: Card(
-        child: ListTile(
-          minVerticalPadding: ClimateSpacing.space16,
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: ClimateSpacing.space16,
-            vertical: ClimateSpacing.space8,
-          ),
-          leading: Icon(
-            _moduleIcon(destination.id),
-            color: Theme.of(context).colorScheme.primary,
-          ),
-          title: Text(
-            _moduleTitle(l10n, destination.titleKey),
-            style: Theme.of(context).textTheme.titleSmall,
-          ),
-          trailing: const Icon(Icons.chevron_right),
-          onTap: () => context.push(destination.path),
-        ),
       ),
     );
   }

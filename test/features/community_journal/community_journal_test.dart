@@ -142,8 +142,6 @@ void main() {
       findsOneWidget,
     );
 
-    await tester.drag(find.byType(Scrollable).first, const Offset(0, 1000));
-    await tester.pumpAndSettle();
     final latestDeleteTooltip = find.descendant(
       of: latestRow,
       matching: find.byTooltip('Delete post'),

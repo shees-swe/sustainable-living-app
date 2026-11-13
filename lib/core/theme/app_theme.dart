@@ -1,25 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 abstract final class ClimateColors {
-  static const surfacePrimary = Color(0xFFFBF8F0);
-  static const surfaceSecondary = Color(0xFFEDF2E7);
-  static const surfaceCard = Color(0xFFFFFEFA);
-  static const textPrimary = Color(0xFF1F2D24);
-  static const textSecondary = Color(0xFF536158);
-  static const verdant = Color(0xFF2F6B4F);
-  static const positiveSaved = Color(0xFF2F6B4F);
-  static const emissions = Color(0xFF85510C);
-  static const warning = Color(0xFFA8322C);
-  static const divider = Color(0xFF8A978B);
-
-  static const cobalt = verdant;
+  static const surfacePrimary = Color(0xFFFFFFFF);
+  static const surfaceSecondary = Color(0xFFF3F4F6);
+  static const textPrimary = Color(0xFF111827);
+  static const textSecondary = Color(0xFF4B5563);
+  static const cobalt = Color(0xFF0057D9);
+  static const positiveSaved = Color(0xFF007A52);
+  static const emissions = Color(0xFF8A4B08);
+  static const warning = Color(0xFFB42318);
+  static const divider = Color(0xFF7B8492);
 
   static const light = ClimateColorSet(
     surfacePrimary: surfacePrimary,
     surfaceSecondary: surfaceSecondary,
     textPrimary: textPrimary,
     textSecondary: textSecondary,
-    cobalt: verdant,
+    cobalt: cobalt,
     positiveSaved: positiveSaved,
     emissions: emissions,
     warning: warning,
@@ -69,8 +67,8 @@ abstract final class ClimateSpacing {
     space48,
   ];
 
-  static const double radiusSmall = 12;
-  static const double radiusLarge = 20;
+  static const double radiusSmall = 4;
+  static const double radiusLarge = 8;
 }
 
 @immutable
@@ -99,7 +97,10 @@ class ClimateTypography extends ThemeExtension<ClimateTypography> {
   }
 
   @override
-  ClimateTypography lerp(covariant ClimateTypography? other, double t) {
+  ClimateTypography lerp(
+    covariant ClimateTypography? other,
+    double t,
+  ) {
     if (other == null) return this;
     return ClimateTypography(
       number: TextStyle.lerp(number, other.number, t)!,
@@ -114,32 +115,58 @@ abstract final class AppTheme {
 
   static ThemeData _buildLightTheme() {
     const colorScheme = ColorScheme.light(
-      primary: ClimateColors.verdant,
-      onPrimary: ClimateColors.surfaceCard,
-      primaryContainer: ClimateColors.surfaceSecondary,
-      onPrimaryContainer: ClimateColors.textPrimary,
-      secondary: Color(0xFFB7CFAE),
-      onSecondary: ClimateColors.textPrimary,
-      secondaryContainer: ClimateColors.surfaceSecondary,
-      onSecondaryContainer: ClimateColors.textPrimary,
-      tertiary: Color(0xFF78975F),
-      onTertiary: ClimateColors.surfaceCard,
+      primary: ClimateColors.cobalt,
+      onPrimary: ClimateColors.surfacePrimary,
+      primaryContainer: ClimateColors.cobalt,
+      onPrimaryContainer: ClimateColors.surfacePrimary,
+      secondary: ClimateColors.cobalt,
+      onSecondary: ClimateColors.surfacePrimary,
+      secondaryContainer: ClimateColors.cobalt,
+      onSecondaryContainer: ClimateColors.surfacePrimary,
+      tertiary: ClimateColors.cobalt,
+      onTertiary: ClimateColors.surfacePrimary,
       error: ClimateColors.warning,
-      onError: ClimateColors.surfaceCard,
+      onError: ClimateColors.surfacePrimary,
       surface: ClimateColors.surfacePrimary,
       onSurface: ClimateColors.textPrimary,
-      surfaceContainerLowest: ClimateColors.surfaceCard,
-      surfaceContainerLow: ClimateColors.surfacePrimary,
+      surfaceContainerLowest: ClimateColors.surfacePrimary,
+      surfaceContainerLow: ClimateColors.surfaceSecondary,
       surfaceContainer: ClimateColors.surfaceSecondary,
-      surfaceContainerHigh: Color(0xFFE5EBDD),
-      surfaceContainerHighest: Color(0xFFDCE5D6),
+      surfaceContainerHigh: ClimateColors.surfaceSecondary,
+      surfaceContainerHighest: ClimateColors.surfaceSecondary,
       onSurfaceVariant: ClimateColors.textSecondary,
       outline: ClimateColors.divider,
-      outlineVariant: Color(0xFFC9D2C6),
+      outlineVariant: ClimateColors.divider,
       surfaceTint: Colors.transparent,
     );
-    final textTheme = Typography.material2021().black.apply(
-      fontFamily: 'IBMPlexSans',
+    final baseTextTheme = const TextTheme(
+      displayLarge: TextStyle(
+        fontSize: 57,
+        height: 1.12,
+        fontWeight: FontWeight.w700,
+      ),
+      titleMedium: TextStyle(
+        fontSize: 16,
+        height: 1.5,
+        fontWeight: FontWeight.w500,
+      ),
+      bodyLarge: TextStyle(
+        fontSize: 16,
+        height: 1.5,
+        fontWeight: FontWeight.w400,
+      ),
+      bodyMedium: TextStyle(
+        fontSize: 14,
+        height: 1.45,
+        fontWeight: FontWeight.w400,
+      ),
+      bodySmall: TextStyle(
+        fontSize: 12,
+        height: 1.4,
+        fontWeight: FontWeight.w400,
+      ),
+    );
+    final textTheme = _withIbmPlexSans(baseTextTheme).apply(
       bodyColor: ClimateColors.textPrimary,
       displayColor: ClimateColors.textPrimary,
     );
@@ -148,64 +175,26 @@ abstract final class AppTheme {
     );
     final fieldBorder = OutlineInputBorder(
       borderRadius: BorderRadius.circular(ClimateSpacing.radiusSmall),
-      borderSide: const BorderSide(color: Color(0xFFC9D2C6)),
+      borderSide: const BorderSide(color: ClimateColors.divider),
     );
 
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
       colorScheme: colorScheme,
-      fontFamily: 'IBMPlexSans',
-      textTheme: textTheme.copyWith(
-        displayLarge: textTheme.displayLarge?.copyWith(
-          fontSize: 40,
-          height: 1.12,
-          fontWeight: FontWeight.w700,
-        ),
-        headlineLarge: textTheme.headlineLarge?.copyWith(
-          fontSize: 32,
-          height: 1.2,
-          fontWeight: FontWeight.w700,
-        ),
-        headlineMedium: textTheme.headlineMedium?.copyWith(
-          fontSize: 24,
-          height: 1.25,
-          fontWeight: FontWeight.w700,
-        ),
-        titleLarge: textTheme.titleLarge?.copyWith(
-          fontSize: 20,
-          height: 1.3,
-          fontWeight: FontWeight.w600,
-        ),
-        titleMedium: textTheme.titleMedium?.copyWith(
-          fontSize: 16,
-          height: 1.4,
-          fontWeight: FontWeight.w600,
-        ),
-        bodyLarge: textTheme.bodyLarge?.copyWith(fontSize: 16, height: 1.5),
-        bodyMedium: textTheme.bodyMedium?.copyWith(fontSize: 14, height: 1.45),
-        bodySmall: textTheme.bodySmall?.copyWith(fontSize: 12, height: 1.4),
-      ),
+      textTheme: textTheme,
+      primaryTextTheme: _withIbmPlexSans(baseTextTheme),
       extensions: [
         ClimateTypography(
-          number: const TextStyle(
-            fontFamily: 'IBMPlexMono',
-            fontWeight: FontWeight.w400,
-          ),
-          unit: const TextStyle(
-            fontFamily: 'IBMPlexMono',
-            fontWeight: FontWeight.w500,
-          ),
-          tableFigure: const TextStyle(
-            fontFamily: 'IBMPlexMono',
-            fontWeight: FontWeight.w600,
-          ),
+          number: GoogleFonts.ibmPlexMono(fontWeight: FontWeight.w400),
+          unit: GoogleFonts.ibmPlexMono(fontWeight: FontWeight.w500),
+          tableFigure: GoogleFonts.ibmPlexMono(fontWeight: FontWeight.w600),
         ),
       ],
       scaffoldBackgroundColor: ClimateColors.surfacePrimary,
       canvasColor: ClimateColors.surfacePrimary,
-      dividerColor: const Color(0xFFE2E7DD),
-      shadowColor: const Color(0x1A233D2B),
+      dividerColor: ClimateColors.divider,
+      shadowColor: Colors.transparent,
       appBarTheme: const AppBarTheme(
         backgroundColor: ClimateColors.surfacePrimary,
         foregroundColor: ClimateColors.textPrimary,
@@ -214,90 +203,64 @@ abstract final class AppTheme {
         surfaceTintColor: Colors.transparent,
       ),
       dividerTheme: const DividerThemeData(
-        color: Color(0xFFE2E7DD),
+        color: ClimateColors.divider,
         thickness: 1,
-        space: 1,
       ),
       cardTheme: CardThemeData(
-        color: ClimateColors.surfaceCard,
+        color: ClimateColors.surfaceSecondary,
         surfaceTintColor: Colors.transparent,
-        shadowColor: const Color(0x14233D2B),
-        elevation: 1,
-        margin: EdgeInsets.zero,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(ClimateSpacing.radiusLarge),
-          side: const BorderSide(color: Color(0xFFE2E7DD)),
-        ),
-      ),
-      listTileTheme: ListTileThemeData(
-        tileColor: ClimateColors.surfaceCard,
-        selectedTileColor: ClimateColors.surfaceSecondary,
-        iconColor: ClimateColors.verdant,
-        textColor: ClimateColors.textPrimary,
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: ClimateSpacing.space16,
-        ),
-        minVerticalPadding: ClimateSpacing.space8,
+        shadowColor: Colors.transparent,
+        elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(ClimateSpacing.radiusSmall),
-          side: const BorderSide(color: Color(0xFFE2E7DD)),
-        ),
-      ),
-      navigationBarTheme: NavigationBarThemeData(
-        backgroundColor: ClimateColors.surfaceCard,
-        indicatorColor: const Color(0xFFDDEBDD),
-        elevation: 4,
-        labelTextStyle: WidgetStateProperty.resolveWith(
-          (states) => TextStyle(
-            fontFamily: 'IBMPlexSans',
-            fontSize: 12,
-            fontWeight: states.contains(WidgetState.selected)
-                ? FontWeight.w600
-                : FontWeight.w400,
-          ),
         ),
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
-          foregroundColor: ClimateColors.surfaceCard,
-          backgroundColor: ClimateColors.verdant,
-          minimumSize: const Size.fromHeight(48),
+          foregroundColor: ClimateColors.surfacePrimary,
+          backgroundColor: ClimateColors.cobalt,
           shape: controlShape,
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          foregroundColor: ClimateColors.verdant,
-          side: const BorderSide(color: ClimateColors.verdant),
-          minimumSize: const Size.fromHeight(48),
+          foregroundColor: ClimateColors.cobalt,
+          side: const BorderSide(color: ClimateColors.cobalt),
           shape: controlShape,
         ),
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          foregroundColor: ClimateColors.verdant,
+          foregroundColor: ClimateColors.cobalt,
           shape: controlShape,
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
-        filled: true,
-        fillColor: ClimateColors.surfaceCard,
-        hintMaxLines: 2,
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: ClimateSpacing.space16,
-          vertical: ClimateSpacing.space16,
-        ),
         enabledBorder: fieldBorder,
         focusedBorder: fieldBorder.copyWith(
-          borderSide: const BorderSide(color: ClimateColors.verdant, width: 2),
+          borderSide: const BorderSide(color: ClimateColors.cobalt),
         ),
         errorBorder: fieldBorder.copyWith(
           borderSide: const BorderSide(color: ClimateColors.warning),
         ),
         focusedErrorBorder: fieldBorder.copyWith(
-          borderSide: const BorderSide(color: ClimateColors.warning, width: 2),
+          borderSide: const BorderSide(color: ClimateColors.warning),
         ),
       ),
+    );
+  }
+
+  static TextTheme _withIbmPlexSans(TextTheme textTheme) {
+    return TextTheme(
+      displayLarge: GoogleFonts.ibmPlexSans(
+        textStyle: textTheme.displayLarge,
+      ),
+      titleMedium: GoogleFonts.ibmPlexSans(
+        textStyle: textTheme.titleMedium,
+      ),
+      bodyLarge: GoogleFonts.ibmPlexSans(textStyle: textTheme.bodyLarge),
+      bodyMedium: GoogleFonts.ibmPlexSans(textStyle: textTheme.bodyMedium),
+      bodySmall: GoogleFonts.ibmPlexSans(textStyle: textTheme.bodySmall),
     );
   }
 }

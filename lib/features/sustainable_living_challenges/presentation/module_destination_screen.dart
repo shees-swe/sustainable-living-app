@@ -69,18 +69,14 @@ class _SustainableLivingChallengesScreenState
                 index < widget.catalog.challenges.length;
                 index++
               ) ...[
-                Card(
-                  child: _ChallengeRow(
-                    challenge: widget.catalog.challenges[index],
-                    progress: byId[widget.catalog.challenges[index].id],
-                    onTap: () => _openChallenge(
-                      context,
-                      widget.catalog.challenges[index],
-                    ),
-                  ),
+                _ChallengeRow(
+                  challenge: widget.catalog.challenges[index],
+                  progress: byId[widget.catalog.challenges[index].id],
+                  onTap: () =>
+                      _openChallenge(context, widget.catalog.challenges[index]),
                 ),
                 if (index < widget.catalog.challenges.length - 1)
-                  const SizedBox(height: ClimateSpacing.space8),
+                  const Divider(height: 1),
               ],
             ],
           );
@@ -135,7 +131,7 @@ class _ChallengeRow extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.all(ClimateSpacing.space16),
+        padding: const EdgeInsets.symmetric(vertical: ClimateSpacing.space16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

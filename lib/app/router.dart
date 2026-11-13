@@ -54,7 +54,6 @@ import '../features/settings/presentation/settings_screen.dart';
 import '../core/data/regions/region_catalog.dart';
 import '../core/accessibility/reduced_motion.dart';
 import '../core/motion/motion_spec.dart';
-import '../core/widgets/app_bottom_navigation_bar.dart';
 import '../features/sustainable_living_challenges/presentation/module_destination_screen.dart'
     as challenges;
 import '../features/waste_reduction_tracker/presentation/module_destination_screen.dart'
@@ -225,13 +224,7 @@ GoRoute _appRoute({
     path: path,
     name: name,
     pageBuilder: (context, state) {
-      final screen = builder(context, state);
-      final child = path == AppRoutes.onboarding
-          ? screen
-          : Scaffold(
-              body: screen,
-              bottomNavigationBar: const AppBottomNavigationBar(),
-            );
+      final child = builder(context, state);
       if (ReducedMotion.isEnabled(context)) {
         return NoTransitionPage<void>(key: state.pageKey, child: child);
       }
@@ -242,7 +235,6 @@ GoRoute _appRoute({
         reverseTransitionDuration: MotionSpec.optionalFade,
         transitionsBuilder: (context, animation, secondaryAnimation, child) =>
             FadeTransition(
-              key: ValueKey('appRouteFade-$path'),
               opacity: animation.drive(
                 CurveTween(curve: MotionSpec.optionalFadeCurve),
               ),

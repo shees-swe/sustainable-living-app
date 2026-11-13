@@ -61,8 +61,6 @@ void main() {
 
     await tester.tap(find.text('Demo region (demo only)'));
     await tester.pump(const Duration(milliseconds: 100));
-    await tester.drag(find.byType(Scrollable).first, const Offset(0, -300));
-    await tester.pumpAndSettle();
 
     expect(find.text('Annual electricity use (kWh)'), findsOneWidget);
     expect(find.text('Annual travel (km)'), findsOneWidget);
@@ -124,13 +122,7 @@ void main() {
       );
       await tester.enterText(find.byKey(const ValueKey('travelInput')), '200');
       tester.testTextInput.hide();
-      final calculateButton = find.text('Calculate demo estimate');
-      await tester.scrollUntilVisible(
-        calculateButton,
-        250,
-        scrollable: find.byType(Scrollable).first,
-      );
-      await tester.tap(calculateButton);
+      await tester.tap(find.text('Calculate demo estimate'));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 400));
 
@@ -218,11 +210,7 @@ void main() {
       await tester.enterText(find.byKey(const ValueKey('travelInput')), '200');
       tester.testTextInput.hide();
       final calculateButton = find.text('Calculate demo estimate');
-      await tester.scrollUntilVisible(
-        calculateButton,
-        250,
-        scrollable: find.byType(Scrollable).first,
-      );
+      await tester.ensureVisible(calculateButton);
       await tester.tap(calculateButton);
       await tester.pump();
       await _pumpUntilVisible(tester, find.text('Your estimated footprint'));

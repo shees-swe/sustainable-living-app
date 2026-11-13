@@ -98,7 +98,7 @@ class _EcoFriendlyProductSuggestionsScreenState
           controller: _searchController,
           onChanged: (value) => setState(() => _query = value),
           decoration: InputDecoration(
-            label: Text(l10n.productSearchLabel, maxLines: 2),
+            labelText: l10n.productSearchLabel,
             suffixIcon: _query.isEmpty
                 ? null
                 : IconButton(
@@ -187,14 +187,11 @@ class _EcoFriendlyProductSuggestionsScreenState
           ),
         ] else ...[
           for (var index = 0; index < products.length; index++) ...[
-            Card(
-              child: _ProductRow(
-                product: products[index],
-                onTap: () => _openDetails(context, products[index]),
-              ),
+            _ProductRow(
+              product: products[index],
+              onTap: () => _openDetails(context, products[index]),
             ),
-            if (index < products.length - 1)
-              const SizedBox(height: ClimateSpacing.space8),
+            if (index < products.length - 1) const Divider(height: 1),
           ],
         ],
       ],
@@ -245,46 +242,22 @@ class _ProductRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return InkWell(
-      borderRadius: BorderRadius.circular(ClimateSpacing.radiusLarge),
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.all(ClimateSpacing.space16),
-        child: Row(
+        padding: const EdgeInsets.symmetric(vertical: ClimateSpacing.space16),
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            DecoratedBox(
-              decoration: BoxDecoration(
-                color: ClimateColors.surfaceSecondary,
-                borderRadius: BorderRadius.circular(ClimateSpacing.radiusSmall),
-              ),
-              child: const SizedBox(
-                width: 44,
-                height: 44,
-                child: Icon(Icons.shopping_bag_outlined),
+            _CatalogText(product.name, style: theme.textTheme.titleMedium),
+            const SizedBox(height: ClimateSpacing.space8),
+            _CatalogText(
+              product.category,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: ClimateColors.textSecondary,
               ),
             ),
-            const SizedBox(width: ClimateSpacing.space16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _CatalogText(
-                    product.name,
-                    style: theme.textTheme.titleMedium,
-                  ),
-                  const SizedBox(height: ClimateSpacing.space8),
-                  _CatalogText(
-                    product.category,
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: ClimateColors.textSecondary,
-                    ),
-                  ),
-                  const SizedBox(height: ClimateSpacing.space8),
-                  _CatalogText(product.note),
-                ],
-              ),
-            ),
-            const Icon(Icons.arrow_forward_ios_rounded, size: 16),
+            const SizedBox(height: ClimateSpacing.space8),
+            _CatalogText(product.note),
           ],
         ),
       ),

@@ -103,14 +103,7 @@ void main() {
     await tester.pumpWidget(_TestApp(textScale: 2, child: settings));
     await tester.pumpAndSettle();
 
-    final deleteButton = find.text('Delete local data');
-    await tester.scrollUntilVisible(
-      deleteButton,
-      150,
-      scrollable: find.byType(Scrollable).first,
-    );
-    await tester.pumpAndSettle();
-    await tester.tap(deleteButton);
+    await tester.tap(find.text('Delete local data'));
     await tester.pumpAndSettle();
 
     expect(find.text('Delete my data'), findsOneWidget);

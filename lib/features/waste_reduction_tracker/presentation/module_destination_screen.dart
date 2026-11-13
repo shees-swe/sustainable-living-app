@@ -146,56 +146,35 @@ class _WasteTrackerBody extends StatelessWidget {
       ),
       children: [
         Text(l10n.wasteEstimateNote),
+        const SizedBox(height: ClimateSpacing.space24),
+        Text(l10n.wasteMonthSummary, style: theme.textTheme.titleMedium),
+        const SizedBox(height: ClimateSpacing.space8),
+        _NumberAwareText(monthLabel, style: typography.number),
         const SizedBox(height: ClimateSpacing.space16),
-        Card(
-          color: ClimateColors.surfaceSecondary,
-          child: Padding(
-            padding: const EdgeInsets.all(ClimateSpacing.space16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  l10n.wasteMonthSummary,
-                  style: theme.textTheme.titleMedium,
-                ),
-                const SizedBox(height: ClimateSpacing.space8),
-                _NumberAwareText(monthLabel, style: typography.number),
-                const SizedBox(height: ClimateSpacing.space16),
-                Text(
-                  l10n.wasteMonthTotal,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: ClimateColors.textSecondary,
-                  ),
-                ),
-                NumericTick(
-                  value: summary.totalKg,
-                  decimalPlaces: 2,
-                  style: theme.textTheme.displayLarge!.merge(typography.number),
-                  suffix: ' kg',
-                  suffixStyle: theme.textTheme.titleMedium!.merge(
-                    typography.unit,
-                  ),
-                  textKey: const ValueKey('wasteMonthTotalValue'),
-                ),
-                if (summary.isEmpty)
-                  Padding(
-                    padding: const EdgeInsets.only(top: ClimateSpacing.space8),
-                    child: Text(l10n.wasteMonthEmpty),
-                  )
-                else
-                  for (
-                    var index = 0;
-                    index < summary.categories.length;
-                    index++
-                  ) ...[
-                    _WasteCategoryTotalRow(total: summary.categories[index]),
-                    if (index < summary.categories.length - 1)
-                      const Divider(height: 1),
-                  ],
-              ],
-            ),
+        Text(
+          l10n.wasteMonthTotal,
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: ClimateColors.textSecondary,
           ),
         ),
+        NumericTick(
+          value: summary.totalKg,
+          decimalPlaces: 2,
+          style: theme.textTheme.displayLarge!.merge(typography.number),
+          suffix: ' kg',
+          suffixStyle: theme.textTheme.titleMedium!.merge(typography.unit),
+          textKey: const ValueKey('wasteMonthTotalValue'),
+        ),
+        if (summary.isEmpty)
+          Padding(
+            padding: const EdgeInsets.only(top: ClimateSpacing.space8),
+            child: Text(l10n.wasteMonthEmpty),
+          )
+        else
+          for (var index = 0; index < summary.categories.length; index++) ...[
+            _WasteCategoryTotalRow(total: summary.categories[index]),
+            if (index < summary.categories.length - 1) const Divider(height: 1),
+          ],
         const SizedBox(height: ClimateSpacing.space24),
         FilledButton.icon(
           key: const ValueKey('wasteAddEntryButton'),
@@ -214,13 +193,11 @@ class _WasteTrackerBody extends StatelessWidget {
           )
         else
           for (final entry in entries) ...[
-            Card(
-              child: _WasteEntryRow(
-                entry: entry,
-                onDelete: () => onDelete(entry.entryId),
-              ),
+            _WasteEntryRow(
+              entry: entry,
+              onDelete: () => onDelete(entry.entryId),
             ),
-            const SizedBox(height: ClimateSpacing.space8),
+            const Divider(height: 1),
           ],
         const SizedBox(height: ClimateSpacing.space24),
         const Divider(height: 1),

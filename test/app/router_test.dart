@@ -86,14 +86,14 @@ void main() {
     await tester.pump(const Duration(milliseconds: 60));
 
     var transition = tester.widget<FadeTransition>(
-      find.byKey(const ValueKey('appRouteFade-/carbon-footprint')),
+      find.byType(FadeTransition).last,
     );
     expect(transition.opacity.value, greaterThan(0));
     expect(transition.opacity.value, lessThan(1));
 
     await tester.pump(const Duration(milliseconds: 60));
     transition = tester.widget<FadeTransition>(
-      find.byKey(const ValueKey('appRouteFade-/carbon-footprint')),
+      find.byType(FadeTransition).last,
     );
     expect(transition.opacity.value, 1);
   });
@@ -125,20 +125,10 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.byTooltip('More navigation'));
     await tester.pumpAndSettle();
-    await tester.tap(find.byType(PopupMenuItem<String>).first);
+    await tester.tap(find.text('Settings'));
     await tester.pumpAndSettle();
 
-    expect(
-      find.descendant(of: find.byType(AppBar), matching: find.text('Settings')),
-      findsOneWidget,
-    );
-    expect(
-      find.descendant(
-        of: find.byType(NavigationBar),
-        matching: find.text('Settings'),
-      ),
-      findsOneWidget,
-    );
+    expect(find.text('Settings'), findsNWidgets(2));
     await tester.binding.handlePopRoute();
     await tester.pumpAndSettle();
 

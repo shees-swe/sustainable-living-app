@@ -97,7 +97,7 @@ class _EducationalContentScreenState extends State<EducationalContentScreen> {
           controller: _searchController,
           onChanged: (value) => setState(() => _query = value),
           decoration: InputDecoration(
-            label: Text(l10n.educationalSearchLabel, maxLines: 2),
+            labelText: l10n.educationalSearchLabel,
             suffixIcon: _query.isEmpty
                 ? null
                 : IconButton(
@@ -167,14 +167,11 @@ class _EducationalContentScreenState extends State<EducationalContentScreen> {
           ),
         ] else ...[
           for (var index = 0; index < articles.length; index++) ...[
-            Card(
-              child: _EducationalArticleRow(
-                article: articles[index],
-                onTap: () => _openArticle(context, articles[index]),
-              ),
+            _EducationalArticleRow(
+              article: articles[index],
+              onTap: () => _openArticle(context, articles[index]),
             ),
-            if (index < articles.length - 1)
-              const SizedBox(height: ClimateSpacing.space8),
+            if (index < articles.length - 1) const Divider(height: 1),
           ],
         ],
       ],
@@ -249,41 +246,20 @@ class _EducationalArticleRow extends StatelessWidget {
       onTap: onTap,
       child: Padding(
         key: ValueKey('educationalArticle-${article.title}'),
-        padding: const EdgeInsets.all(ClimateSpacing.space16),
-        child: Row(
+        padding: const EdgeInsets.symmetric(vertical: ClimateSpacing.space16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              width: 44,
-              height: 44,
-              decoration: BoxDecoration(
-                color: ClimateColors.surfaceSecondary,
-                borderRadius: BorderRadius.circular(ClimateSpacing.radiusSmall),
-              ),
-              child: const Icon(
-                Icons.menu_book_outlined,
-                color: ClimateColors.verdant,
+            Text(article.title, style: theme.textTheme.titleMedium),
+            const SizedBox(height: ClimateSpacing.space8),
+            Text(
+              article.topic,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: ClimateColors.textSecondary,
               ),
             ),
-            const SizedBox(width: ClimateSpacing.space8),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(article.title, style: theme.textTheme.titleMedium),
-                  const SizedBox(height: ClimateSpacing.space8),
-                  Text(
-                    article.topic,
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: ClimateColors.textSecondary,
-                    ),
-                  ),
-                  const SizedBox(height: ClimateSpacing.space8),
-                  _ReadingTime(minutes: article.readingTimeMinutes),
-                ],
-              ),
-            ),
-            const SizedBox(width: ClimateSpacing.space8),
-            const Icon(Icons.arrow_forward_rounded),
+            const SizedBox(height: ClimateSpacing.space8),
+            _ReadingTime(minutes: article.readingTimeMinutes),
           ],
         ),
       ),
