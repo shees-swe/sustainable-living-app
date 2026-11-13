@@ -100,7 +100,11 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text(title), findsOneWidget);
-      expectNoTextOverlapOrClipping(tester, title);
+      expectNoTextOverlapOrClipping(
+        tester,
+        title,
+        within: find.byType(ListView),
+      );
       expect(
         tester.takeException(),
         isNull,
@@ -114,7 +118,11 @@ void main() {
       scrollable: scrollable,
     );
     expect(find.text('About Us'), findsOneWidget);
-    expectNoTextOverlapOrClipping(tester, 'About Us');
+    expectNoTextOverlapOrClipping(
+      tester,
+      'About Us',
+      within: find.byType(ListView),
+    );
     expect(tester.takeException(), isNull);
   });
 

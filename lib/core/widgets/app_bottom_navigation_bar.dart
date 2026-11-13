@@ -7,6 +7,7 @@ class AppBottomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final location = GoRouterState.of(context).uri;
+    final textScale = MediaQuery.textScalerOf(context).scale(1);
     final selectedIndex = switch (location.path) {
       '/home' when location.queryParameters['tab'] == 'modules' => 1,
       '/home' => 0,
@@ -16,6 +17,7 @@ class AppBottomNavigationBar extends StatelessWidget {
     };
 
     return NavigationBar(
+      height: textScale > 1 ? 56 + 24 * textScale : 80,
       selectedIndex: selectedIndex,
       onDestinationSelected: (index) {
         switch (index) {
