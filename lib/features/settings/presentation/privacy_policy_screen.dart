@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 
 import '../../../core/accessibility/motion_aware_progress_indicator.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/design_tokens.dart';
+import '../../../core/widgets/design_components.dart';
 import '../../../l10n/generated/app_localizations.dart';
 
 class PrivacyPolicyScreen extends StatefulWidget {
@@ -58,12 +60,21 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
           }
           return ListView(
             padding: const EdgeInsets.symmetric(
-              horizontal: ClimateSpacing.space16,
-              vertical: ClimateSpacing.space8,
+              horizontal: DesignTokens.space16,
+              vertical: DesignTokens.space16,
             ),
             children: [
-              for (final line in policy.split('\n'))
-                if (line.trim().isNotEmpty) _buildPolicyLine(context, line),
+              AppPanel(
+                padding: const EdgeInsets.all(DesignTokens.space16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    for (final line in policy.split('\n'))
+                      if (line.trim().isNotEmpty)
+                        _buildPolicyLine(context, line),
+                  ],
+                ),
+              ),
             ],
           );
         },
@@ -89,7 +100,8 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
           heading,
           style: headingLevel == 1
               ? Theme.of(context).textTheme.headlineSmall
-              : Theme.of(context).textTheme.titleLarge,
+              : Theme.of(context).textTheme.titleLarge
+                    ?.copyWith(color: DesignTokens.blueInk),
         ),
       );
     }

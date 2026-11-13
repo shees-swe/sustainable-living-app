@@ -29,7 +29,7 @@ class EstimateFactorDisclosure extends StatelessWidget {
             Expanded(
               child: Text(
                 l10n.factorsUsedInEstimate,
-                style: Theme.of(context).textTheme.titleMedium,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
             ),
             if (demoOnly) DemoOnlyTag(label: l10n.demoOnlyTag),

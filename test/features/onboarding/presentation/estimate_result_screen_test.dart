@@ -74,6 +74,8 @@ void main() {
     tester,
   ) async {
     await _pumpResult(tester, database: database, references: references);
+    expect(_plainText('45.00 kg CO2e/year'), findsOneWidget);
+    await _scrollUntilBuilt(tester, find.text('Category breakdown'));
 
     final electricity = tester.widget<Text>(
       find.byKey(const ValueKey('categoryAmount-electricity')),
@@ -102,7 +104,6 @@ void main() {
           .value,
       closeTo(20 / 45, 0.000001),
     );
-    expect(_plainText('45.00 kg CO2e/year'), findsOneWidget);
   });
 
   testWidgets('coverage lists included and excluded available categories', (
@@ -117,6 +118,7 @@ void main() {
       ],
     );
 
+    await _scrollUntilBuilt(tester, find.text('Estimate coverage'));
     final coverage = find.byKey(const ValueKey('estimateCoveragePanel'));
     expect(
       find.descendant(of: coverage, matching: find.text('Electricity')),

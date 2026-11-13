@@ -73,7 +73,7 @@ class _RegionPickerState extends State<RegionPicker> {
           children: [
             Text(
               l10n.chooseRegion,
-              style: Theme.of(context).textTheme.titleMedium,
+              style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: ClimateSpacing.space8),
             Text(

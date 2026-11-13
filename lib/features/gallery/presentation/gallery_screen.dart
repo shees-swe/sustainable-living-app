@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/design_tokens.dart';
+import '../../../core/widgets/design_components.dart';
 import '../../../l10n/generated/app_localizations.dart';
 
 class GalleryScreen extends StatelessWidget {
@@ -22,10 +24,24 @@ class GalleryScreen extends StatelessWidget {
           child: ConstrainedBox(
             constraints: BoxConstraints(minHeight: constraints.maxHeight),
             child: Center(
-              child: Text(
-                l10n.galleryEmpty,
-                style: Theme.of(context).textTheme.bodyLarge,
-                textAlign: TextAlign.center,
+              child: AppPanel(
+                color: DesignTokens.surfaceBlue,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    AppIconBadge(
+                      icon: Icons.photo_library_outlined,
+                      backgroundColor: DesignTokens.surface,
+                      foregroundColor: DesignTokens.blue,
+                    ),
+                    const SizedBox(height: DesignTokens.space16),
+                    Text(
+                      l10n.galleryEmpty,
+                      style: Theme.of(context).textTheme.bodyLarge,
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/design_tokens.dart';
+import '../../../core/widgets/design_components.dart';
 import '../../../l10n/generated/app_localizations.dart';
 
 class AboutScreen extends StatelessWidget {
@@ -19,11 +21,25 @@ class AboutScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(ClimateSpacing.space16),
         children: [
-          Text(
-            l10n.aboutDescription,
-            style: Theme.of(context).textTheme.bodyLarge,
+          AppPanel(
+            color: DesignTokens.surfaceBlue,
+            padding: const EdgeInsets.all(DesignTokens.space24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AppIconBadge(
+                  icon: Icons.eco_outlined,
+                  backgroundColor: DesignTokens.surface,
+                  foregroundColor: DesignTokens.blue,
+                ),
+                const SizedBox(height: DesignTokens.space16),
+                Text(
+                  l10n.aboutDescription,
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+              ],
+            ),
           ),
-          const Divider(height: 1),
         ],
       ),
     );

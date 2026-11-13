@@ -103,6 +103,8 @@ void main() {
     await tester.pumpWidget(_TestApp(textScale: 2, child: settings));
     await tester.pumpAndSettle();
 
+    await tester.ensureVisible(find.text('Delete local data'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Delete local data'));
     await tester.pumpAndSettle();
 
