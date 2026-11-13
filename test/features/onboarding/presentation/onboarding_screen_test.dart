@@ -122,7 +122,10 @@ void main() {
       );
       await tester.enterText(find.byKey(const ValueKey('travelInput')), '200');
       tester.testTextInput.hide();
-      await tester.tap(find.text('Calculate demo estimate'));
+      final calculateButton = find.text('Calculate demo estimate');
+      await tester.ensureVisible(calculateButton);
+      await tester.pumpAndSettle();
+      await tester.tap(calculateButton);
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 400));
 
@@ -211,6 +214,7 @@ void main() {
       tester.testTextInput.hide();
       final calculateButton = find.text('Calculate demo estimate');
       await tester.ensureVisible(calculateButton);
+      await tester.pumpAndSettle();
       await tester.tap(calculateButton);
       await tester.pump();
       await _pumpUntilVisible(tester, find.text('Your estimated footprint'));
@@ -264,9 +268,13 @@ void main() {
       );
       tester.testTextInput.hide();
       final button = find.text('Calculate estimate');
-      await tester.drag(find.byType(Scrollable).first, const Offset(0, -250));
+      await tester.drag(
+        _listScrollable(find.byType(ListView).first),
+        const Offset(0, -250),
+      );
       await tester.pump();
       await tester.ensureVisible(button);
+      await tester.pumpAndSettle();
       await tester.tap(button);
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 300));
@@ -308,7 +316,9 @@ void main() {
       await tester.scrollUntilVisible(
         findTextContaining('Yearly Electricity Data'),
         250,
-        scrollable: find.byType(Scrollable).first,
+        scrollable: _listScrollable(
+          find.byKey(const ValueKey('estimateResultList')),
+        ),
       );
       expect(findTextContaining('Ember'), findsOneWidget);
       expect(findTextContaining('Publication year: 2025'), findsWidgets);
@@ -340,9 +350,13 @@ void main() {
       '100',
     );
     final button = find.text('Calculate demo estimate');
-    await tester.drag(find.byType(Scrollable).first, const Offset(0, -200));
+    await tester.drag(
+      _listScrollable(find.byType(ListView).first),
+      const Offset(0, -200),
+    );
     await tester.pump();
     await tester.ensureVisible(button);
+    await tester.pumpAndSettle();
     await tester.tap(button);
     await tester.pump();
 
@@ -365,6 +379,9 @@ Future<void> _pumpUntilVisible(WidgetTester tester, Finder finder) async {
   }
   fail('Widget did not appear: $finder');
 }
+
+Finder _listScrollable(Finder list) =>
+    find.descendant(of: list, matching: find.byType(Scrollable)).first;
 
 class _TestApp extends StatelessWidget {
   const _TestApp({required this.router, this.textScale = 1});

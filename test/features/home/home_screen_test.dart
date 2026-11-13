@@ -20,7 +20,7 @@ void main() {
     await tester.pumpWidget(_TestApp(router: router));
     await tester.pumpAndSettle();
 
-    final scrollable = find.byType(Scrollable).first;
+    final scrollable = _listScrollable(find.byType(ListView).first);
     for (final title in _moduleTitles) {
       await tester.scrollUntilVisible(
         find.text(title),
@@ -38,10 +38,12 @@ void main() {
       400,
       scrollable: scrollable,
     );
+    await tester.pumpAndSettle();
     expect(find.text('About Us'), findsOneWidget);
     expect(find.text('Sign in'), findsNothing);
     expect(find.text('Register'), findsNothing);
 
+    await tester.ensureVisible(find.text('About Us'));
     await tester.tap(find.text('About Us'));
     await tester.pumpAndSettle();
     expect(
@@ -59,10 +61,7 @@ void main() {
     await tester.pumpWidget(_TestApp(router: router));
     await tester.pumpAndSettle();
 
-    final carbonEntry = find.widgetWithText(
-      ListTile,
-      'Carbon Footprint Tracker',
-    );
+    final carbonEntry = find.bySemanticsLabel('Carbon Footprint Tracker');
     expect(carbonEntry, findsOneWidget);
     final semantics = tester.getSemantics(carbonEntry);
     final semanticsData = semantics.getSemanticsData();
@@ -90,7 +89,7 @@ void main() {
     await tester.pumpWidget(_TestApp(router: router, textScale: 2));
     await tester.pumpAndSettle();
 
-    final scrollable = find.byType(Scrollable).first;
+    final scrollable = _listScrollable(find.byType(ListView).first);
     for (final title in _moduleTitles) {
       await tester.scrollUntilVisible(
         find.text(title),
@@ -140,6 +139,9 @@ void main() {
     expect(find.text('No gallery images are available yet.'), findsOneWidget);
   });
 }
+
+Finder _listScrollable(Finder list) =>
+    find.descendant(of: list, matching: find.byType(Scrollable)).first;
 
 const _moduleTitles = [
   'Carbon Footprint Tracker',
