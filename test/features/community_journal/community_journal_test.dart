@@ -109,7 +109,6 @@ void main() {
     );
     await tester.ensureVisible(latestRow);
     await tester.ensureVisible(olderRow);
-    await tester.ensureVisible(olderRow);
     expect(
       tester.getTopLeft(latestRow).dy,
       lessThan(tester.getTopLeft(olderRow).dy),
@@ -143,11 +142,6 @@ void main() {
       findsOneWidget,
     );
 
-    await tester.drag(
-      find.byKey(const ValueKey('communityJournalList')),
-      const Offset(0, 600),
-    );
-    await tester.pumpAndSettle();
     final latestDeleteTooltip = find.descendant(
       of: latestRow,
       matching: find.byTooltip('Delete post'),

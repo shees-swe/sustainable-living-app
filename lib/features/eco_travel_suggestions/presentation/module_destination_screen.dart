@@ -6,8 +6,6 @@ import '../../../core/accessibility/reduced_motion.dart';
 import '../../../core/data/database/app_database.dart';
 import '../../../core/motion/motion_spec.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/design_tokens.dart';
-import '../../../core/widgets/design_components.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../data/travel_guide_catalog.dart';
 import '../data/travel_trip_repository.dart';
@@ -210,6 +208,7 @@ class _TravelPlannerBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
     return ListView(
       key: const ValueKey('travelPlannerList'),
       padding: const EdgeInsets.symmetric(
@@ -217,31 +216,25 @@ class _TravelPlannerBody extends StatelessWidget {
         vertical: ClimateSpacing.space16,
       ),
       children: [
-        AppSectionHeading(title: l10n.travelTripSection),
-        const SizedBox(height: DesignTokens.space12),
+        Text(l10n.travelTripSection, style: theme.textTheme.titleMedium),
         if (trips.isEmpty)
-          AppPanel(
-            color: DesignTokens.surfaceBlue,
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: ClimateSpacing.space16,
+            ),
             child: Text(l10n.travelNoTrips),
           )
         else
-          for (var index = 0; index < trips.length; index++) ...[
-            AppPanel(
-              padding: EdgeInsets.zero,
-              child: _TravelTripRow(
-                trip: trips[index],
-                guidance: _guidanceFor(
-                  catalog,
-                  trips[index].transportMode,
-                ).guidance,
-                onEdit: () => onEdit(trips[index]),
-                onDelete: () => onDelete(trips[index].tripId),
-              ),
+          for (final trip in trips) ...[
+            _TravelTripRow(
+              trip: trip,
+              guidance: _guidanceFor(catalog, trip.transportMode).guidance,
+              onEdit: () => onEdit(trip),
+              onDelete: () => onDelete(trip.tripId),
             ),
-            if (index < trips.length - 1)
-              const SizedBox(height: DesignTokens.space12),
+            const Divider(height: 1),
           ],
-        const SizedBox(height: DesignTokens.space16),
+        const SizedBox(height: ClimateSpacing.space16),
         FilledButton.icon(
           key: const ValueKey('travelAddTripButton'),
           onPressed: onAdd,
@@ -249,21 +242,19 @@ class _TravelPlannerBody extends StatelessWidget {
           label: Text(l10n.travelAddTrip),
         ),
         const SizedBox(height: ClimateSpacing.space24),
-        AppPanel(
-          padding: EdgeInsets.zero,
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(DesignTokens.space16),
-                child: AppSectionHeading(title: l10n.travelTipsSection),
-              ),
-              for (var index = 0; index < catalog.tips.length; index++) ...[
-                const Divider(height: 1),
-                _TravelTipRow(tip: catalog.tips[index]),
-              ],
-            ],
+        const Divider(height: 1),
+        Padding(
+          padding: const EdgeInsets.only(top: ClimateSpacing.space16),
+          child: Text(
+            l10n.travelTipsSection,
+            style: theme.textTheme.titleMedium,
           ),
         ),
+        for (final tip in catalog.tips) ...[
+          const Divider(height: 1),
+          _TravelTipRow(tip: tip),
+        ],
+        const Divider(height: 1),
       ],
     );
   }
