@@ -6,6 +6,8 @@ import '../../../core/accessibility/reduced_motion.dart';
 import '../../../core/data/database/app_database.dart';
 import '../../../core/motion/motion_spec.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/design_tokens.dart';
+import '../../../core/widgets/design_components.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../data/community_post_repository.dart';
 
@@ -175,7 +177,6 @@ class _CommunityJournalBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
     return ListView(
       key: const ValueKey('communityJournalList'),
       padding: const EdgeInsets.symmetric(
@@ -183,48 +184,63 @@ class _CommunityJournalBody extends StatelessWidget {
         vertical: ClimateSpacing.space16,
       ),
       children: [
-        Text(
-          l10n.communityLocalOnly,
-          style: theme.textTheme.bodySmall?.copyWith(
-            color: ClimateColors.textSecondary,
+        AppPanel(
+          color: DesignTokens.surfaceBlue,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              AppIconBadge(
+                icon: Icons.lock_outline,
+                backgroundColor: DesignTokens.surface,
+                foregroundColor: DesignTokens.blue,
+              ),
+              const SizedBox(height: DesignTokens.space16),
+              Text(l10n.communityLocalOnly),
+            ],
           ),
         ),
-        const SizedBox(height: ClimateSpacing.space16),
-        Text(l10n.communityFeedHeading, style: theme.textTheme.titleMedium),
-        const SizedBox(height: ClimateSpacing.space8),
+        const SizedBox(height: DesignTokens.space24),
+        AppSectionHeading(title: l10n.communityFeedHeading),
+        const SizedBox(height: DesignTokens.space12),
         FilledButton.icon(
           key: const ValueKey('communityAddPostButton'),
           onPressed: onAdd,
           icon: const Icon(Icons.add),
           label: Text(l10n.communityAddPost),
         ),
+        const SizedBox(height: DesignTokens.space12),
         if (posts.isEmpty)
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: ClimateSpacing.space16,
-            ),
-            child: Text(l10n.communityNoPosts),
-          )
+          AppPanel(child: Text(l10n.communityNoPosts))
         else
-          for (final post in posts) ...[
-            const Divider(height: 1),
-            _CommunityPostRow(
-              post: post,
-              onEdit: () => onEdit(post),
-              onDelete: () => onDelete(post.postId),
+          for (var index = 0; index < posts.length; index++) ...[
+            AppPanel(
+              child: _CommunityPostRow(
+                post: posts[index],
+                onEdit: () => onEdit(posts[index]),
+                onDelete: () => onDelete(posts[index].postId),
+              ),
             ),
+            if (index < posts.length - 1)
+              const SizedBox(height: DesignTokens.space12),
           ],
-        const Divider(height: 1),
-        const SizedBox(height: ClimateSpacing.space24),
-        Text(
-          l10n.communityGuidelinesHeading,
-          style: theme.textTheme.titleMedium,
+        const SizedBox(height: DesignTokens.space24),
+        AppPanel(
+          padding: EdgeInsets.zero,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(DesignTokens.space16),
+                child: AppSectionHeading(
+                  title: l10n.communityGuidelinesHeading,
+                ),
+              ),
+              for (final guideline in _guidelines(l10n)) ...[
+                const Divider(height: 1),
+                _GuidelineRow(guideline: guideline),
+              ],
+            ],
+          ),
         ),
-        for (final guideline in _guidelines(l10n)) ...[
-          const Divider(height: 1),
-          _GuidelineRow(guideline: guideline),
-        ],
-        const Divider(height: 1),
       ],
     );
   }

@@ -62,7 +62,11 @@ void main() {
       find.text('Set your recycling collection day.'),
     );
 
-    expectNoTextOverlapOrClipping(tester, 'Waste planner at 200% text');
+    expectNoTextOverlapOrClipping(
+      tester,
+      'Waste planner at 200% text',
+      within: find.byKey(const ValueKey('wasteTrackerList')),
+    );
     final list = find.byType(Scrollable).first;
     await tester.scrollUntilVisible(
       find.byKey(const ValueKey('wasteCompostDayPicker')),

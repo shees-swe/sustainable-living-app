@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 import '../../../core/accessibility/motion_aware_progress_indicator.dart';
 import '../../../core/data/database/app_database.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/design_tokens.dart';
+import '../../../core/widgets/design_components.dart';
 import '../../../features/carbon_footprint_tracker/data/activity_log_repository.dart';
 import '../../../features/carbon_footprint_tracker/domain/activity_log_insights.dart';
 import '../../../features/community_journal/data/community_post_repository.dart';
@@ -189,29 +191,44 @@ class _DashboardList extends StatelessWidget {
       ),
       children: [
         if (!hasAnyData) ...[
-          Padding(
-            padding: const EdgeInsets.only(bottom: ClimateSpacing.space16),
-            child: Text(l10n.progressOverallEmpty),
+          AppPanel(
+            color: DesignTokens.surfaceBlue,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AppIconBadge(
+                  icon: Icons.insights_outlined,
+                  backgroundColor: DesignTokens.surface,
+                  foregroundColor: DesignTokens.blue,
+                ),
+                const SizedBox(height: DesignTokens.space16),
+                Text(l10n.progressOverallEmpty),
+              ],
+            ),
           ),
-          const Divider(height: 1),
+          const SizedBox(height: DesignTokens.space16),
         ],
         _DashboardSection(
           title: l10n.progressCarbonTitle,
+          color: DesignTokens.surfaceBlue,
           children: _carbonContent(context, l10n, year, carbonInsights),
         ),
-        const Divider(height: 1),
+        const SizedBox(height: DesignTokens.space16),
         _DashboardSection(
           title: l10n.progressWasteTitle,
+          color: DesignTokens.surfaceSun,
           children: _wasteContent(context, l10n, year, wasteTrend),
         ),
-        const Divider(height: 1),
+        const SizedBox(height: DesignTokens.space16),
         _DashboardSection(
           title: l10n.progressChallengesTitle,
+          color: DesignTokens.surfaceCoral,
           children: _challengeContent(context, l10n),
         ),
-        const Divider(height: 1),
+        const SizedBox(height: DesignTokens.space16),
         _DashboardSection(
           title: l10n.progressTravelTitle,
+          color: DesignTokens.surfaceBlue,
           children: _countContent(
             l10n.progressTravelEmpty,
             l10n.progressTripsPlanned,
@@ -219,9 +236,10 @@ class _DashboardList extends StatelessWidget {
             'progressTravelTripCount',
           ),
         ),
-        const Divider(height: 1),
+        const SizedBox(height: DesignTokens.space16),
         _DashboardSection(
           title: l10n.progressJournalTitle,
+          color: DesignTokens.surfaceCoral,
           children: _countContent(
             l10n.progressJournalEmpty,
             l10n.progressPostsWritten,
@@ -229,9 +247,9 @@ class _DashboardList extends StatelessWidget {
             'progressJournalPostCount',
           ),
         ),
-        const Divider(height: 1),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: ClimateSpacing.space24),
+        const SizedBox(height: DesignTokens.space16),
+        AppPanel(
+          color: DesignTokens.surfaceMuted,
           child: Text(l10n.progressPurchasesScope),
         ),
       ],
@@ -374,19 +392,24 @@ class _DashboardList extends StatelessWidget {
 }
 
 class _DashboardSection extends StatelessWidget {
-  const _DashboardSection({required this.title, required this.children});
+  const _DashboardSection({
+    required this.title,
+    required this.children,
+    this.color,
+  });
 
   final String title;
   final List<Widget> children;
+  final Color? color;
 
   @override
-  Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.symmetric(vertical: ClimateSpacing.space16),
+  Widget build(BuildContext context) => AppPanel(
+    color: color,
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title, style: Theme.of(context).textTheme.titleMedium),
-        const SizedBox(height: ClimateSpacing.space8),
+        AppSectionHeading(title: title),
+        const SizedBox(height: DesignTokens.space12),
         ...children,
       ],
     ),
@@ -471,7 +494,7 @@ class _MonthlyTrendRow extends StatelessWidget {
             child: ExcludeSemantics(
               child: DecoratedBox(
                 decoration: BoxDecoration(
-                  color: ClimateColors.surfaceSecondary,
+                  color: DesignTokens.surfaceMuted,
                   borderRadius: BorderRadius.circular(
                     ClimateSpacing.radiusSmall,
                   ),

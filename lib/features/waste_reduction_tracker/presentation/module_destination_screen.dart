@@ -7,6 +7,8 @@ import '../../../core/data/database/app_database.dart';
 import '../../../core/motion/motion_spec.dart';
 import '../../../core/motion/numeric_tick.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/design_tokens.dart';
+import '../../../core/widgets/design_components.dart';
 import '../../settings/data/user_preferences_repository.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../data/waste_log_repository.dart';
@@ -145,36 +147,53 @@ class _WasteTrackerBody extends StatelessWidget {
         vertical: ClimateSpacing.space16,
       ),
       children: [
-        Text(l10n.wasteEstimateNote),
-        const SizedBox(height: ClimateSpacing.space24),
-        Text(l10n.wasteMonthSummary, style: theme.textTheme.titleMedium),
-        const SizedBox(height: ClimateSpacing.space8),
-        _NumberAwareText(monthLabel, style: typography.number),
-        const SizedBox(height: ClimateSpacing.space16),
-        Text(
-          l10n.wasteMonthTotal,
-          style: theme.textTheme.bodySmall?.copyWith(
-            color: ClimateColors.textSecondary,
+        AppPanel(
+          color: DesignTokens.surfaceSun,
+          padding: const EdgeInsets.all(DesignTokens.space24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(l10n.wasteEstimateNote),
+              const SizedBox(height: DesignTokens.space16),
+              AppSectionHeading(title: l10n.wasteMonthSummary),
+              const SizedBox(height: DesignTokens.space8),
+              _NumberAwareText(monthLabel, style: typography.number),
+              const SizedBox(height: DesignTokens.space16),
+              Text(
+                l10n.wasteMonthTotal,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: ClimateColors.textSecondary,
+                ),
+              ),
+              NumericTick(
+                value: summary.totalKg,
+                decimalPlaces: 2,
+                style: theme.textTheme.displayLarge!.merge(typography.number),
+                suffix: ' kg',
+                suffixStyle: theme.textTheme.titleMedium!.merge(
+                  typography.unit,
+                ),
+                textKey: const ValueKey('wasteMonthTotalValue'),
+              ),
+              if (summary.isEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(top: DesignTokens.space8),
+                  child: Text(l10n.wasteMonthEmpty),
+                )
+              else
+                for (
+                  var index = 0;
+                  index < summary.categories.length;
+                  index++
+                ) ...[
+                  if (index == 0) const SizedBox(height: DesignTokens.space8),
+                  _WasteCategoryTotalRow(total: summary.categories[index]),
+                  if (index < summary.categories.length - 1)
+                    const Divider(height: 1),
+                ],
+            ],
           ),
         ),
-        NumericTick(
-          value: summary.totalKg,
-          decimalPlaces: 2,
-          style: theme.textTheme.displayLarge!.merge(typography.number),
-          suffix: ' kg',
-          suffixStyle: theme.textTheme.titleMedium!.merge(typography.unit),
-          textKey: const ValueKey('wasteMonthTotalValue'),
-        ),
-        if (summary.isEmpty)
-          Padding(
-            padding: const EdgeInsets.only(top: ClimateSpacing.space8),
-            child: Text(l10n.wasteMonthEmpty),
-          )
-        else
-          for (var index = 0; index < summary.categories.length; index++) ...[
-            _WasteCategoryTotalRow(total: summary.categories[index]),
-            if (index < summary.categories.length - 1) const Divider(height: 1),
-          ],
         const SizedBox(height: ClimateSpacing.space24),
         FilledButton.icon(
           key: const ValueKey('wasteAddEntryButton'),
@@ -183,28 +202,35 @@ class _WasteTrackerBody extends StatelessWidget {
           label: Text(l10n.wasteAddEntry),
         ),
         const SizedBox(height: ClimateSpacing.space24),
-        Text(l10n.wasteLogSection, style: theme.textTheme.titleMedium),
+        AppSectionHeading(title: l10n.wasteLogSection),
+        const SizedBox(height: DesignTokens.space12),
         if (entries.isEmpty)
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: ClimateSpacing.space16,
-            ),
+          AppPanel(
+            color: DesignTokens.surfaceBlue,
             child: Text(l10n.wasteNoEntries),
           )
         else
-          for (final entry in entries) ...[
-            _WasteEntryRow(
-              entry: entry,
-              onDelete: () => onDelete(entry.entryId),
+          AppPanel(
+            padding: EdgeInsets.zero,
+            child: Column(
+              children: [
+                for (var index = 0; index < entries.length; index++) ...[
+                  _WasteEntryRow(
+                    entry: entries[index],
+                    onDelete: () => onDelete(entries[index].entryId),
+                  ),
+                  if (index < entries.length - 1) const Divider(height: 1),
+                ],
+              ],
             ),
-            const Divider(height: 1),
-          ],
+          ),
         const SizedBox(height: ClimateSpacing.space24),
-        const Divider(height: 1),
-        _WasteWeeklyPlannerSection(preferences: preferences),
+        AppPanel(
+          color: DesignTokens.surfaceBlue,
+          child: _WasteWeeklyPlannerSection(preferences: preferences),
+        ),
         const SizedBox(height: ClimateSpacing.space24),
-        const Divider(height: 1),
-        _WasteTipsSection(),
+        AppPanel(child: _WasteTipsSection()),
       ],
     );
   }
@@ -231,7 +257,6 @@ class _WasteWeeklyPlannerSectionState
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
     return FutureBuilder<UserPreferencesSettings>(
       future: _initialSettings,
       builder: (context, snapshot) {
@@ -246,7 +271,7 @@ class _WasteWeeklyPlannerSectionState
           key: const ValueKey('wastePlannerSection'),
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(l10n.wasteWeeklyPlanner, style: theme.textTheme.titleMedium),
+            AppSectionHeading(title: l10n.wasteWeeklyPlanner),
             const SizedBox(height: ClimateSpacing.space8),
             Text(l10n.wastePlannerOwnScheduleNote),
             const SizedBox(height: ClimateSpacing.space16),

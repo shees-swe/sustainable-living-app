@@ -176,28 +176,31 @@ void main() {
       find.text('Your progress will appear here as you use the app.'),
     );
 
-    expect(
-      find.text('No activity logged yet. Start in Carbon Footprint Tracker.'),
-      findsOneWidget,
+    final carbonEmpty = find.text(
+      'No activity logged yet. Start in Carbon Footprint Tracker.',
     );
-    expect(
-      find.text('No waste logged yet. Start in Waste Reduction Tracker.'),
-      findsOneWidget,
+    await _reveal(tester, carbonEmpty);
+    expect(carbonEmpty, findsOneWidget);
+    final wasteEmpty = find.text(
+      'No waste logged yet. Start in Waste Reduction Tracker.',
     );
-    expect(
-      find.text(
-        'No challenges joined yet. Start in Sustainable Living Challenges.',
-      ),
-      findsOneWidget,
+    await _reveal(tester, wasteEmpty);
+    expect(wasteEmpty, findsOneWidget);
+    final challengesEmpty = find.text(
+      'No challenges joined yet. Start in Sustainable Living Challenges.',
     );
-    expect(
-      find.text('No trips planned yet. Start in Eco-Travel Suggestions.'),
-      findsOneWidget,
+    await _reveal(tester, challengesEmpty);
+    expect(challengesEmpty, findsOneWidget);
+    final tripsEmpty = find.text(
+      'No trips planned yet. Start in Eco-Travel Suggestions.',
     );
-    expect(
-      find.text('No posts written yet. Start in Community Journal.'),
-      findsOneWidget,
+    await _reveal(tester, tripsEmpty);
+    expect(tripsEmpty, findsOneWidget);
+    final postsEmpty = find.text(
+      'No posts written yet. Start in Community Journal.',
     );
+    await _reveal(tester, postsEmpty);
+    expect(postsEmpty, findsOneWidget);
     final scope = find.text(
       'Purchases are not tracked in this app, so they do not appear on this dashboard.',
     );
@@ -247,7 +250,12 @@ Future<void> _reveal(WidgetTester tester, Finder finder) async {
   await tester.scrollUntilVisible(
     finder,
     200,
-    scrollable: find.byType(Scrollable).first,
+    scrollable: find
+        .descendant(
+          of: find.byKey(const ValueKey('progressDashboardList')),
+          matching: find.byType(Scrollable),
+        )
+        .first,
   );
   await tester.pump(const Duration(milliseconds: 100));
 }

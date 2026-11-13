@@ -97,7 +97,17 @@ void main() {
 
     expectNoTextOverlapOrClipping(tester, 'Waste Tracker');
     final addButton = find.byKey(const ValueKey('wasteAddEntryButton'));
-    await tester.ensureVisible(addButton);
+    await tester.scrollUntilVisible(
+      addButton,
+      120,
+      scrollable: find
+          .descendant(
+            of: find.byKey(const ValueKey('wasteTrackerList')),
+            matching: find.byType(Scrollable),
+          )
+          .first,
+    );
+    await tester.pumpAndSettle();
     await tester.tap(addButton);
     await _pumpUntilVisible(tester, find.text('Save entry'));
     await tester.pump(const Duration(milliseconds: 150));
