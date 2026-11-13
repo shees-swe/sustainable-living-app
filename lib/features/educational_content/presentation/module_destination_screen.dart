@@ -4,6 +4,8 @@ import '../../../core/accessibility/motion_aware_progress_indicator.dart';
 import '../../../core/accessibility/reduced_motion.dart';
 import '../../../core/motion/motion_spec.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/design_tokens.dart';
+import '../../../core/widgets/design_components.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../data/educational_article_catalog.dart';
 
@@ -92,86 +94,111 @@ class _EducationalContentScreenState extends State<EducationalContentScreen> {
         vertical: ClimateSpacing.space16,
       ),
       children: [
-        TextField(
-          key: const ValueKey('educationalArticleSearchField'),
-          controller: _searchController,
-          onChanged: (value) => setState(() => _query = value),
-          decoration: InputDecoration(
-            labelText: l10n.educationalSearchLabel,
-            suffixIcon: _query.isEmpty
-                ? null
-                : IconButton(
-                    tooltip: l10n.educationalClearSearch,
-                    onPressed: () {
-                      _searchController.clear();
-                      setState(() => _query = '');
-                    },
-                    icon: const Icon(Icons.clear),
+        AppPanel(
+          color: DesignTokens.surfaceBlue,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextField(
+                key: const ValueKey('educationalArticleSearchField'),
+                controller: _searchController,
+                onChanged: (value) => setState(() => _query = value),
+                decoration: InputDecoration(
+                  label: Text(l10n.educationalSearchLabel, softWrap: true),
+                  suffixIcon: _query.isEmpty
+                      ? null
+                      : IconButton(
+                          tooltip: l10n.educationalClearSearch,
+                          onPressed: () {
+                            _searchController.clear();
+                            setState(() => _query = '');
+                          },
+                          icon: const Icon(Icons.clear),
+                        ),
+                ),
+              ),
+              const SizedBox(height: DesignTokens.space16),
+              _FilterField(
+                label: l10n.educationalTopicFilter,
+                child: DropdownButtonFormField<String>(
+                  key: const ValueKey('educationalTopicFilter'),
+                  initialValue: _topic ?? _allTopicsValue,
+                  isExpanded: true,
+                  decoration: const InputDecoration(),
+                  items: [
+                    DropdownMenuItem(
+                      value: _allTopicsValue,
+                      child: Text(l10n.educationalAllTopics, maxLines: 2),
+                    ),
+                    for (final topic in EducationalArticleCatalog.topics)
+                      DropdownMenuItem(
+                        value: topic,
+                        child: Text(topic, maxLines: 2),
+                      ),
+                  ],
+                  onChanged: (value) => setState(
+                    () => _topic = value == _allTopicsValue ? null : value,
                   ),
-          ),
-        ),
-        const SizedBox(height: ClimateSpacing.space16),
-        _FilterField(
-          label: l10n.educationalTopicFilter,
-          child: DropdownButtonFormField<String>(
-            key: const ValueKey('educationalTopicFilter'),
-            initialValue: _topic ?? _allTopicsValue,
-            isExpanded: true,
-            decoration: const InputDecoration(),
-            items: [
-              DropdownMenuItem(
-                value: _allTopicsValue,
-                child: Text(l10n.educationalAllTopics, maxLines: 2),
+                ),
               ),
-              for (final topic in EducationalArticleCatalog.topics)
-                DropdownMenuItem(value: topic, child: Text(topic, maxLines: 2)),
-            ],
-            onChanged: (value) => setState(
-              () => _topic = value == _allTopicsValue ? null : value,
-            ),
-          ),
-        ),
-        const SizedBox(height: ClimateSpacing.space16),
-        _FilterField(
-          label: l10n.educationalSortLabel,
-          child: DropdownButtonFormField<EducationalArticleSortOrder>(
-            key: const ValueKey('educationalArticleSort'),
-            initialValue: _sortOrder,
-            isExpanded: true,
-            decoration: const InputDecoration(),
-            items: [
-              DropdownMenuItem(
-                value: EducationalArticleSortOrder.title,
-                child: Text(l10n.educationalSortTitle, maxLines: 2),
-              ),
-              DropdownMenuItem(
-                value: EducationalArticleSortOrder.shortestRead,
-                child: Text(l10n.educationalSortShortestRead, maxLines: 2),
+              const SizedBox(height: DesignTokens.space16),
+              _FilterField(
+                label: l10n.educationalSortLabel,
+                child: DropdownButtonFormField<EducationalArticleSortOrder>(
+                  key: const ValueKey('educationalArticleSort'),
+                  initialValue: _sortOrder,
+                  isExpanded: true,
+                  decoration: const InputDecoration(),
+                  items: [
+                    DropdownMenuItem(
+                      value: EducationalArticleSortOrder.title,
+                      child: Text(l10n.educationalSortTitle, maxLines: 2),
+                    ),
+                    DropdownMenuItem(
+                      value: EducationalArticleSortOrder.shortestRead,
+                      child: Text(
+                        l10n.educationalSortShortestRead,
+                        maxLines: 2,
+                      ),
+                    ),
+                  ],
+                  onChanged: (value) {
+                    if (value != null) setState(() => _sortOrder = value);
+                  },
+                ),
               ),
             ],
-            onChanged: (value) {
-              if (value != null) setState(() => _sortOrder = value);
-            },
           ),
         ),
-        const SizedBox(height: ClimateSpacing.space16),
+        const SizedBox(height: DesignTokens.space24),
         if (articles.isEmpty) ...[
-          Text(l10n.educationalNoMatches),
-          const SizedBox(height: ClimateSpacing.space8),
-          Align(
-            alignment: AlignmentDirectional.centerStart,
-            child: TextButton(
-              onPressed: _clearFilters,
-              child: Text(l10n.educationalClearFilters),
+          AppPanel(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(l10n.educationalNoMatches),
+                const SizedBox(height: DesignTokens.space8),
+                Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: TextButton(
+                    onPressed: _clearFilters,
+                    child: Text(l10n.educationalClearFilters),
+                  ),
+                ),
+              ],
             ),
           ),
         ] else ...[
           for (var index = 0; index < articles.length; index++) ...[
-            _EducationalArticleRow(
-              article: articles[index],
-              onTap: () => _openArticle(context, articles[index]),
+            AppPanel(
+              padding: EdgeInsets.zero,
+              child: _EducationalArticleRow(
+                article: articles[index],
+                onTap: () => _openArticle(context, articles[index]),
+              ),
             ),
-            if (index < articles.length - 1) const Divider(height: 1),
+            if (index < articles.length - 1)
+              const SizedBox(height: DesignTokens.space12),
           ],
         ],
       ],
@@ -313,35 +340,65 @@ class _EducationalArticleScreen extends StatelessWidget {
           vertical: ClimateSpacing.space16,
         ),
         children: [
-          Text(article.title, style: theme.textTheme.headlineSmall),
-          const SizedBox(height: ClimateSpacing.space16),
-          Wrap(
-            spacing: ClimateSpacing.space16,
-            runSpacing: ClimateSpacing.space8,
-            children: [
-              Text(
-                article.topic,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: ClimateColors.textSecondary,
+          AppPanel(
+            color: DesignTokens.surfaceBlue,
+            padding: const EdgeInsets.all(DesignTokens.space24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AppIconBadge(
+                  icon: Icons.menu_book_outlined,
+                  backgroundColor: DesignTokens.surface,
+                  foregroundColor: DesignTokens.blue,
                 ),
-              ),
-              _ReadingTime(minutes: article.readingTimeMinutes),
-            ],
+                const SizedBox(height: DesignTokens.space16),
+                Text(article.title, style: theme.textTheme.headlineSmall),
+                const SizedBox(height: DesignTokens.space16),
+                Wrap(
+                  spacing: DesignTokens.space16,
+                  runSpacing: DesignTokens.space8,
+                  children: [
+                    Text(
+                      article.topic,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: ClimateColors.textSecondary,
+                      ),
+                    ),
+                    _ReadingTime(minutes: article.readingTimeMinutes),
+                  ],
+                ),
+              ],
+            ),
           ),
-          const SizedBox(height: ClimateSpacing.space16),
-          const Divider(height: 1),
-          const SizedBox(height: ClimateSpacing.space16),
-          for (var index = 0; index < article.paragraphs.length; index++) ...[
-            _ArticleText(article.paragraphs[index]),
-            if (index < article.paragraphs.length - 1)
-              const SizedBox(height: ClimateSpacing.space16),
-          ],
-          const SizedBox(height: ClimateSpacing.space24),
-          const Divider(height: 1),
-          const SizedBox(height: ClimateSpacing.space16),
-          Text(l10n.educationalTakeaway, style: theme.textTheme.titleMedium),
-          const SizedBox(height: ClimateSpacing.space8),
-          _ArticleText(article.takeaway),
+          const SizedBox(height: DesignTokens.space16),
+          AppPanel(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                for (
+                  var index = 0;
+                  index < article.paragraphs.length;
+                  index++
+                ) ...[
+                  _ArticleText(article.paragraphs[index]),
+                  if (index < article.paragraphs.length - 1)
+                    const SizedBox(height: DesignTokens.space16),
+                ],
+              ],
+            ),
+          ),
+          const SizedBox(height: DesignTokens.space16),
+          AppPanel(
+            color: DesignTokens.surfaceSun,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AppSectionHeading(title: l10n.educationalTakeaway),
+                const SizedBox(height: DesignTokens.space8),
+                _ArticleText(article.takeaway),
+              ],
+            ),
+          ),
         ],
       ),
     );
