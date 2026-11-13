@@ -182,6 +182,9 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(router.routeInformationProvider.value.uri.path, AppRoutes.about);
-    expect(find.byType(FadeTransition), findsNothing);
+    expect(
+      find.byKey(const ValueKey('appRouteFade-${AppRoutes.about}')),
+      findsNothing,
+    );
   });
 }

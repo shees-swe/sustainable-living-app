@@ -72,11 +72,6 @@ class HomeScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          l10n.exploreModules,
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                        const SizedBox(height: ClimateSpacing.space8),
-                        Text(
                           l10n.onboardingIntro,
                           style: Theme.of(context).textTheme.bodyMedium,
                         ),

@@ -189,7 +189,14 @@ Future<void> _openRecommendations(
     ),
   );
   await tester.pumpAndSettle();
-  await tester.tap(find.text('View recommendations'));
+  final recommendationsButton = find.text('View recommendations');
+  await tester.scrollUntilVisible(
+    recommendationsButton,
+    150,
+    scrollable: find.byType(Scrollable).first,
+  );
+  await tester.pumpAndSettle();
+  await tester.tap(recommendationsButton);
   final coverage = find.text(
     'These recommendations use your logged electricity only. '
     'They are scenarios based on your entries, not promises.',

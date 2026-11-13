@@ -118,6 +118,11 @@ void main() {
     );
 
     final coverage = find.byKey(const ValueKey('estimateCoveragePanel'));
+    await tester.scrollUntilVisible(
+      coverage,
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
     expect(
       find.descendant(of: coverage, matching: find.text('Electricity')),
       findsOneWidget,

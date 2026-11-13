@@ -242,6 +242,7 @@ GoRoute _appRoute({
         reverseTransitionDuration: MotionSpec.optionalFade,
         transitionsBuilder: (context, animation, secondaryAnimation, child) =>
             FadeTransition(
+              key: ValueKey('appRouteFade-$path'),
               opacity: animation.drive(
                 CurveTween(curve: MotionSpec.optionalFadeCurve),
               ),
