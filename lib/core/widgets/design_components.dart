@@ -17,13 +17,12 @@ class AppPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Material(
-      color: color ?? theme.colorScheme.surface,
-      shape: RoundedRectangleBorder(
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: color ?? theme.colorScheme.surface,
+        border: Border.all(color: theme.colorScheme.outlineVariant),
         borderRadius: BorderRadius.circular(DesignTokens.radiusCard),
-        side: BorderSide(color: theme.colorScheme.outlineVariant),
       ),
-      clipBehavior: Clip.antiAlias,
       child: Padding(padding: padding, child: child),
     );
   }
@@ -71,7 +70,10 @@ class AppSectionHeading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final heading = Text(title, style: Theme.of(context).textTheme.titleLarge);
+    final heading = Text(
+      title,
+      style: Theme.of(context).textTheme.titleLarge,
+    );
     if (trailing == null) return heading;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
