@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/design_tokens.dart';
-import '../../../core/widgets/design_components.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../data/account_repository.dart';
 
@@ -100,91 +98,76 @@ class _AccountScreenState extends State<AccountScreen> {
           vertical: ClimateSpacing.space8,
         ),
         children: [
-          AppPanel(
-            color: DesignTokens.surfaceBlue,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                AppIconBadge(
-                  icon: Icons.person_outline,
-                  backgroundColor: DesignTokens.surface,
-                  foregroundColor: DesignTokens.blue,
-                ),
-                const SizedBox(height: DesignTokens.space16),
-                Text(
-                  l10n.accountOptionalGuest,
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-              ],
-            ),
+          Text(
+            l10n.accountOptionalGuest,
+            style: Theme.of(context).textTheme.bodyLarge,
           ),
-          const SizedBox(height: DesignTokens.space24),
-          AppPanel(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                AppSectionHeading(
-                  title: _isRegistering ? l10n.register : l10n.logIn,
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: ClimateSpacing.space16),
+            child: Divider(height: 1),
+          ),
+          Text(
+            _isRegistering ? l10n.register : l10n.logIn,
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          const SizedBox(height: ClimateSpacing.space8),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              TextField(
+                key: const ValueKey('accountIdentifier'),
+                controller: _identifierController,
+                autofillHints: const [AutofillHints.username],
+                keyboardType: TextInputType.emailAddress,
+                autocorrect: false,
+                decoration: InputDecoration(
+                  labelText: l10n.accountLoginIdentifier,
+                  border: const OutlineInputBorder(),
                 ),
-                const SizedBox(height: DesignTokens.space16),
-                TextField(
-                  key: const ValueKey('accountIdentifier'),
-                  controller: _identifierController,
-                  autofillHints: const [AutofillHints.username],
-                  keyboardType: TextInputType.emailAddress,
-                  autocorrect: false,
-                  decoration: InputDecoration(
-                    label: Text(l10n.accountLoginIdentifier, softWrap: true),
-                  ),
+              ),
+              const SizedBox(height: ClimateSpacing.space16),
+              TextField(
+                key: const ValueKey('accountPassword'),
+                controller: _passwordController,
+                autofillHints: _isRegistering
+                    ? const [AutofillHints.newPassword]
+                    : const [AutofillHints.password],
+                obscureText: true,
+                autocorrect: false,
+                enableSuggestions: false,
+                decoration: InputDecoration(
+                  labelText: l10n.accountPassword,
+                  border: const OutlineInputBorder(),
                 ),
-                const SizedBox(height: DesignTokens.space16),
-                TextField(
-                  key: const ValueKey('accountPassword'),
-                  controller: _passwordController,
-                  autofillHints: _isRegistering
-                      ? const [AutofillHints.newPassword]
-                      : const [AutofillHints.password],
-                  obscureText: true,
-                  autocorrect: false,
-                  enableSuggestions: false,
-                  decoration: InputDecoration(
-                    label: Text(l10n.accountPassword, softWrap: true),
-                  ),
+              ),
+              const SizedBox(height: ClimateSpacing.space16),
+              FilledButton(
+                key: const ValueKey('accountSubmit'),
+                onPressed: _isSubmitting ? null : _submit,
+                child: Text(
+                  _isSubmitting
+                      ? l10n.accountPleaseWait
+                      : _isRegistering
+                      ? l10n.createLocalAccount
+                      : l10n.logIn,
                 ),
-                const SizedBox(height: DesignTokens.space16),
-                FilledButton(
-                  key: const ValueKey('accountSubmit'),
-                  onPressed: _isSubmitting ? null : _submit,
-                  child: Text(
-                    _isSubmitting
-                        ? l10n.accountPleaseWait
-                        : _isRegistering
-                        ? l10n.createLocalAccount
-                        : l10n.logIn,
-                  ),
-                ),
-                TextButton(
-                  onPressed: _isSubmitting ? null : _toggleMode,
-                  child: Text(_isRegistering ? l10n.logIn : l10n.register),
-                ),
-              ],
-            ),
+              ),
+              TextButton(
+                onPressed: _isSubmitting ? null : _toggleMode,
+                child: Text(_isRegistering ? l10n.logIn : l10n.register),
+              ),
+            ],
           ),
           if (_message case final message?) ...[
-            const SizedBox(height: DesignTokens.space16),
-            AppPanel(
-              color: _isError
-                  ? DesignTokens.surfaceCoral
-                  : DesignTokens.surfaceBlue,
-              child: Semantics(
-                liveRegion: true,
-                child: Text(
-                  message,
-                  style: TextStyle(
-                    color: _isError
-                        ? Theme.of(context).colorScheme.error
-                        : Theme.of(context).colorScheme.primary,
-                  ),
+            const SizedBox(height: ClimateSpacing.space16),
+            Semantics(
+              liveRegion: true,
+              child: Text(
+                message,
+                style: TextStyle(
+                  color: _isError
+                      ? Theme.of(context).colorScheme.error
+                      : Theme.of(context).colorScheme.primary,
                 ),
               ),
             ),

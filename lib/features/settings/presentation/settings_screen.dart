@@ -10,8 +10,6 @@ import '../../../app/router.dart';
 import '../../../core/accessibility/motion_aware_progress_indicator.dart';
 import '../../../core/data/regions/region_catalog.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/design_tokens.dart';
-import '../../../core/widgets/design_components.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../data/user_data_deleter.dart';
 import '../data/user_data_exporter.dart';
@@ -222,101 +220,87 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
         children: [
           if (widget.preferences != null && widget.regionCatalog != null) ...[
-            AppPanel(
-              color: DesignTokens.surfaceBlue,
-              child: RegionPicker(
-                preferences: widget.preferences!,
-                catalog: widget.regionCatalog!,
-              ),
+            RegionPicker(
+              preferences: widget.preferences!,
+              catalog: widget.regionCatalog!,
             ),
-            const SizedBox(height: DesignTokens.space24),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: ClimateSpacing.space16),
+              child: Divider(height: 1),
+            ),
           ],
-          AppSectionHeading(title: l10n.privacyControls),
-          const SizedBox(height: DesignTokens.space12),
-          AppPanel(
-            padding: EdgeInsets.zero,
-            child: Column(
-              children: [
-                ListTile(
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: DesignTokens.space16,
-                  ),
-                  leading: const Icon(Icons.file_download_outlined),
-                  title: Text(l10n.importMyData),
-                  subtitle: Text(l10n.importDataDescription),
-                  trailing: _isImporting
-                      ? MotionAwareProgressIndicator(
-                          semanticsLabel: l10n.loading,
-                          size: 24,
-                          strokeWidth: 2,
-                        )
-                      : const Icon(Icons.chevron_right),
-                  onTap: busy ? null : _importData,
-                ),
-                const Divider(height: 1),
-                ListTile(
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: DesignTokens.space16,
-                  ),
-                  leading: const Icon(Icons.policy_outlined),
-                  title: Text(l10n.privacyPolicy),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: busy
-                      ? null
-                      : () => context.push(AppRoutes.privacyPolicy),
-                ),
-                const Divider(height: 1),
-                ListTile(
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: DesignTokens.space16,
-                  ),
-                  leading: const Icon(Icons.file_upload_outlined),
-                  title: Text(l10n.exportMyData),
-                  subtitle: Text(l10n.exportDataDescription),
-                  trailing: _isExporting
-                      ? MotionAwareProgressIndicator(
-                          semanticsLabel: l10n.loading,
-                          size: 24,
-                          strokeWidth: 2,
-                        )
-                      : const Icon(Icons.chevron_right),
-                  onTap: busy ? null : _exportData,
-                ),
-                const Divider(height: 1),
-                ListTile(
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: DesignTokens.space16,
-                  ),
-                  leading: const Icon(Icons.delete_outline),
-                  title: Text(l10n.deleteLocalData),
-                  subtitle: Text(l10n.deleteDataDescription),
-                  trailing: _isDeleting
-                      ? MotionAwareProgressIndicator(
-                          semanticsLabel: l10n.loading,
-                          size: 24,
-                          strokeWidth: 2,
-                        )
-                      : const Icon(Icons.chevron_right),
-                  onTap: busy ? null : _requestDeletion,
-                ),
-              ],
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: ClimateSpacing.space16,
+            ),
+            child: Text(
+              l10n.privacyControls,
+              style: Theme.of(context).textTheme.titleMedium,
             ),
           ),
+          const Divider(height: 1),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: const Icon(Icons.file_download_outlined),
+            title: Text(l10n.importMyData),
+            subtitle: Text(l10n.importDataDescription),
+            trailing: _isImporting
+                ? MotionAwareProgressIndicator(
+                    semanticsLabel: l10n.loading,
+                    size: 24,
+                    strokeWidth: 2,
+                  )
+                : const Icon(Icons.chevron_right),
+            onTap: busy ? null : _importData,
+          ),
+          const Divider(height: 1),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: const Icon(Icons.policy_outlined),
+            title: Text(l10n.privacyPolicy),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: busy ? null : () => context.push(AppRoutes.privacyPolicy),
+          ),
+          const Divider(height: 1),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: const Icon(Icons.file_upload_outlined),
+            title: Text(l10n.exportMyData),
+            subtitle: Text(l10n.exportDataDescription),
+            trailing: _isExporting
+                ? MotionAwareProgressIndicator(
+                    semanticsLabel: l10n.loading,
+                    size: 24,
+                    strokeWidth: 2,
+                  )
+                : const Icon(Icons.chevron_right),
+            onTap: busy ? null : _exportData,
+          ),
+          const Divider(height: 1),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: const Icon(Icons.delete_outline),
+            title: Text(l10n.deleteLocalData),
+            subtitle: Text(l10n.deleteDataDescription),
+            trailing: _isDeleting
+                ? MotionAwareProgressIndicator(
+                    semanticsLabel: l10n.loading,
+                    size: 24,
+                    strokeWidth: 2,
+                  )
+                : const Icon(Icons.chevron_right),
+            onTap: busy ? null : _requestDeletion,
+          ),
           if (_status case final status?) ...[
-            const SizedBox(height: DesignTokens.space16),
-            AppPanel(
-              color: _statusIsError
-                  ? DesignTokens.surfaceCoral
-                  : DesignTokens.surfaceBlue,
-              child: Semantics(
-                liveRegion: true,
-                child: Text(
-                  status,
-                  style: TextStyle(
-                    color: _statusIsError
-                        ? Theme.of(context).colorScheme.error
-                        : Theme.of(context).colorScheme.primary,
-                  ),
+            const SizedBox(height: ClimateSpacing.space16),
+            Semantics(
+              liveRegion: true,
+              child: Text(
+                status,
+                style: TextStyle(
+                  color: _statusIsError
+                      ? Theme.of(context).colorScheme.error
+                      : Theme.of(context).colorScheme.primary,
                 ),
               ),
             ),

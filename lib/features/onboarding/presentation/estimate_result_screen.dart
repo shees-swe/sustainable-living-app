@@ -6,8 +6,6 @@ import '../../../core/data/regions/foundation_references.dart';
 import '../../../core/data/regions/region_pack_parser.dart';
 import '../../../core/motion/numeric_tick.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/design_tokens.dart';
-import '../../../core/widgets/design_components.dart';
 import '../../../core/widgets/app_skeleton.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../data/estimate_demo_fixtures.dart';
@@ -153,59 +151,40 @@ class _EstimateResultScreenState extends State<EstimateResultScreen> {
               vertical: ClimateSpacing.space8,
             ),
             children: [
-              AppPanel(
-                color: data.region.demoOnly
-                    ? DesignTokens.surfaceCoral
-                    : DesignTokens.surfaceBlue,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (data.region.demoOnly)
-                      Semantics(
-                        liveRegion: true,
-                        child: Text(
-                          l10n.demoOnlyWarning,
-                          style: Theme.of(context).textTheme.titleMedium
-                              ?.copyWith(
-                                color: Theme.of(context).colorScheme.error,
-                              ),
-                        ),
-                      )
-                    else
-                      Text(l10n.regionalEstimateContext),
-                    const SizedBox(height: DesignTokens.space8),
-                    Text(
-                      _regionLabel(l10n, data.region.labelKey),
-                      key: const ValueKey('estimateRegionLabel'),
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    if (data.region.currencyCode != null)
-                      Text(l10n.regionCurrency(data.region.currencyCode!)),
-                  ],
-                ),
+              if (data.region.demoOnly)
+                Semantics(
+                  liveRegion: true,
+                  child: Text(
+                    l10n.demoOnlyWarning,
+                    style: Theme.of(context).textTheme.titleMedium
+                        ?.copyWith(color: Theme.of(context).colorScheme.error),
+                  ),
+                )
+              else
+                Text(l10n.regionalEstimateContext),
+              const SizedBox(height: ClimateSpacing.space8),
+              Text(
+                _regionLabel(l10n, data.region.labelKey),
+                key: const ValueKey('estimateRegionLabel'),
+                style: Theme.of(context).textTheme.titleMedium,
               ),
-              const SizedBox(height: DesignTokens.space16),
-              AppPanel(
-                color: DesignTokens.surfaceBlue,
-                child: _buildTotal(context, l10n, data.estimate),
+              if (data.region.currencyCode != null)
+                Text(l10n.regionCurrency(data.region.currencyCode!)),
+              const SizedBox(height: ClimateSpacing.space16),
+              _buildTotal(context, l10n, data.estimate),
+              const Divider(height: ClimateSpacing.space24),
+              _BudgetSharePanel(
+                data: data,
+                share: budgetShare,
+                demoOnly: data.region.demoOnly,
               ),
-              const SizedBox(height: DesignTokens.space24),
-              AppPanel(
-                child: _BudgetSharePanel(
-                  data: data,
-                  share: budgetShare,
-                  demoOnly: data.region.demoOnly,
-                ),
+              const Divider(height: ClimateSpacing.space24),
+              _CategoryBreakdownPanel(
+                categories: categoryTotals,
+                estimate: data.estimate,
+                demoOnly: data.region.demoOnly,
               ),
-              const SizedBox(height: DesignTokens.space16),
-              AppPanel(
-                child: _CategoryBreakdownPanel(
-                  categories: categoryTotals,
-                  estimate: data.estimate,
-                  demoOnly: data.region.demoOnly,
-                ),
-              ),
-              const SizedBox(height: DesignTokens.space16),
+              const Divider(height: ClimateSpacing.space24),
               _CoveragePanel(
                 included: data.estimate.categoryTotals
                     .map((item) => item.category)
@@ -215,25 +194,15 @@ class _EstimateResultScreenState extends State<EstimateResultScreen> {
                     .toSet(),
                 demoOnly: data.region.demoOnly,
               ),
-              const SizedBox(height: DesignTokens.space16),
-              AppPanel(
-                child: EstimateFactorDisclosure(
-                  factors: data.estimate.factorsUsed,
-                  demoOnly: data.region.demoOnly,
-                ),
+              const Divider(height: ClimateSpacing.space24),
+              EstimateFactorDisclosure(
+                factors: data.estimate.factorsUsed,
+                demoOnly: data.region.demoOnly,
               ),
-              const SizedBox(height: DesignTokens.space16),
-              AppPanel(
-                color: DesignTokens.surfaceBlue,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    for (final assumption in data.estimate.assumptions)
-                      Text(_assumptionLabel(l10n, assumption)),
-                  ],
-                ),
-              ),
-              const SizedBox(height: DesignTokens.space24),
+              const SizedBox(height: ClimateSpacing.space24),
+              for (final assumption in data.estimate.assumptions)
+                Text(_assumptionLabel(l10n, assumption)),
+              const SizedBox(height: ClimateSpacing.space24),
               FilledButton(
                 onPressed: () => context.go(AppRoutes.home),
                 child: Text(l10n.continueToHome),
@@ -521,8 +490,14 @@ class _CoveragePanel extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final excluded = available.difference(included);
-    return AppPanel(
+    return Container(
       key: const ValueKey('estimateCoveragePanel'),
+      decoration: BoxDecoration(
+        color: ClimateColors.surfaceSecondary,
+        border: Border.all(color: ClimateColors.divider),
+        borderRadius: BorderRadius.circular(ClimateSpacing.radiusSmall),
+      ),
+      padding: const EdgeInsets.all(ClimateSpacing.space16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -572,7 +547,7 @@ class _SectionHeading extends StatelessWidget {
   Widget build(BuildContext context) => Row(
     children: [
       Expanded(
-        child: Text(title, style: Theme.of(context).textTheme.titleLarge),
+        child: Text(title, style: Theme.of(context).textTheme.titleMedium),
       ),
       if (demoOnly)
         DemoOnlyTag(label: AppLocalizations.of(context)!.demoOnlyTag),

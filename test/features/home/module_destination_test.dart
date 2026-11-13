@@ -245,23 +245,6 @@ void main() {
           destination.path,
           within: find.byKey(const ValueKey('progressDashboardList')),
         );
-      } else if (destination.id == 'wasteReductionTracker') {
-        expectNoTextOverlapOrClipping(
-          tester,
-          destination.path,
-          within: find.byKey(const ValueKey('wasteTrackerList')),
-        );
-        expectNoTextOverlapOrClipping(
-          tester,
-          '${destination.path} AppBar',
-          within: find.byType(AppBar),
-        );
-      } else if (destination.id == 'communityJournal') {
-        expectNoTextOverlapOrClipping(
-          tester,
-          '${destination.path} AppBar',
-          within: find.byType(AppBar),
-        );
       } else if (destination.id != 'carbonFootprintTracker') {
         expectNoTextOverlapOrClipping(tester, destination.path);
       }
