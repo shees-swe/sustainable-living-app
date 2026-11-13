@@ -62,8 +62,9 @@ void main() {
       await tester.scrollUntilVisible(
         find.text('Day 1'),
         160,
-        scrollable: find.byType(Scrollable).first,
+        scrollable: _detailScrollable,
       );
+      await tester.pumpAndSettle();
 
       await tester.tap(find.text('Day 1'));
       var progress = (await repository.readChallengeProgress(

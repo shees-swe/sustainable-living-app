@@ -7,6 +7,8 @@ import '../../../core/accessibility/reduced_motion.dart';
 import '../../../core/motion/motion_spec.dart';
 import '../../../core/motion/numeric_tick.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/design_tokens.dart';
+import '../../../core/widgets/design_components.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../onboarding/domain/footprint_estimate.dart';
 import '../../onboarding/presentation/estimate_factor_disclosure.dart';
@@ -107,102 +109,119 @@ class _ActivityLogBody extends StatelessWidget {
         vertical: ClimateSpacing.space16,
       ),
       children: [
-        MonoNumericText(text: l10n.trackerPeriodTotal(periodYear)),
-        const SizedBox(height: ClimateSpacing.space8),
-        NumericTick(
-          value: periodTotal,
-          decimalPlaces: 2,
-          style: Theme.of(context).textTheme.displayLarge!
-              .merge(typography.number),
-          suffix: ' kg CO2',
-          suffixStyle: Theme.of(context).textTheme.titleMedium!
-              .merge(typography.unit),
-          textKey: const ValueKey('trackerPeriodTotalValue'),
-        ),
-        const SizedBox(height: ClimateSpacing.space8),
-        Text(l10n.trackerCoverage),
-        const SizedBox(height: ClimateSpacing.space24),
-        OutlinedButton(
-          onPressed: () => Navigator.of(context).push<void>(
-            PageRouteBuilder<void>(
-              pageBuilder: (context, animation, secondaryAnimation) =>
-                  ActivityLogInsightsScreen(
-                    repository: repository,
-                    year: periodYear,
-                  ),
-              transitionDuration: ReducedMotion.duration(
-                context,
-                MotionSpec.optionalFade,
+        AppPanel(
+          color: DesignTokens.surfaceBlue,
+          padding: const EdgeInsets.all(DesignTokens.space24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              MonoNumericText(text: l10n.trackerPeriodTotal(periodYear)),
+              const SizedBox(height: DesignTokens.space8),
+              NumericTick(
+                value: periodTotal,
+                decimalPlaces: 2,
+                style: Theme.of(context).textTheme.displayLarge!
+                    .merge(typography.number),
+                suffix: ' kg CO2',
+                suffixStyle: Theme.of(context).textTheme.titleMedium!
+                    .merge(typography.unit),
+                textKey: const ValueKey('trackerPeriodTotalValue'),
               ),
-              reverseTransitionDuration: ReducedMotion.duration(
-                context,
-                MotionSpec.optionalFade,
-              ),
-              transitionsBuilder:
-                  (context, animation, secondaryAnimation, child) =>
-                      FadeTransition(
-                        opacity: animation.drive(
-                          CurveTween(curve: MotionSpec.optionalFadeCurve),
-                        ),
-                        child: child,
-                      ),
-            ),
+              const SizedBox(height: DesignTokens.space12),
+              Text(l10n.trackerCoverage),
+            ],
           ),
-          child: Text(l10n.trackerViewInsights),
         ),
-        const SizedBox(height: ClimateSpacing.space8),
-        OutlinedButton(
-          onPressed: () => Navigator.of(context).push<void>(
-            PageRouteBuilder<void>(
-              pageBuilder: (context, animation, secondaryAnimation) =>
-                  ActivityLogRecommendationsScreen(
-                    repository: repository,
-                    year: periodYear,
-                    factors: factors,
-                    references: references,
-                  ),
-              transitionDuration: ReducedMotion.duration(
-                context,
-                MotionSpec.optionalFade,
-              ),
-              reverseTransitionDuration: ReducedMotion.duration(
-                context,
-                MotionSpec.optionalFade,
-              ),
-              transitionsBuilder:
-                  (context, animation, secondaryAnimation, child) =>
-                      FadeTransition(
-                        opacity: animation.drive(
-                          CurveTween(curve: MotionSpec.optionalFadeCurve),
-                        ),
-                        child: child,
+        const SizedBox(height: DesignTokens.space16),
+        Wrap(
+          spacing: DesignTokens.space8,
+          runSpacing: DesignTokens.space8,
+          children: [
+            OutlinedButton(
+              onPressed: () => Navigator.of(context).push<void>(
+                PageRouteBuilder<void>(
+                  pageBuilder: (context, animation, secondaryAnimation) =>
+                      ActivityLogInsightsScreen(
+                        repository: repository,
+                        year: periodYear,
                       ),
+                  transitionDuration: ReducedMotion.duration(
+                    context,
+                    MotionSpec.optionalFade,
+                  ),
+                  reverseTransitionDuration: ReducedMotion.duration(
+                    context,
+                    MotionSpec.optionalFade,
+                  ),
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) =>
+                          FadeTransition(
+                            opacity: animation.drive(
+                              CurveTween(curve: MotionSpec.optionalFadeCurve),
+                            ),
+                            child: child,
+                          ),
+                ),
+              ),
+              child: Text(l10n.trackerViewInsights),
             ),
-          ),
-          child: Text(l10n.trackerViewRecommendations),
+            OutlinedButton(
+              onPressed: () => Navigator.of(context).push<void>(
+                PageRouteBuilder<void>(
+                  pageBuilder: (context, animation, secondaryAnimation) =>
+                      ActivityLogRecommendationsScreen(
+                        repository: repository,
+                        year: periodYear,
+                        factors: factors,
+                        references: references,
+                      ),
+                  transitionDuration: ReducedMotion.duration(
+                    context,
+                    MotionSpec.optionalFade,
+                  ),
+                  reverseTransitionDuration: ReducedMotion.duration(
+                    context,
+                    MotionSpec.optionalFade,
+                  ),
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) =>
+                          FadeTransition(
+                            opacity: animation.drive(
+                              CurveTween(curve: MotionSpec.optionalFadeCurve),
+                            ),
+                            child: child,
+                          ),
+                ),
+              ),
+              child: Text(l10n.trackerViewRecommendations),
+            ),
+          ],
         ),
-        const SizedBox(height: ClimateSpacing.space16),
+        const SizedBox(height: DesignTokens.space16),
         FilledButton.icon(
           onPressed: () => _showCategoryPicker(context),
           icon: const Icon(Icons.add),
           label: Text(l10n.trackerAddEntry),
         ),
-        const SizedBox(height: ClimateSpacing.space24),
+        const SizedBox(height: DesignTokens.space24),
         if (entries.isEmpty)
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: ClimateSpacing.space16,
-            ),
-            child: Text(l10n.trackerNoActivities),
-          )
+          AppPanel(child: Text(l10n.trackerNoActivities))
         else
-          for (final entry in entries) ...[
-            _ActivityRow(
-              entry: entry,
-              onDelete: () => _deleteEntry(context, entry.activityId),
+          AppPanel(
+            padding: EdgeInsets.zero,
+            child: Column(
+              children: [
+                for (var index = 0; index < entries.length; index++) ...[
+                  _ActivityRow(
+                    entry: entries[index],
+                    onDelete: () =>
+                        _deleteEntry(context, entries[index].activityId),
+                  ),
+                  if (index < entries.length - 1) const Divider(height: 1),
+                ],
+              ],
             ),
-            const Divider(height: 1),
-          ],
+          ),
       ],
     );
   }

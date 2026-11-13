@@ -47,8 +47,8 @@ void expectNoTextOverlapOrClipping(
         isFalse,
         reason:
             '$screen has overlapping text: '
-            '"${paragraphs[index].text.toPlainText()}" and '
-            '"${paragraphs[other].text.toPlainText()}"',
+            '"${paragraphs[index].text.toPlainText()}" at ${bounds[index]} and '
+            '"${paragraphs[other].text.toPlainText()}" at ${bounds[other]}',
       );
     }
   }

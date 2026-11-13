@@ -189,7 +189,10 @@ Future<void> _openRecommendations(
     ),
   );
   await tester.pumpAndSettle();
-  await tester.tap(find.text('View recommendations'));
+  final viewRecommendations = find.text('View recommendations');
+  await tester.ensureVisible(viewRecommendations);
+  await tester.pumpAndSettle();
+  await tester.tap(viewRecommendations);
   final coverage = find.text(
     'These recommendations use your logged electricity only. '
     'They are scenarios based on your entries, not promises.',

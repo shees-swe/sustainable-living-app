@@ -6,6 +6,8 @@ import '../../../core/data/database/app_database.dart';
 import '../../../core/motion/motion_spec.dart';
 import '../../../core/motion/numeric_tick.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/design_tokens.dart';
+import '../../../core/widgets/design_components.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../data/activity_log_repository.dart';
 import '../domain/activity_log_insights.dart';
@@ -67,57 +69,115 @@ class _ActivityLogInsightsBody extends StatelessWidget {
         vertical: ClimateSpacing.space16,
       ),
       children: [
-        Text(l10n.trackerInsightsCoverage),
         if (insights.isEmpty) ...[
-          const SizedBox(height: ClimateSpacing.space24),
-          Text(l10n.trackerNoActivities),
-        ] else ...[
-          const SizedBox(height: ClimateSpacing.space24),
-          MonoNumericText(text: l10n.trackerInsightsYear(insights.year)),
-          const SizedBox(height: ClimateSpacing.space8),
-          NumericTick(
-            value: insights.yearTotalKg,
-            decimalPlaces: 2,
-            style: Theme.of(context).textTheme.displayLarge!
-                .merge(typography.number),
-            suffix: ' kg CO2',
-            suffixStyle: Theme.of(context).textTheme.titleMedium!
-                .merge(typography.unit),
-            textKey: const ValueKey('trackerInsightsYearTotal'),
-          ),
-          const SizedBox(height: ClimateSpacing.space24),
-          Text(
-            l10n.trackerMonthlyTotals,
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          const SizedBox(height: ClimateSpacing.space8),
-          for (final month in insights.months) ...[
-            _MonthlyActivityBar(month: month),
-            const Divider(height: 1),
-          ],
-          const SizedBox(height: ClimateSpacing.space24),
-          MonoNumericText(
-            text: l10n.trackerHighestMonth(
-              DateFormat.MMMM(l10n.localeName)
-                  .format(DateTime(insights.year, insights.highestMonth!)),
-              insights.highestMonthKg.toStringAsFixed(2),
+          AppPanel(
+            color: DesignTokens.surfaceBlue,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AppIconBadge(
+                  icon: Icons.insights_outlined,
+                  backgroundColor: DesignTokens.surface,
+                  foregroundColor: DesignTokens.blue,
+                ),
+                const SizedBox(height: DesignTokens.space16),
+                Text(l10n.trackerInsightsCoverage),
+                const SizedBox(height: DesignTokens.space16),
+                Text(l10n.trackerNoActivities),
+              ],
             ),
           ),
-          const Divider(height: 1),
-          const SizedBox(height: ClimateSpacing.space16),
-          Text(
-            l10n.trackerLargestContributions,
-            style: Theme.of(context).textTheme.titleMedium,
+        ] else ...[
+          AppPanel(
+            color: DesignTokens.surfaceBlue,
+            padding: const EdgeInsets.all(DesignTokens.space24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(l10n.trackerInsightsCoverage),
+                const SizedBox(height: DesignTokens.space16),
+                MonoNumericText(text: l10n.trackerInsightsYear(insights.year)),
+                const SizedBox(height: DesignTokens.space8),
+                NumericTick(
+                  value: insights.yearTotalKg,
+                  decimalPlaces: 2,
+                  style: Theme.of(context).textTheme.displayLarge!
+                      .merge(typography.number),
+                  suffix: ' kg CO2',
+                  suffixStyle: Theme.of(context).textTheme.titleMedium!
+                      .merge(typography.unit),
+                  textKey: const ValueKey('trackerInsightsYearTotal'),
+                ),
+              ],
+            ),
           ),
-          const SizedBox(height: ClimateSpacing.space8),
-          for (
-            var index = 0;
-            index < insights.topContributions.length;
-            index++
-          ) ...[
-            _ActivityContribution(entry: insights.topContributions[index]),
-            if (index < insights.topContributions.length - 1)
-              const Divider(height: 1),
+          const SizedBox(height: ClimateSpacing.space24),
+          AppPanel(
+            padding: EdgeInsets.zero,
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(DesignTokens.space16),
+                  child: AppSectionHeading(title: l10n.trackerMonthlyTotals),
+                ),
+                for (var index = 0; index < insights.months.length; index++)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: DesignTokens.space16,
+                    ),
+                    child: Column(
+                      children: [
+                        _MonthlyActivityBar(month: insights.months[index]),
+                        if (index < insights.months.length - 1)
+                          const Divider(height: 1),
+                      ],
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          const SizedBox(height: ClimateSpacing.space24),
+          AppPanel(
+            color: DesignTokens.surfaceSun,
+            child: MonoNumericText(
+              text: l10n.trackerHighestMonth(
+                DateFormat.MMMM(l10n.localeName)
+                    .format(DateTime(insights.year, insights.highestMonth!)),
+                insights.highestMonthKg.toStringAsFixed(2),
+              ),
+            ),
+          ),
+          if (insights.topContributions.isNotEmpty) ...[
+            const SizedBox(height: ClimateSpacing.space24),
+            AppPanel(
+              padding: EdgeInsets.zero,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(DesignTokens.space16),
+                    child: AppSectionHeading(
+                      title: l10n.trackerLargestContributions,
+                    ),
+                  ),
+                  for (
+                    var index = 0;
+                    index < insights.topContributions.length;
+                    index++
+                  ) ...[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: DesignTokens.space16,
+                      ),
+                      child: _ActivityContribution(
+                        entry: insights.topContributions[index],
+                      ),
+                    ),
+                    if (index < insights.topContributions.length - 1)
+                      const Divider(height: 1),
+                  ],
+                ],
+              ),
+            ),
           ],
         ],
       ],
@@ -162,7 +222,7 @@ class _MonthlyActivityBar extends StatelessWidget {
               key: ValueKey('trackerMonthBar-${month.month}'),
               value: value,
               minHeight: 8,
-              backgroundColor: ClimateColors.surfaceSecondary,
+              backgroundColor: DesignTokens.surfaceMuted,
               color: ClimateColors.emissions,
               semanticsLabel: '$monthName, $shareText',
               semanticsValue: ((share ?? 0) * 100).toStringAsFixed(1),
