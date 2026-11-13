@@ -130,13 +130,12 @@ Future<void> _selectDay(
 ) async {
   final picker = find.byKey(ValueKey(pickerKey));
   final scrollable = find.byType(Scrollable).first;
-  await tester.drag(scrollable, const Offset(0, 1000));
-  await tester.pump();
   final dropdown = find.descendant(
     of: picker,
     matching: find.byType(DropdownButtonFormField<int>),
   );
   await tester.scrollUntilVisible(dropdown, 250, scrollable: scrollable);
+  await _pumpUntilVisible(tester, dropdown);
   await _fullyReveal(tester, dropdown, scrollable);
   await tester.tap(dropdown);
   await _pumpUntilVisible(tester, find.text(option));

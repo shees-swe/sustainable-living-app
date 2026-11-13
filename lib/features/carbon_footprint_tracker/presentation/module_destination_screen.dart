@@ -107,21 +107,32 @@ class _ActivityLogBody extends StatelessWidget {
         vertical: ClimateSpacing.space16,
       ),
       children: [
-        MonoNumericText(text: l10n.trackerPeriodTotal(periodYear)),
-        const SizedBox(height: ClimateSpacing.space8),
-        NumericTick(
-          value: periodTotal,
-          decimalPlaces: 2,
-          style: Theme.of(context).textTheme.displayLarge!
-              .merge(typography.number),
-          suffix: ' kg CO2',
-          suffixStyle: Theme.of(context).textTheme.titleMedium!
-              .merge(typography.unit),
-          textKey: const ValueKey('trackerPeriodTotalValue'),
+        Card(
+          color: ClimateColors.surfaceSecondary,
+          child: Padding(
+            padding: const EdgeInsets.all(ClimateSpacing.space16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                MonoNumericText(text: l10n.trackerPeriodTotal(periodYear)),
+                const SizedBox(height: ClimateSpacing.space8),
+                NumericTick(
+                  value: periodTotal,
+                  decimalPlaces: 2,
+                  style: Theme.of(context).textTheme.displayLarge!
+                      .merge(typography.number),
+                  suffix: ' kg CO2',
+                  suffixStyle: Theme.of(context).textTheme.titleMedium!
+                      .merge(typography.unit),
+                  textKey: const ValueKey('trackerPeriodTotalValue'),
+                ),
+                const SizedBox(height: ClimateSpacing.space8),
+                Text(l10n.trackerCoverage),
+              ],
+            ),
+          ),
         ),
-        const SizedBox(height: ClimateSpacing.space8),
-        Text(l10n.trackerCoverage),
-        const SizedBox(height: ClimateSpacing.space24),
+        const SizedBox(height: ClimateSpacing.space16),
         OutlinedButton(
           onPressed: () => Navigator.of(context).push<void>(
             PageRouteBuilder<void>(
@@ -181,7 +192,6 @@ class _ActivityLogBody extends StatelessWidget {
           ),
           child: Text(l10n.trackerViewRecommendations),
         ),
-        const SizedBox(height: ClimateSpacing.space16),
         FilledButton.icon(
           onPressed: () => _showCategoryPicker(context),
           icon: const Icon(Icons.add),
@@ -197,11 +207,13 @@ class _ActivityLogBody extends StatelessWidget {
           )
         else
           for (final entry in entries) ...[
-            _ActivityRow(
-              entry: entry,
-              onDelete: () => _deleteEntry(context, entry.activityId),
+            Card(
+              child: _ActivityRow(
+                entry: entry,
+                onDelete: () => _deleteEntry(context, entry.activityId),
+              ),
             ),
-            const Divider(height: 1),
+            const SizedBox(height: ClimateSpacing.space8),
           ],
       ],
     );

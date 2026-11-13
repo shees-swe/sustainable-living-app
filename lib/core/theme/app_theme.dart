@@ -99,10 +99,7 @@ class ClimateTypography extends ThemeExtension<ClimateTypography> {
   }
 
   @override
-  ClimateTypography lerp(
-    covariant ClimateTypography? other,
-    double t,
-  ) {
+  ClimateTypography lerp(covariant ClimateTypography? other, double t) {
     if (other == null) return this;
     return ClimateTypography(
       number: TextStyle.lerp(number, other.number, t)!,
@@ -185,18 +182,9 @@ abstract final class AppTheme {
           height: 1.4,
           fontWeight: FontWeight.w600,
         ),
-        bodyLarge: textTheme.bodyLarge?.copyWith(
-          fontSize: 16,
-          height: 1.5,
-        ),
-        bodyMedium: textTheme.bodyMedium?.copyWith(
-          fontSize: 14,
-          height: 1.45,
-        ),
-        bodySmall: textTheme.bodySmall?.copyWith(
-          fontSize: 12,
-          height: 1.4,
-        ),
+        bodyLarge: textTheme.bodyLarge?.copyWith(fontSize: 16, height: 1.5),
+        bodyMedium: textTheme.bodyMedium?.copyWith(fontSize: 14, height: 1.45),
+        bodySmall: textTheme.bodySmall?.copyWith(fontSize: 12, height: 1.4),
       ),
       extensions: [
         ClimateTypography(
@@ -241,6 +229,20 @@ abstract final class AppTheme {
           side: const BorderSide(color: Color(0xFFE2E7DD)),
         ),
       ),
+      listTileTheme: ListTileThemeData(
+        tileColor: ClimateColors.surfaceCard,
+        selectedTileColor: ClimateColors.surfaceSecondary,
+        iconColor: ClimateColors.verdant,
+        textColor: ClimateColors.textPrimary,
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: ClimateSpacing.space16,
+        ),
+        minVerticalPadding: ClimateSpacing.space8,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(ClimateSpacing.radiusSmall),
+          side: const BorderSide(color: Color(0xFFE2E7DD)),
+        ),
+      ),
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: ClimateColors.surfaceCard,
         indicatorColor: const Color(0xFFDDEBDD),
@@ -280,6 +282,7 @@ abstract final class AppTheme {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: ClimateColors.surfaceCard,
+        hintMaxLines: 2,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: ClimateSpacing.space16,
           vertical: ClimateSpacing.space16,
