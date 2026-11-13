@@ -1,23 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+
+import 'design_tokens.dart';
 
 abstract final class ClimateColors {
-  static const surfacePrimary = Color(0xFFFFFFFF);
-  static const surfaceSecondary = Color(0xFFF3F4F6);
-  static const textPrimary = Color(0xFF111827);
-  static const textSecondary = Color(0xFF4B5563);
-  static const cobalt = Color(0xFF0057D9);
-  static const positiveSaved = Color(0xFF007A52);
-  static const emissions = Color(0xFF8A4B08);
-  static const warning = Color(0xFFB42318);
-  static const divider = Color(0xFF7B8492);
+  static const canvas = DesignTokens.canvas;
+  static const surfacePrimary = DesignTokens.surface;
+  static const surfaceSecondary = DesignTokens.surfaceMuted;
+  static const textPrimary = DesignTokens.ink;
+  static const textSecondary = DesignTokens.inkMuted;
+  static const cobalt = DesignTokens.blue;
+  static const coral = DesignTokens.coral;
+  static const sun = DesignTokens.sun;
+  static const positiveSaved = DesignTokens.positive;
+  static const emissions = DesignTokens.sun;
+  static const warning = DesignTokens.warning;
+  static const divider = DesignTokens.divider;
+  static const dividerSubtle = DesignTokens.dividerSubtle;
 
   static const light = ClimateColorSet(
+    canvas: canvas,
     surfacePrimary: surfacePrimary,
     surfaceSecondary: surfaceSecondary,
     textPrimary: textPrimary,
     textSecondary: textSecondary,
     cobalt: cobalt,
+    coral: coral,
+    sun: sun,
     positiveSaved: positiveSaved,
     emissions: emissions,
     warning: warning,
@@ -28,22 +36,28 @@ abstract final class ClimateColors {
 @immutable
 class ClimateColorSet {
   const ClimateColorSet({
+    required this.canvas,
     required this.surfacePrimary,
     required this.surfaceSecondary,
     required this.textPrimary,
     required this.textSecondary,
     required this.cobalt,
+    required this.coral,
+    required this.sun,
     required this.positiveSaved,
     required this.emissions,
     required this.warning,
     required this.divider,
   });
 
+  final Color canvas;
   final Color surfacePrimary;
   final Color surfaceSecondary;
   final Color textPrimary;
   final Color textSecondary;
   final Color cobalt;
+  final Color coral;
+  final Color sun;
   final Color positiveSaved;
   final Color emissions;
   final Color warning;
@@ -51,24 +65,33 @@ class ClimateColorSet {
 }
 
 abstract final class ClimateSpacing {
-  static const double base = 8;
-  static const double space8 = 8;
-  static const double space16 = 16;
-  static const double space24 = 24;
-  static const double space32 = 32;
-  static const double space40 = 40;
-  static const double space48 = 48;
+  static const double base = DesignTokens.space8;
+  static const double space4 = DesignTokens.space4;
+  static const double space8 = DesignTokens.space8;
+  static const double space12 = DesignTokens.space12;
+  static const double space16 = DesignTokens.space16;
+  static const double space24 = DesignTokens.space24;
+  static const double space32 = DesignTokens.space32;
+  static const double space40 = DesignTokens.space40;
+  static const double space48 = DesignTokens.space48;
+  static const double space64 = DesignTokens.space64;
   static const values = <double>[
+    space4,
     space8,
+    space12,
     space16,
     space24,
     space32,
     space40,
     space48,
+    space64,
   ];
 
-  static const double radiusSmall = 4;
-  static const double radiusLarge = 8;
+  static const double radiusSmall = DesignTokens.radiusSmall;
+  static const double radiusLarge = DesignTokens.radiusCard;
+  static const double radiusControl = DesignTokens.radiusControl;
+  static const double radiusPill = DesignTokens.radiusPill;
+  static const double minimumTouchTarget = DesignTokens.minimumTouchTarget;
 }
 
 @immutable
@@ -115,67 +138,117 @@ abstract final class AppTheme {
 
   static ThemeData _buildLightTheme() {
     const colorScheme = ColorScheme.light(
-      primary: ClimateColors.cobalt,
-      onPrimary: ClimateColors.surfacePrimary,
-      primaryContainer: ClimateColors.cobalt,
-      onPrimaryContainer: ClimateColors.surfacePrimary,
-      secondary: ClimateColors.cobalt,
-      onSecondary: ClimateColors.surfacePrimary,
-      secondaryContainer: ClimateColors.cobalt,
-      onSecondaryContainer: ClimateColors.surfacePrimary,
-      tertiary: ClimateColors.cobalt,
-      onTertiary: ClimateColors.surfacePrimary,
-      error: ClimateColors.warning,
-      onError: ClimateColors.surfacePrimary,
-      surface: ClimateColors.surfacePrimary,
-      onSurface: ClimateColors.textPrimary,
-      surfaceContainerLowest: ClimateColors.surfacePrimary,
-      surfaceContainerLow: ClimateColors.surfaceSecondary,
-      surfaceContainer: ClimateColors.surfaceSecondary,
-      surfaceContainerHigh: ClimateColors.surfaceSecondary,
-      surfaceContainerHighest: ClimateColors.surfaceSecondary,
-      onSurfaceVariant: ClimateColors.textSecondary,
-      outline: ClimateColors.divider,
-      outlineVariant: ClimateColors.divider,
+      primary: DesignTokens.blue,
+      onPrimary: Colors.white,
+      primaryContainer: DesignTokens.surfaceBlue,
+      onPrimaryContainer: DesignTokens.blueInk,
+      secondary: DesignTokens.coral,
+      onSecondary: Colors.white,
+      secondaryContainer: DesignTokens.surfaceCoral,
+      onSecondaryContainer: DesignTokens.coralInk,
+      tertiary: DesignTokens.sun,
+      onTertiary: Colors.white,
+      tertiaryContainer: DesignTokens.surfaceSun,
+      onTertiaryContainer: DesignTokens.sunInk,
+      error: DesignTokens.warning,
+      onError: Colors.white,
+      surface: DesignTokens.surface,
+      onSurface: DesignTokens.ink,
+      surfaceContainerLowest: DesignTokens.surface,
+      surfaceContainerLow: DesignTokens.canvas,
+      surfaceContainer: DesignTokens.surfaceMuted,
+      surfaceContainerHigh: DesignTokens.surfaceRaised,
+      surfaceContainerHighest: DesignTokens.surfaceStrong,
+      onSurfaceVariant: DesignTokens.inkMuted,
+      outline: DesignTokens.divider,
+      outlineVariant: DesignTokens.dividerSubtle,
+      inverseSurface: DesignTokens.ink,
+      onInverseSurface: DesignTokens.surface,
+      inversePrimary: Color(0xFFB6CBE0),
       surfaceTint: Colors.transparent,
     );
-    final baseTextTheme = const TextTheme(
+    final textTheme = const TextTheme(
       displayLarge: TextStyle(
-        fontSize: 57,
+        fontSize: 40,
+        height: 1.08,
+        fontWeight: FontWeight.w700,
+      ),
+      displayMedium: TextStyle(
+        fontSize: 34,
         height: 1.12,
         fontWeight: FontWeight.w700,
       ),
+      headlineLarge: TextStyle(
+        fontSize: 30,
+        height: 1.2,
+        fontWeight: FontWeight.w600,
+      ),
+      headlineMedium: TextStyle(
+        fontSize: 24,
+        height: 1.25,
+        fontWeight: FontWeight.w600,
+      ),
+      headlineSmall: TextStyle(
+        fontSize: 20,
+        height: 1.3,
+        fontWeight: FontWeight.w600,
+      ),
+      titleLarge: TextStyle(
+        fontSize: 20,
+        height: 1.3,
+        fontWeight: FontWeight.w600,
+      ),
       titleMedium: TextStyle(
         fontSize: 16,
-        height: 1.5,
-        fontWeight: FontWeight.w500,
+        height: 1.4,
+        fontWeight: FontWeight.w600,
+      ),
+      titleSmall: TextStyle(
+        fontSize: 14,
+        height: 1.4,
+        fontWeight: FontWeight.w600,
       ),
       bodyLarge: TextStyle(
         fontSize: 16,
-        height: 1.5,
+        height: 1.55,
         fontWeight: FontWeight.w400,
       ),
       bodyMedium: TextStyle(
         fontSize: 14,
-        height: 1.45,
+        height: 1.5,
         fontWeight: FontWeight.w400,
       ),
       bodySmall: TextStyle(
         fontSize: 12,
-        height: 1.4,
+        height: 1.45,
         fontWeight: FontWeight.w400,
       ),
-    );
-    final textTheme = _withIbmPlexSans(baseTextTheme).apply(
-      bodyColor: ClimateColors.textPrimary,
-      displayColor: ClimateColors.textPrimary,
+      labelLarge: TextStyle(
+        fontSize: 14,
+        height: 1.3,
+        fontWeight: FontWeight.w600,
+      ),
+      labelMedium: TextStyle(
+        fontSize: 12,
+        height: 1.3,
+        fontWeight: FontWeight.w500,
+      ),
+      labelSmall: TextStyle(
+        fontSize: 11,
+        height: 1.3,
+        fontWeight: FontWeight.w500,
+      ),
+    ).apply(
+      fontFamily: 'IBMPlexSans',
+      bodyColor: DesignTokens.ink,
+      displayColor: DesignTokens.ink,
     );
     final controlShape = RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(ClimateSpacing.radiusSmall),
+      borderRadius: BorderRadius.circular(DesignTokens.radiusControl),
     );
     final fieldBorder = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(ClimateSpacing.radiusSmall),
-      borderSide: const BorderSide(color: ClimateColors.divider),
+      borderRadius: BorderRadius.circular(DesignTokens.radiusControl),
+      borderSide: const BorderSide(color: DesignTokens.dividerSubtle),
     );
 
     return ThemeData(
@@ -183,84 +256,177 @@ abstract final class AppTheme {
       brightness: Brightness.light,
       colorScheme: colorScheme,
       textTheme: textTheme,
-      primaryTextTheme: _withIbmPlexSans(baseTextTheme),
+      primaryTextTheme: textTheme,
       extensions: [
         ClimateTypography(
-          number: GoogleFonts.ibmPlexMono(fontWeight: FontWeight.w400),
-          unit: GoogleFonts.ibmPlexMono(fontWeight: FontWeight.w500),
-          tableFigure: GoogleFonts.ibmPlexMono(fontWeight: FontWeight.w600),
+          number: const TextStyle(
+            fontFamily: 'IBMPlexMono',
+            fontWeight: FontWeight.w400,
+          ),
+          unit: const TextStyle(
+            fontFamily: 'IBMPlexMono',
+            fontWeight: FontWeight.w500,
+          ),
+          tableFigure: const TextStyle(
+            fontFamily: 'IBMPlexMono',
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ],
-      scaffoldBackgroundColor: ClimateColors.surfacePrimary,
-      canvasColor: ClimateColors.surfacePrimary,
-      dividerColor: ClimateColors.divider,
-      shadowColor: Colors.transparent,
+      scaffoldBackgroundColor: DesignTokens.canvas,
+      canvasColor: DesignTokens.canvas,
+      dividerColor: DesignTokens.dividerSubtle,
+      shadowColor: const Color(0x1A182A38),
       appBarTheme: const AppBarTheme(
-        backgroundColor: ClimateColors.surfacePrimary,
-        foregroundColor: ClimateColors.textPrimary,
+        backgroundColor: DesignTokens.canvas,
+        foregroundColor: DesignTokens.ink,
         elevation: 0,
         scrolledUnderElevation: 0,
         surfaceTintColor: Colors.transparent,
+        titleTextStyle: TextStyle(
+          fontFamily: 'IBMPlexSans',
+          color: DesignTokens.ink,
+          fontSize: 20,
+          height: 1.3,
+          fontWeight: FontWeight.w600,
+        ),
       ),
       dividerTheme: const DividerThemeData(
-        color: ClimateColors.divider,
+        color: DesignTokens.dividerSubtle,
         thickness: 1,
+        space: DesignTokens.space24,
       ),
       cardTheme: CardThemeData(
-        color: ClimateColors.surfaceSecondary,
+        color: DesignTokens.surface,
         surfaceTintColor: Colors.transparent,
         shadowColor: Colors.transparent,
         elevation: 0,
+        margin: const EdgeInsets.symmetric(vertical: DesignTokens.space4),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(ClimateSpacing.radiusSmall),
+          borderRadius: BorderRadius.circular(DesignTokens.radiusCard),
+          side: const BorderSide(color: DesignTokens.dividerSubtle),
+        ),
+      ),
+      listTileTheme: const ListTileThemeData(
+        contentPadding: EdgeInsets.symmetric(horizontal: DesignTokens.space16),
+        minVerticalPadding: DesignTokens.space12,
+        iconColor: DesignTokens.inkMuted,
+        textColor: DesignTokens.ink,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(DesignTokens.radiusControl),
+          ),
         ),
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
-          foregroundColor: ClimateColors.surfacePrimary,
-          backgroundColor: ClimateColors.cobalt,
+          foregroundColor: Colors.white,
+          backgroundColor: DesignTokens.blue,
+          minimumSize: const Size.fromHeight(
+            DesignTokens.minimumTouchTarget,
+          ),
+          padding: const EdgeInsets.symmetric(
+            horizontal: DesignTokens.space24,
+            vertical: DesignTokens.space12,
+          ),
           shape: controlShape,
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          foregroundColor: ClimateColors.cobalt,
-          side: const BorderSide(color: ClimateColors.cobalt),
+          foregroundColor: DesignTokens.blue,
+          minimumSize: const Size.fromHeight(
+            DesignTokens.minimumTouchTarget,
+          ),
+          padding: const EdgeInsets.symmetric(
+            horizontal: DesignTokens.space24,
+            vertical: DesignTokens.space12,
+          ),
+          side: const BorderSide(color: DesignTokens.blue, width: 1.4),
           shape: controlShape,
         ),
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          foregroundColor: ClimateColors.cobalt,
+          foregroundColor: DesignTokens.blue,
+          minimumSize: const Size.fromHeight(
+            DesignTokens.minimumTouchTarget,
+          ),
           shape: controlShape,
         ),
       ),
+      iconButtonTheme: IconButtonThemeData(
+        style: IconButton.styleFrom(
+          foregroundColor: DesignTokens.inkMuted,
+          minimumSize: const Size(
+            DesignTokens.minimumTouchTarget,
+            DesignTokens.minimumTouchTarget,
+          ),
+        ),
+      ),
       inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: DesignTokens.surface,
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: DesignTokens.space16,
+          vertical: DesignTokens.space12,
+        ),
+        labelStyle: const TextStyle(color: DesignTokens.inkMuted),
+        hintStyle: const TextStyle(color: DesignTokens.inkMuted),
         enabledBorder: fieldBorder,
         focusedBorder: fieldBorder.copyWith(
-          borderSide: const BorderSide(color: ClimateColors.cobalt),
+          borderSide: const BorderSide(color: DesignTokens.blue, width: 2),
         ),
         errorBorder: fieldBorder.copyWith(
-          borderSide: const BorderSide(color: ClimateColors.warning),
+          borderSide: const BorderSide(color: DesignTokens.warning, width: 1.5),
         ),
         focusedErrorBorder: fieldBorder.copyWith(
-          borderSide: const BorderSide(color: ClimateColors.warning),
+          borderSide: const BorderSide(color: DesignTokens.warning, width: 2),
         ),
       ),
-    );
-  }
-
-  static TextTheme _withIbmPlexSans(TextTheme textTheme) {
-    return TextTheme(
-      displayLarge: GoogleFonts.ibmPlexSans(
-        textStyle: textTheme.displayLarge,
+      chipTheme: ChipThemeData(
+        backgroundColor: DesignTokens.surfaceMuted,
+        selectedColor: DesignTokens.surfaceBlue,
+        labelStyle: const TextStyle(color: DesignTokens.ink),
+        secondaryLabelStyle: const TextStyle(color: DesignTokens.blueInk),
+        padding: const EdgeInsets.symmetric(
+          horizontal: DesignTokens.space8,
+          vertical: DesignTokens.space4,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(DesignTokens.radiusPill),
+          side: const BorderSide(color: DesignTokens.dividerSubtle),
+        ),
       ),
-      titleMedium: GoogleFonts.ibmPlexSans(
-        textStyle: textTheme.titleMedium,
+      dialogTheme: DialogThemeData(
+        backgroundColor: DesignTokens.surface,
+        surfaceTintColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(DesignTokens.radiusCard),
+        ),
       ),
-      bodyLarge: GoogleFonts.ibmPlexSans(textStyle: textTheme.bodyLarge),
-      bodyMedium: GoogleFonts.ibmPlexSans(textStyle: textTheme.bodyMedium),
-      bodySmall: GoogleFonts.ibmPlexSans(textStyle: textTheme.bodySmall),
+      bottomSheetTheme: const BottomSheetThemeData(
+        backgroundColor: DesignTokens.surface,
+        surfaceTintColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(DesignTokens.radiusLarge),
+          ),
+        ),
+      ),
+      snackBarTheme: SnackBarThemeData(
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: DesignTokens.ink,
+        contentTextStyle: const TextStyle(color: Colors.white),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(DesignTokens.radiusControl),
+        ),
+      ),
+      progressIndicatorTheme: const ProgressIndicatorThemeData(
+        color: DesignTokens.blue,
+        linearTrackColor: DesignTokens.surfaceBlue,
+        circularTrackColor: DesignTokens.surfaceBlue,
+      ),
     );
   }
 }
