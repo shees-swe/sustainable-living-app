@@ -11,15 +11,16 @@ void main() {
   });
 
   group('AppTheme', () {
-    test('uses the Verdant light palette', () {
+    test('uses the Climate Instrument light palette', () {
       final colorScheme = AppTheme.light.colorScheme;
 
       expect(colorScheme.brightness, Brightness.light);
       expect(colorScheme.primary, ClimateColors.cobalt);
+      expect(colorScheme.onPrimary, ClimateColors.surfacePrimary);
       expect(colorScheme.surface, ClimateColors.surfacePrimary);
       expect(colorScheme.onSurface, ClimateColors.textPrimary);
       expect(colorScheme.error, ClimateColors.warning);
-      expect(AppTheme.light.scaffoldBackgroundColor, ClimateColors.surfacePrimary);
+      expect(AppTheme.light.scaffoldBackgroundColor, Colors.white);
     });
 
     test('uses IBM Plex Sans for headings and body text', () {
@@ -84,12 +85,12 @@ void main() {
       expect(colors.divider, ClimateColors.divider);
     });
 
-    test('provides hairline dividers, elevated surfaces, and Verdant shapes', () {
+    test('provides hairline dividers, flat surfaces, and compact shapes', () {
       final theme = AppTheme.light;
 
       expect(theme.dividerTheme.thickness, 1);
       expect(theme.dividerTheme.color, ClimateColors.divider);
-      expect(theme.cardTheme.elevation, 1);
+      expect(theme.cardTheme.elevation, 0);
       expect(
         theme.filledButtonTheme.style!.shape!.resolve({}),
         isA<RoundedRectangleBorder>(),
@@ -97,10 +98,10 @@ void main() {
       final buttonShape =
           theme.filledButtonTheme.style!.shape!.resolve({})
               as RoundedRectangleBorder;
-      expect(buttonShape.borderRadius, BorderRadius.circular(ClimateSpacing.radiusSmall));
-      expect(ClimateSpacing.values, [4, 8, 12, 16, 24, 32, 40, 48]);
-      expect(ClimateSpacing.radiusSmall, 8);
-      expect(ClimateSpacing.radiusLarge, 16);
+      expect(buttonShape.borderRadius, BorderRadius.circular(4));
+      expect(ClimateSpacing.values, [8, 16, 24, 32, 40, 48]);
+      expect(ClimateSpacing.radiusSmall, 4);
+      expect(ClimateSpacing.radiusLarge, 8);
     });
 
     test('loads bundled IBM Plex assets with runtime fetching disabled', () async {

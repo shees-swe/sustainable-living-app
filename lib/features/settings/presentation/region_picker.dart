@@ -96,16 +96,13 @@ class _RegionPickerState extends State<RegionPicker> {
               child: Column(
                 children: [
                   for (final region in widget.catalog.regions) ...[
-                    Material(
-                      color: Colors.transparent,
-                      child: RadioListTile<String>(
-                        contentPadding: EdgeInsets.zero,
-                        title: Text(_regionName(l10n, region.nameKey)),
-                        subtitle: region.demoOnly
-                            ? Text(l10n.demoOnlyWarning)
-                            : Text(l10n.regionCurrency(region.currencyCode)),
-                        value: region.regionId,
-                      ),
+                    RadioListTile<String>(
+                      contentPadding: EdgeInsets.zero,
+                      title: Text(_regionName(l10n, region.nameKey)),
+                      subtitle: region.demoOnly
+                          ? Text(l10n.demoOnlyWarning)
+                          : Text(l10n.regionCurrency(region.currencyCode)),
+                      value: region.regionId,
                     ),
                     const Divider(height: 1),
                   ],

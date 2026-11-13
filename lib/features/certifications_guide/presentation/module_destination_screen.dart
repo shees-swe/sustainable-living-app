@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../../core/accessibility/reduced_motion.dart';
 import '../../../core/motion/motion_spec.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/design_tokens.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../data/certification_catalog.dart';
 
@@ -34,200 +33,119 @@ class _CertificationsGuideScreenState extends State<CertificationsGuideScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final verdant = theme.extension<VerdantColors>()!;
     final certifications = widget.catalog.filter(
       query: _query,
       category: _category,
     );
 
     return Scaffold(
-      backgroundColor: verdant.cream,
       appBar: AppBar(
-        backgroundColor: verdant.forestGreen,
-        foregroundColor: Colors.white,
         toolbarHeight:
             kToolbarHeight * MediaQuery.textScalerOf(context).scale(1),
-        title: Text(
-          l10n.certificationsGuide,
-          maxLines: 2,
-          style: const TextStyle(color: Colors.white),
-        ),
-        iconTheme: const IconThemeData(color: Colors.white),
-        elevation: 0,
-        scrolledUnderElevation: 0,
+        title: Text(l10n.certificationsGuide, maxLines: 2),
       ),
       body: ListView(
         key: const ValueKey('certificationDirectoryList'),
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
+        padding: const EdgeInsets.symmetric(
+          horizontal: ClimateSpacing.space16,
+          vertical: ClimateSpacing.space16,
+        ),
         children: [
-          // Info card
-          Container(
-            decoration: BoxDecoration(
-              color: verdant.forestLight,
-              borderRadius: BorderRadius.circular(DesignTokens.radiusMedium),
-              border: Border.all(
-                color: verdant.forestGreen.withValues(alpha: 0.2),
+          Text(l10n.certificationsSection, style: theme.textTheme.titleLarge),
+          const SizedBox(height: ClimateSpacing.space8),
+          Text(
+            l10n.certificationDisclaimer,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: ClimateColors.textSecondary,
+            ),
+          ),
+          const SizedBox(height: ClimateSpacing.space16),
+          TextField(
+            key: const ValueKey('certificationSearchField'),
+            controller: _searchController,
+            onChanged: (value) => setState(() => _query = value),
+            decoration: InputDecoration(
+              labelText: l10n.certificationSearchLabel,
+              suffixIcon: _query.isEmpty
+                  ? null
+                  : IconButton(
+                      tooltip: l10n.certificationClearSearch,
+                      onPressed: () {
+                        _searchController.clear();
+                        setState(() => _query = '');
+                      },
+                      icon: const Icon(Icons.clear),
+                    ),
+            ),
+          ),
+          const SizedBox(height: ClimateSpacing.space16),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                l10n.certificationCategoryFilter,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: ClimateColors.textSecondary,
+                ),
               ),
-            ),
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  l10n.certificationsSection,
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    color: verdant.forestGreen,
+              const SizedBox(height: ClimateSpacing.space8),
+              DropdownButtonFormField<String>(
+                key: const ValueKey('certificationCategoryFilter'),
+                initialValue: _category ?? _allCategoriesValue,
+                isExpanded: true,
+                decoration: const InputDecoration(),
+                items: [
+                  DropdownMenuItem(
+                    value: _allCategoriesValue,
+                    child: Text(l10n.certificationAllCategories),
                   ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  l10n.certificationDisclaimer,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: ClimateColors.textSecondary,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 16),
-          // Search & filter card
-          Container(
-            decoration: DesignTokens.sectionCard(context),
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextField(
-                  key: const ValueKey('certificationSearchField'),
-                  controller: _searchController,
-                  onChanged: (value) => setState(() => _query = value),
-                  decoration: InputDecoration(
-                    labelText: l10n.certificationSearchLabel,
-                    prefixIcon: const Icon(Icons.search),
-                    suffixIcon: _query.isEmpty
-                        ? null
-                        : IconButton(
-                            tooltip: l10n.certificationClearSearch,
-                            onPressed: () {
-                              _searchController.clear();
-                              setState(() => _query = '');
-                            },
-                            icon: const Icon(Icons.clear),
-                          ),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  l10n.certificationCategoryFilter,
-                  style: theme.textTheme.labelMedium?.copyWith(
-                    color: ClimateColors.textSecondary,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                DropdownButtonFormField<String>(
-                  key: const ValueKey('certificationCategoryFilter'),
-                  initialValue: _category ?? _allCategoriesValue,
-                  isExpanded: true,
-                  decoration: const InputDecoration(),
-                  items: [
+                  for (final category in widget.catalog.categories)
                     DropdownMenuItem(
-                      value: _allCategoriesValue,
-                      child: Text(l10n.certificationAllCategories),
+                      value: category,
+                      child: Text(category, maxLines: 2),
                     ),
-                    for (final category in widget.catalog.categories)
-                      DropdownMenuItem(
-                        value: category,
-                        child: Text(category, maxLines: 2),
-                      ),
-                  ],
-                  onChanged: (value) => setState(
-                    () =>
-                        _category = value == _allCategoriesValue ? null : value,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 16),
-          // Certifications list
-          if (certifications.isEmpty) ...[
-            Container(
-              decoration: DesignTokens.sectionCard(context),
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                children: [
-                  Icon(
-                    Icons.search_off_rounded,
-                    size: 48,
-                    color: verdant.forestGreen.withValues(alpha: 0.4),
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    l10n.certificationNoMatches,
-                    textAlign: TextAlign.center,
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: ClimateColors.textSecondary,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  TextButton(
-                    onPressed: _clearFilters,
-                    child: Text(l10n.certificationClearFilters),
-                  ),
                 ],
+                onChanged: (value) => setState(
+                  () => _category = value == _allCategoriesValue ? null : value,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: ClimateSpacing.space16),
+          if (certifications.isEmpty) ...[
+            Text(l10n.certificationNoMatches),
+            const SizedBox(height: ClimateSpacing.space8),
+            Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: TextButton(
+                onPressed: _clearFilters,
+                child: Text(l10n.certificationClearFilters),
               ),
             ),
           ] else ...[
-            Container(
-              decoration: DesignTokens.sectionCard(context),
-              child: Column(
-                children: [
-                  for (
-                    var index = 0;
-                    index < certifications.length;
-                    index++
-                  ) ...[
-                    _CertificationRow(
-                      certification: certifications[index],
-                      onTap: () => _openDetails(context, certifications[index]),
-                    ),
-                    if (index < certifications.length - 1)
-                      const Divider(height: 1, indent: 16, endIndent: 16),
-                  ],
-                ],
+            for (var index = 0; index < certifications.length; index++) ...[
+              _CertificationRow(
+                certification: certifications[index],
+                onTap: () => _openDetails(context, certifications[index]),
               ),
-            ),
+              if (index < certifications.length - 1) const Divider(height: 1),
+            ],
           ],
-          const SizedBox(height: 20),
-          // Brand check guide card
-          Container(
-            decoration: DesignTokens.sectionCard(context),
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  l10n.checkBrandSection,
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    color: verdant.forestGreen,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                for (
-                  var index = 0;
-                  index < widget.catalog.guidePoints.length;
-                  index++
-                ) ...[
-                  _GuidePointRow(
-                    number: index + 1,
-                    point: widget.catalog.guidePoints[index],
-                  ),
-                  if (index < widget.catalog.guidePoints.length - 1)
-                    const Divider(height: 1),
-                ],
-              ],
+          const SizedBox(height: ClimateSpacing.space32),
+          Text(l10n.checkBrandSection, style: theme.textTheme.titleLarge),
+          const SizedBox(height: ClimateSpacing.space8),
+          for (
+            var index = 0;
+            index < widget.catalog.guidePoints.length;
+            index++
+          ) ...[
+            _GuidePointRow(
+              number: index + 1,
+              point: widget.catalog.guidePoints[index],
             ),
-          ),
+            if (index < widget.catalog.guidePoints.length - 1)
+              const Divider(height: 1),
+          ],
         ],
       ),
     );
@@ -275,45 +193,24 @@ class _CertificationRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final verdant = theme.extension<VerdantColors>()!;
     return InkWell(
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: ClimateSpacing.space16,
-        ),
-        child: Row(
+        padding: const EdgeInsets.symmetric(vertical: ClimateSpacing.space16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _DirectoryText(
-                    certification.name,
-                    style: theme.textTheme.titleSmall,
-                  ),
-                  const SizedBox(height: 4),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 3,
-                    ),
-                    decoration: BoxDecoration(
-                      color: verdant.tagBackground,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: _DirectoryText(
-                      certification.category,
-                      style: theme.textTheme.labelSmall?.copyWith(
-                        color: verdant.forestGreen,
-                      ),
-                    ),
-                  ),
-                ],
+            _DirectoryText(
+              certification.name,
+              style: theme.textTheme.titleMedium,
+            ),
+            const SizedBox(height: ClimateSpacing.space8),
+            _DirectoryText(
+              certification.category,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: ClimateColors.textSecondary,
               ),
             ),
-            Icon(Icons.chevron_right, color: ClimateColors.textSecondary),
           ],
         ),
       ),
@@ -330,42 +227,27 @@ class _GuidePointRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final verdant = theme.extension<VerdantColors>()!;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: ClimateSpacing.space16),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: 28,
-            height: 28,
-            decoration: BoxDecoration(
-              color: verdant.forestGreen,
-              shape: BoxShape.circle,
-            ),
-            child: Center(
-              child: Text(
-                '$number',
-                style: theme.textTheme.labelSmall?.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w700,
-                ),
+          SizedBox(
+            width: ClimateSpacing.space32,
+            child: _DirectoryText(
+              '$number',
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: ClimateColors.textSecondary,
               ),
             ),
           ),
-          const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _DirectoryText(point.title, style: theme.textTheme.titleSmall),
-                const SizedBox(height: 4),
-                _DirectoryText(
-                  point.text,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: ClimateColors.textSecondary,
-                  ),
-                ),
+                _DirectoryText(point.title, style: theme.textTheme.titleMedium),
+                const SizedBox(height: ClimateSpacing.space8),
+                _DirectoryText(point.text),
               ],
             ),
           ),
@@ -384,93 +266,49 @@ class _CertificationDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final verdant = theme.extension<VerdantColors>()!;
     return Scaffold(
-      backgroundColor: verdant.cream,
       appBar: AppBar(
-        backgroundColor: verdant.forestGreen,
-        foregroundColor: Colors.white,
         toolbarHeight:
             kToolbarHeight * MediaQuery.textScalerOf(context).scale(1),
-        title: Text(
-          l10n.certificationDetail,
-          maxLines: 2,
-          style: const TextStyle(color: Colors.white),
-        ),
-        iconTheme: const IconThemeData(color: Colors.white),
-        elevation: 0,
-        scrolledUnderElevation: 0,
+        title: Text(l10n.certificationDetail, maxLines: 2),
       ),
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
+        padding: const EdgeInsets.symmetric(
+          horizontal: ClimateSpacing.space16,
+          vertical: ClimateSpacing.space16,
+        ),
         children: [
-          Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [verdant.forestGreen, verdant.forestDeep],
-              ),
-              borderRadius: BorderRadius.circular(DesignTokens.radiusLarge),
-            ),
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _DirectoryText(
-                  certification.name,
-                  style: theme.textTheme.titleLarge?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.2),
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: _DirectoryText(
-                    certification.category,
-                    style: theme.textTheme.labelMedium?.copyWith(
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+          _DirectoryText(
+            certification.name,
+            style: theme.textTheme.headlineSmall,
           ),
-          const SizedBox(height: 12),
-          Container(
-            decoration: DesignTokens.sectionCard(context),
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  l10n.certificationMeaningLabel,
-                  style: theme.textTheme.titleSmall?.copyWith(
-                    color: verdant.forestGreen,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                _DirectoryText(certification.meaning),
-                const SizedBox(height: 16),
-                Text(
-                  l10n.certificationWhereSeenLabel,
-                  style: theme.textTheme.titleSmall?.copyWith(
-                    color: verdant.forestGreen,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                _DirectoryText(certification.whereSeen),
-              ],
-            ),
+          const SizedBox(height: ClimateSpacing.space16),
+          const Divider(height: 1),
+          const SizedBox(height: ClimateSpacing.space16),
+          Text(
+            l10n.certificationCategoryFilter,
+            style: theme.textTheme.titleMedium,
           ),
+          const SizedBox(height: ClimateSpacing.space8),
+          _DirectoryText(certification.category),
+          const SizedBox(height: ClimateSpacing.space16),
+          const Divider(height: 1),
+          const SizedBox(height: ClimateSpacing.space16),
+          Text(
+            l10n.certificationMeaningLabel,
+            style: theme.textTheme.titleMedium,
+          ),
+          const SizedBox(height: ClimateSpacing.space8),
+          _DirectoryText(certification.meaning),
+          const SizedBox(height: ClimateSpacing.space16),
+          const Divider(height: 1),
+          const SizedBox(height: ClimateSpacing.space16),
+          Text(
+            l10n.certificationWhereSeenLabel,
+            style: theme.textTheme.titleMedium,
+          ),
+          const SizedBox(height: ClimateSpacing.space8),
+          _DirectoryText(certification.whereSeen),
         ],
       ),
     );

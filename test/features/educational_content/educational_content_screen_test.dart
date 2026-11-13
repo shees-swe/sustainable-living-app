@@ -246,8 +246,7 @@ EducationalArticleCatalog _catalogWithLongArticle(
 Finder _richText(String value) => find.byWidgetPredicate(
   (widget) =>
       widget is Text &&
-      (widget.data == value ||
-          widget.textSpan?.toPlainText(includeSemanticsLabels: false) == value),
+      widget.textSpan?.toPlainText(includeSemanticsLabels: false) == value,
 );
 
 Future<void> _openArticles(

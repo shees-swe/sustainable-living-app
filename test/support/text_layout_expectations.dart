@@ -29,25 +29,9 @@ void expectNoTextOverlapOrClipping(
       .whereType<RenderParagraph>()
       .where((paragraph) => paragraph.attached && paragraph.hasSize)
       .toList();
-  final visibleParagraphs = <(RenderParagraph, Rect)>[];
-  for (final paragraph in paragraphs) {
-    var rect = paragraph.localToGlobal(Offset.zero) & paragraph.size;
-    final viewport = RenderAbstractViewport.maybeOf(paragraph);
-    if (viewport is RenderBox) {
-      final viewportBox = viewport as RenderBox;
-      if (viewportBox.hasSize) {
-        final viewportRect =
-            viewportBox.localToGlobal(Offset.zero) & viewportBox.size;
-        if (!rect.overlaps(viewportRect)) {
-          continue;
-        }
-        rect = rect.intersect(viewportRect);
-      }
-    }
-    if (rect.width > 0 && rect.height > 0) {
-      visibleParagraphs.add((paragraph, rect));
-    }
-  }
+  final bounds = paragraphs
+      .map((paragraph) => paragraph.localToGlobal(Offset.zero) & paragraph.size)
+      .toList();
 
   for (var index = 0; index < paragraphs.length; index++) {
     expect(
@@ -57,16 +41,14 @@ void expectNoTextOverlapOrClipping(
           '$screen contains clipped text: '
           '${paragraphs[index].text.toPlainText()}',
     );
-  }
-  for (var index = 0; index < visibleParagraphs.length; index++) {
-    for (var other = index + 1; other < visibleParagraphs.length; other++) {
+    for (var other = index + 1; other < bounds.length; other++) {
       expect(
-        visibleParagraphs[index].$2.overlaps(visibleParagraphs[other].$2),
+        bounds[index].overlaps(bounds[other]),
         isFalse,
         reason:
             '$screen has overlapping text: '
-            '"${visibleParagraphs[index].$1.text.toPlainText()}" and '
-            '"${visibleParagraphs[other].$1.text.toPlainText()}"',
+            '"${paragraphs[index].text.toPlainText()}" and '
+            '"${paragraphs[other].text.toPlainText()}"',
       );
     }
   }

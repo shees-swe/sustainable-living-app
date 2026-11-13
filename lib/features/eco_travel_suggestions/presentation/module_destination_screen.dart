@@ -6,7 +6,6 @@ import '../../../core/accessibility/reduced_motion.dart';
 import '../../../core/data/database/app_database.dart';
 import '../../../core/motion/motion_spec.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/design_tokens.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../data/travel_guide_catalog.dart';
 import '../data/travel_trip_repository.dart';
@@ -41,22 +40,11 @@ class _EcoTravelSuggestionsScreenState
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final verdant = Theme.of(context).extension<VerdantColors>()!;
     return Scaffold(
-      backgroundColor: verdant.cream,
       appBar: AppBar(
-        backgroundColor: verdant.forestGreen,
-        foregroundColor: Colors.white,
         toolbarHeight:
             kToolbarHeight * MediaQuery.textScalerOf(context).scale(1),
-        title: Text(
-          l10n.ecoTravelSuggestions,
-          maxLines: 2,
-          style: const TextStyle(color: Colors.white),
-        ),
-        iconTheme: const IconThemeData(color: Colors.white),
-        elevation: 0,
-        scrolledUnderElevation: 0,
+        title: Text(l10n.ecoTravelSuggestions, maxLines: 2),
       ),
       body: FutureBuilder<TravelGuideCatalog>(
         future: _catalog,
@@ -221,93 +209,52 @@ class _TravelPlannerBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final verdant = theme.extension<VerdantColors>()!;
     return ListView(
       key: const ValueKey('travelPlannerList'),
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
+      padding: const EdgeInsets.symmetric(
+        horizontal: ClimateSpacing.space16,
+        vertical: ClimateSpacing.space16,
+      ),
       children: [
-        // Trips Section Header & Card
-        Container(
-          decoration: DesignTokens.sectionCard(context),
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    l10n.travelTripSection,
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      color: verdant.forestGreen,
-                    ),
-                  ),
-                  FilledButton.icon(
-                    key: const ValueKey('travelAddTripButton'),
-                    onPressed: onAdd,
-                    style: FilledButton.styleFrom(
-                      backgroundColor: verdant.forestGreen,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 14,
-                        vertical: 8,
-                      ),
-                    ),
-                    icon: const Icon(Icons.add, size: 18),
-                    label: Text(l10n.travelAddTrip),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              if (trips.isEmpty)
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  child: Center(
-                    child: Text(
-                      l10n.travelNoTrips,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: ClimateColors.textSecondary,
-                      ),
-                    ),
-                  ),
-                )
-              else
-                for (var i = 0; i < trips.length; i++) ...[
-                  _TravelTripRow(
-                    trip: trips[i],
-                    guidance: _guidanceFor(catalog, trips[i].transportMode).guidance,
-                    onEdit: () => onEdit(trips[i]),
-                    onDelete: () => onDelete(trips[i].tripId),
-                  ),
-                  if (i < trips.length - 1)
-                    const Divider(height: 1),
-                ],
-            ],
+        Text(l10n.travelTripSection, style: theme.textTheme.titleMedium),
+        if (trips.isEmpty)
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: ClimateSpacing.space16,
+            ),
+            child: Text(l10n.travelNoTrips),
+          )
+        else
+          for (final trip in trips) ...[
+            _TravelTripRow(
+              trip: trip,
+              guidance: _guidanceFor(catalog, trip.transportMode).guidance,
+              onEdit: () => onEdit(trip),
+              onDelete: () => onDelete(trip.tripId),
+            ),
+            const Divider(height: 1),
+          ],
+        const SizedBox(height: ClimateSpacing.space16),
+        FilledButton.icon(
+          key: const ValueKey('travelAddTripButton'),
+          onPressed: onAdd,
+          icon: const Icon(Icons.add),
+          label: Text(l10n.travelAddTrip),
+        ),
+        const SizedBox(height: ClimateSpacing.space24),
+        const Divider(height: 1),
+        Padding(
+          padding: const EdgeInsets.only(top: ClimateSpacing.space16),
+          child: Text(
+            l10n.travelTipsSection,
+            style: theme.textTheme.titleMedium,
           ),
         ),
-        const SizedBox(height: 16),
-        // Eco Travel Tips Section
-        Container(
-          decoration: DesignTokens.sectionCard(context),
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                l10n.travelTipsSection,
-                style: theme.textTheme.titleMedium?.copyWith(
-                  color: verdant.forestGreen,
-                ),
-              ),
-              const SizedBox(height: 8),
-              for (var i = 0; i < catalog.tips.length; i++) ...[
-                _TravelTipRow(tip: catalog.tips[i]),
-                if (i < catalog.tips.length - 1)
-                  const Divider(height: 1),
-              ],
-            ],
-          ),
-        ),
+        for (final tip in catalog.tips) ...[
+          const Divider(height: 1),
+          _TravelTipRow(tip: tip),
+        ],
+        const Divider(height: 1),
       ],
     );
   }
@@ -330,7 +277,6 @@ class _TravelTripRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final verdant = theme.extension<VerdantColors>()!;
     final numberStyle = theme.extension<ClimateTypography>()!.number;
     return Padding(
       key: ValueKey('travelTrip-${trip.tripId}'),
@@ -338,111 +284,53 @@ class _TravelTripRow extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Text(trip.title, style: theme.textTheme.titleSmall),
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    tooltip: l10n.travelEditTripTooltip,
-                    onPressed: onEdit,
-                    icon: const Icon(Icons.edit_outlined, size: 20),
-                    visualDensity: VisualDensity.compact,
-                  ),
-                  IconButton(
-                    tooltip: l10n.travelDeleteTrip,
-                    onPressed: onDelete,
-                    icon: const Icon(Icons.delete_outline, size: 20),
-                    visualDensity: VisualDensity.compact,
-                  ),
-                ],
-              ),
-            ],
-          ),
-          const SizedBox(height: 4),
-          Row(
-            children: [
-              Icon(Icons.location_on_outlined, size: 16, color: ClimateColors.textSecondary),
-              const SizedBox(width: 4),
-              Text(
-                trip.destination,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
+          Text(trip.title, style: theme.textTheme.titleSmall),
+          const SizedBox(height: ClimateSpacing.space8),
+          Text(trip.destination),
+          const SizedBox(height: ClimateSpacing.space8),
           Wrap(
-            spacing: ClimateSpacing.space12,
-            runSpacing: ClimateSpacing.space4,
+            spacing: ClimateSpacing.space16,
+            runSpacing: ClimateSpacing.space8,
             children: [
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                decoration: BoxDecoration(
-                  color: verdant.tagBackground,
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: Text(
-                  trip.transportMode,
-                  style: theme.textTheme.labelSmall?.copyWith(
-                    color: verdant.forestGreen,
-                  ),
-                ),
-              ),
+              Text(trip.transportMode),
               if (trip.tripDate != null)
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.calendar_today_outlined, size: 14, color: ClimateColors.textSecondary),
-                    const SizedBox(width: 4),
-                    Text(
-                      DateFormat.yMMMd(l10n.localeName).format(trip.tripDate!),
-                      style: numberStyle,
-                    ),
-                  ],
+                Text(
+                  DateFormat.yMMMd(l10n.localeName).format(trip.tripDate!),
+                  style: numberStyle,
                 ),
             ],
           ),
-          const SizedBox(height: 10),
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: verdant.cream,
-              borderRadius: BorderRadius.circular(DesignTokens.radiusSmall),
-              border: Border.all(color: verdant.cardBorder),
+          const SizedBox(height: ClimateSpacing.space8),
+          Text(
+            l10n.travelTransportGuidance,
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: ClimateColors.textSecondary,
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          ),
+          const SizedBox(height: ClimateSpacing.space8),
+          Text(guidance),
+          if (trip.notes != null) ...[
+            const SizedBox(height: ClimateSpacing.space8),
+            Text(trip.notes!),
+          ],
+          const SizedBox(height: ClimateSpacing.space8),
+          Align(
+            alignment: AlignmentDirectional.centerEnd,
+            child: Wrap(
               children: [
-                Text(
-                  l10n.travelTransportGuidance,
-                  style: theme.textTheme.labelSmall?.copyWith(
-                    color: ClimateColors.textSecondary,
-                  ),
+                IconButton(
+                  tooltip: l10n.travelEditTripTooltip,
+                  onPressed: onEdit,
+                  icon: const Icon(Icons.edit_outlined),
                 ),
-                const SizedBox(height: 2),
-                Text(
-                  guidance,
-                  style: theme.textTheme.bodySmall,
+                IconButton(
+                  tooltip: l10n.travelDeleteTrip,
+                  onPressed: onDelete,
+                  icon: const Icon(Icons.delete_outline),
                 ),
               ],
             ),
           ),
-          if (trip.notes != null && trip.notes!.isNotEmpty) ...[
-            const SizedBox(height: 8),
-            Text(
-              trip.notes!,
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: ClimateColors.textSecondary,
-                fontStyle: FontStyle.italic,
-              ),
-            ),
-          ],
         ],
       ),
     );
@@ -458,18 +346,13 @@ class _TravelTipRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: ClimateSpacing.space12),
+      padding: const EdgeInsets.symmetric(vertical: ClimateSpacing.space16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(tip.title, style: theme.textTheme.titleSmall),
-          const SizedBox(height: 4),
-          Text(
-            tip.text,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: ClimateColors.textSecondary,
-            ),
-          ),
+          const SizedBox(height: ClimateSpacing.space8),
+          Text(tip.text),
         ],
       ),
     );
@@ -526,7 +409,6 @@ class _TravelTripDialogState extends State<_TravelTripDialog> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final verdant = theme.extension<VerdantColors>()!;
     final numberStyle = theme.extension<ClimateTypography>()!.number;
     final isEditing = widget.trip != null;
     final dateText = _date == null
@@ -588,26 +470,14 @@ class _TravelTripDialogState extends State<_TravelTripDialog> {
               },
             ),
             const SizedBox(height: ClimateSpacing.space8),
-            Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: verdant.forestLight,
-                borderRadius: BorderRadius.circular(DesignTokens.radiusSmall),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    l10n.travelTransportGuidance,
-                    style: theme.textTheme.labelSmall?.copyWith(
-                      color: verdant.forestGreen,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(_selectedMode.guidance, style: theme.textTheme.bodySmall),
-                ],
+            Text(
+              l10n.travelTransportGuidance,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: ClimateColors.textSecondary,
               ),
             ),
+            const SizedBox(height: ClimateSpacing.space8),
+            Text(_selectedMode.guidance),
             const SizedBox(height: ClimateSpacing.space16),
             Text(
               l10n.travelDateLabel,
@@ -654,10 +524,6 @@ class _TravelTripDialogState extends State<_TravelTripDialog> {
         FilledButton(
           key: const ValueKey('travelSaveTripButton'),
           onPressed: _save,
-          style: FilledButton.styleFrom(
-            backgroundColor: verdant.forestGreen,
-            foregroundColor: Colors.white,
-          ),
           child: Text(isEditing ? l10n.travelUpdateTrip : l10n.travelSaveTrip),
         ),
       ],

@@ -7,7 +7,6 @@ import '../../../core/data/database/app_database.dart';
 import '../../../core/motion/motion_spec.dart';
 import '../../../core/motion/numeric_tick.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/design_tokens.dart';
 import '../../settings/data/user_preferences_repository.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../data/waste_log_repository.dart';
@@ -34,22 +33,11 @@ class _WasteReductionTrackerScreenState
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final verdant = Theme.of(context).extension<VerdantColors>()!;
     return Scaffold(
-      backgroundColor: verdant.cream,
       appBar: AppBar(
-        backgroundColor: verdant.forestGreen,
-        foregroundColor: Colors.white,
         toolbarHeight:
             kToolbarHeight * MediaQuery.textScalerOf(context).scale(1),
-        title: Text(
-          l10n.wasteReductionTracker,
-          maxLines: 2,
-          style: const TextStyle(color: Colors.white),
-        ),
-        iconTheme: const IconThemeData(color: Colors.white),
-        elevation: 0,
-        scrolledUnderElevation: 0,
+        title: Text(l10n.wasteReductionTracker, maxLines: 2),
       ),
       body: StreamBuilder<List<WasteLogEntry>>(
         stream: widget.repository.watchEntries(),
@@ -147,7 +135,6 @@ class _WasteTrackerBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final verdant = theme.extension<VerdantColors>()!;
     final typography = theme.extension<ClimateTypography>()!;
     final month = DateTime(summary.year, summary.month);
     final monthLabel = DateFormat.yMMMM(l10n.localeName).format(month);
@@ -158,170 +145,66 @@ class _WasteTrackerBody extends StatelessWidget {
         vertical: ClimateSpacing.space16,
       ),
       children: [
-        // Note card
-        Container(
-          decoration: BoxDecoration(
-            color: verdant.amberLight,
-            borderRadius: BorderRadius.circular(DesignTokens.radiusSmall),
-            border: Border.all(color: verdant.amber.withValues(alpha: 0.3)),
-          ),
-          padding: const EdgeInsets.all(ClimateSpacing.space12),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Icon(Icons.info_outline, size: 18, color: verdant.amber),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  l10n.wasteEstimateNote,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: ClimateColors.textPrimary,
-                  ),
-                ),
-              ),
-            ],
+        Text(l10n.wasteEstimateNote),
+        const SizedBox(height: ClimateSpacing.space24),
+        Text(l10n.wasteMonthSummary, style: theme.textTheme.titleMedium),
+        const SizedBox(height: ClimateSpacing.space8),
+        _NumberAwareText(monthLabel, style: typography.number),
+        const SizedBox(height: ClimateSpacing.space16),
+        Text(
+          l10n.wasteMonthTotal,
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: ClimateColors.textSecondary,
           ),
         ),
-        const SizedBox(height: ClimateSpacing.space16),
-        // Hero summary card
-        Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [verdant.forestGreen, verdant.forestDeep],
-            ),
-            borderRadius: BorderRadius.circular(DesignTokens.radiusMedium),
-          ),
-          padding: const EdgeInsets.all(ClimateSpacing.space16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                l10n.wasteMonthSummary,
-                style: theme.textTheme.labelSmall?.copyWith(
-                  color: Colors.white.withValues(alpha: 0.8),
-                  letterSpacing: 0.5,
-                ),
-              ),
-              const SizedBox(height: 4),
-              _NumberAwareText(
-                monthLabel,
-                style: typography.number.copyWith(color: Colors.white, fontSize: 13),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                l10n.wasteMonthTotal,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: Colors.white.withValues(alpha: 0.7),
-                  fontSize: 11,
-                ),
-              ),
-              NumericTick(
-                value: summary.totalKg,
-                decimalPlaces: 2,
-                style: theme.textTheme.displayLarge!
-                    .merge(typography.number)
-                    .copyWith(color: Colors.white, fontWeight: FontWeight.w700),
-                suffix: ' kg',
-                suffixStyle: theme.textTheme.titleMedium!
-                    .merge(typography.unit)
-                    .copyWith(color: Colors.white.withValues(alpha: 0.8)),
-                textKey: const ValueKey('wasteMonthTotalValue'),
-              ),
-            ],
-          ),
+        NumericTick(
+          value: summary.totalKg,
+          decimalPlaces: 2,
+          style: theme.textTheme.displayLarge!.merge(typography.number),
+          suffix: ' kg',
+          suffixStyle: theme.textTheme.titleMedium!.merge(typography.unit),
+          textKey: const ValueKey('wasteMonthTotalValue'),
         ),
-        const SizedBox(height: ClimateSpacing.space16),
-        // Category totals card
-        Container(
-          decoration: DesignTokens.sectionCard(context),
-          padding: const EdgeInsets.all(ClimateSpacing.space16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (summary.isEmpty)
-                Text(
-                  l10n.wasteMonthEmpty,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: ClimateColors.textSecondary,
-                  ),
-                )
-              else
-                for (
-                  var index = 0;
-                  index < summary.categories.length;
-                  index++
-                ) ...[
-                  _WasteCategoryTotalRow(total: summary.categories[index]),
-                  if (index < summary.categories.length - 1)
-                    const Divider(height: 1),
-                ],
-              const SizedBox(height: 12),
-              SizedBox(
-                width: double.infinity,
-                child: FilledButton.icon(
-                  key: const ValueKey('wasteAddEntryButton'),
-                  onPressed: onAdd,
-                  style: FilledButton.styleFrom(
-                    backgroundColor: verdant.forestGreen,
-                    foregroundColor: Colors.white,
-                    minimumSize: const Size.fromHeight(44),
-                  ),
-                  icon: const Icon(Icons.add, size: 18),
-                  label: Text(l10n.wasteAddEntry),
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: ClimateSpacing.space16),
-        // Log section
-        Container(
-          decoration: DesignTokens.sectionCard(context),
-          padding: const EdgeInsets.all(ClimateSpacing.space16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                l10n.wasteLogSection,
-                style: theme.textTheme.titleSmall?.copyWith(
-                  color: verdant.forestGreen,
-                ),
-              ),
-              if (entries.isEmpty) ...[
-                const SizedBox(height: 8),
-                Text(
-                  l10n.wasteNoEntries,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: ClimateColors.textSecondary,
-                  ),
-                ),
-              ] else
-                for (final entry in entries) ...[
-                  const Divider(height: 1),
-                  _WasteEntryRow(
-                    entry: entry,
-                    onDelete: () => onDelete(entry.entryId),
-                  ),
-                ],
-            ],
-          ),
+        if (summary.isEmpty)
+          Padding(
+            padding: const EdgeInsets.only(top: ClimateSpacing.space8),
+            child: Text(l10n.wasteMonthEmpty),
+          )
+        else
+          for (var index = 0; index < summary.categories.length; index++) ...[
+            _WasteCategoryTotalRow(total: summary.categories[index]),
+            if (index < summary.categories.length - 1) const Divider(height: 1),
+          ],
+        const SizedBox(height: ClimateSpacing.space24),
+        FilledButton.icon(
+          key: const ValueKey('wasteAddEntryButton'),
+          onPressed: onAdd,
+          icon: const Icon(Icons.add),
+          label: Text(l10n.wasteAddEntry),
         ),
         const SizedBox(height: ClimateSpacing.space24),
-        // Weekly planner section
-        Container(
-          decoration: DesignTokens.sectionCard(context),
-          padding: const EdgeInsets.all(16),
-          child: _WasteWeeklyPlannerSection(preferences: preferences),
-        ),
-        const SizedBox(height: 16),
-        // Tips section
-        Container(
-          decoration: DesignTokens.sectionCard(context),
-          padding: const EdgeInsets.all(16),
-          child: _WasteTipsSection(),
-        ),
+        Text(l10n.wasteLogSection, style: theme.textTheme.titleMedium),
+        if (entries.isEmpty)
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: ClimateSpacing.space16,
+            ),
+            child: Text(l10n.wasteNoEntries),
+          )
+        else
+          for (final entry in entries) ...[
+            _WasteEntryRow(
+              entry: entry,
+              onDelete: () => onDelete(entry.entryId),
+            ),
+            const Divider(height: 1),
+          ],
+        const SizedBox(height: ClimateSpacing.space24),
+        const Divider(height: 1),
+        _WasteWeeklyPlannerSection(preferences: preferences),
+        const SizedBox(height: ClimateSpacing.space24),
+        const Divider(height: 1),
+        _WasteTipsSection(),
       ],
     );
   }

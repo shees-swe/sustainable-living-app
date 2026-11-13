@@ -7,9 +7,9 @@ import '../../../core/accessibility/reduced_motion.dart';
 import '../../../core/motion/motion_spec.dart';
 import '../../../core/motion/numeric_tick.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/design_tokens.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../onboarding/domain/footprint_estimate.dart';
+import '../../onboarding/presentation/estimate_factor_disclosure.dart';
 import '../data/activity_log_repository.dart';
 import 'activity_log_insights_screen.dart';
 import 'activity_log_recommendations_screen.dart';
@@ -38,23 +38,12 @@ class CarbonFootprintDestinationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final verdant = Theme.of(context).extension<VerdantColors>()!;
     final entries = repository?.watchEntries();
     return Scaffold(
-      backgroundColor: verdant.cream,
       appBar: AppBar(
-        backgroundColor: verdant.forestGreen,
-        foregroundColor: Colors.white,
         toolbarHeight:
             kToolbarHeight * MediaQuery.textScalerOf(context).scale(1),
-        title: Text(
-          l10n.carbonFootprintTracker,
-          maxLines: 2,
-          style: const TextStyle(color: Colors.white),
-        ),
-        iconTheme: const IconThemeData(color: Colors.white),
-        elevation: 0,
-        scrolledUnderElevation: 0,
+        title: Text(l10n.carbonFootprintTracker, maxLines: 2),
       ),
       body: StreamBuilder<List<ActivityLogEntry>>(
         stream: entries,
@@ -111,181 +100,109 @@ class _ActivityLogBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final verdant = Theme.of(context).extension<VerdantColors>()!;
     final typography = Theme.of(context).extension<ClimateTypography>()!;
     return ListView(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
+      padding: const EdgeInsets.symmetric(
+        horizontal: ClimateSpacing.space16,
+        vertical: ClimateSpacing.space16,
+      ),
       children: [
-        // Hero total card
-        Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [verdant.forestGreen, verdant.forestDeep],
+        MonoNumericText(text: l10n.trackerPeriodTotal(periodYear)),
+        const SizedBox(height: ClimateSpacing.space8),
+        NumericTick(
+          value: periodTotal,
+          decimalPlaces: 2,
+          style: Theme.of(context).textTheme.displayLarge!
+              .merge(typography.number),
+          suffix: ' kg CO2',
+          suffixStyle: Theme.of(context).textTheme.titleMedium!
+              .merge(typography.unit),
+          textKey: const ValueKey('trackerPeriodTotalValue'),
+        ),
+        const SizedBox(height: ClimateSpacing.space8),
+        Text(l10n.trackerCoverage),
+        const SizedBox(height: ClimateSpacing.space24),
+        OutlinedButton(
+          onPressed: () => Navigator.of(context).push<void>(
+            PageRouteBuilder<void>(
+              pageBuilder: (context, animation, secondaryAnimation) =>
+                  ActivityLogInsightsScreen(
+                    repository: repository,
+                    year: periodYear,
+                  ),
+              transitionDuration: ReducedMotion.duration(
+                context,
+                MotionSpec.optionalFade,
+              ),
+              reverseTransitionDuration: ReducedMotion.duration(
+                context,
+                MotionSpec.optionalFade,
+              ),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) =>
+                      FadeTransition(
+                        opacity: animation.drive(
+                          CurveTween(curve: MotionSpec.optionalFadeCurve),
+                        ),
+                        child: child,
+                      ),
             ),
-            borderRadius: BorderRadius.circular(DesignTokens.radiusLarge),
           ),
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                l10n.trackerPeriodTotal(periodYear),
-                style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                  color: Colors.white.withValues(alpha: 0.8),
-                  letterSpacing: 0.5,
-                ),
-              ),
-              const SizedBox(height: 8),
-              NumericTick(
-                value: periodTotal,
-                decimalPlaces: 2,
-                style: Theme.of(context).textTheme.displayLarge!
-                    .merge(typography.number)
-                    .copyWith(color: Colors.white, fontWeight: FontWeight.w700),
-                suffix: ' kg CO2',
-                suffixStyle: Theme.of(context).textTheme.titleMedium!
-                    .merge(typography.unit)
-                    .copyWith(color: Colors.white.withValues(alpha: 0.8)),
-                textKey: const ValueKey('trackerPeriodTotalValue'),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                l10n.trackerCoverage,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Colors.white.withValues(alpha: 0.7),
-                ),
-              ),
-            ],
-          ),
+          child: Text(l10n.trackerViewInsights),
         ),
-        const SizedBox(height: 16),
-        // Action buttons card
-        Container(
-          decoration: DesignTokens.sectionCard(context),
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              OutlinedButton.icon(
-                onPressed: () => Navigator.of(context).push<void>(
-                  PageRouteBuilder<void>(
-                    pageBuilder: (context, animation, secondaryAnimation) =>
-                        ActivityLogInsightsScreen(
-                          repository: repository,
-                          year: periodYear,
-                        ),
-                    transitionDuration: ReducedMotion.duration(
-                      context,
-                      MotionSpec.optionalFade,
-                    ),
-                    reverseTransitionDuration: ReducedMotion.duration(
-                      context,
-                      MotionSpec.optionalFade,
-                    ),
-                    transitionsBuilder:
-                        (context, animation, secondaryAnimation, child) =>
-                            FadeTransition(
-                              opacity: animation.drive(
-                                CurveTween(
-                                  curve: MotionSpec.optionalFadeCurve,
-                                ),
-                              ),
-                              child: child,
-                            ),
+        const SizedBox(height: ClimateSpacing.space8),
+        OutlinedButton(
+          onPressed: () => Navigator.of(context).push<void>(
+            PageRouteBuilder<void>(
+              pageBuilder: (context, animation, secondaryAnimation) =>
+                  ActivityLogRecommendationsScreen(
+                    repository: repository,
+                    year: periodYear,
+                    factors: factors,
+                    references: references,
                   ),
-                ),
-                icon: const Icon(Icons.bar_chart_rounded),
-                label: Text(l10n.trackerViewInsights),
+              transitionDuration: ReducedMotion.duration(
+                context,
+                MotionSpec.optionalFade,
               ),
-              const SizedBox(height: 8),
-              OutlinedButton.icon(
-                onPressed: () => Navigator.of(context).push<void>(
-                  PageRouteBuilder<void>(
-                    pageBuilder: (context, animation, secondaryAnimation) =>
-                        ActivityLogRecommendationsScreen(
-                          repository: repository,
-                          year: periodYear,
-                          factors: factors,
-                          references: references,
+              reverseTransitionDuration: ReducedMotion.duration(
+                context,
+                MotionSpec.optionalFade,
+              ),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) =>
+                      FadeTransition(
+                        opacity: animation.drive(
+                          CurveTween(curve: MotionSpec.optionalFadeCurve),
                         ),
-                    transitionDuration: ReducedMotion.duration(
-                      context,
-                      MotionSpec.optionalFade,
-                    ),
-                    reverseTransitionDuration: ReducedMotion.duration(
-                      context,
-                      MotionSpec.optionalFade,
-                    ),
-                    transitionsBuilder:
-                        (context, animation, secondaryAnimation, child) =>
-                            FadeTransition(
-                              opacity: animation.drive(
-                                CurveTween(
-                                  curve: MotionSpec.optionalFadeCurve,
-                                ),
-                              ),
-                              child: child,
-                            ),
-                  ),
-                ),
-                icon: const Icon(Icons.eco_rounded),
-                label: Text(l10n.trackerViewRecommendations),
-              ),
-              const SizedBox(height: 12),
-              FilledButton.icon(
-                onPressed: () => _showCategoryPicker(context),
-                style: FilledButton.styleFrom(
-                  backgroundColor: verdant.forestGreen,
-                  foregroundColor: Colors.white,
-                ),
-                icon: const Icon(Icons.add),
-                label: Text(l10n.trackerAddEntry),
-              ),
-            ],
+                        child: child,
+                      ),
+            ),
           ),
+          child: Text(l10n.trackerViewRecommendations),
         ),
-        const SizedBox(height: 16),
-        // Activity log
+        const SizedBox(height: ClimateSpacing.space16),
+        FilledButton.icon(
+          onPressed: () => _showCategoryPicker(context),
+          icon: const Icon(Icons.add),
+          label: Text(l10n.trackerAddEntry),
+        ),
+        const SizedBox(height: ClimateSpacing.space24),
         if (entries.isEmpty)
-          Container(
-            decoration: DesignTokens.sectionCard(context),
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              children: [
-                Icon(
-                  Icons.eco_outlined,
-                  size: 48,
-                  color: verdant.forestGreen.withValues(alpha: 0.4),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  l10n.trackerNoActivities,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: ClimateColors.textSecondary,
-                  ),
-                ),
-              ],
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: ClimateSpacing.space16,
             ),
+            child: Text(l10n.trackerNoActivities),
           )
         else
-          Container(
-            decoration: DesignTokens.sectionCard(context),
-            child: Column(
-              children: [
-                for (var i = 0; i < entries.length; i++) ...[
-                  _ActivityRow(
-                    entry: entries[i],
-                    onDelete: () => _deleteEntry(context, entries[i].activityId),
-                  ),
-                  if (i < entries.length - 1)
-                    const Divider(height: 1, indent: 16, endIndent: 16),
-                ],
-              ],
+          for (final entry in entries) ...[
+            _ActivityRow(
+              entry: entry,
+              onDelete: () => _deleteEntry(context, entry.activityId),
             ),
-          ),
+            const Divider(height: 1),
+          ],
       ],
     );
   }
@@ -384,7 +301,6 @@ class _ActivityRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final verdant = Theme.of(context).extension<VerdantColors>()!;
     final numberStyle = Theme.of(context)
         .extension<ClimateTypography>()!
         .number;
@@ -394,62 +310,26 @@ class _ActivityRow extends StatelessWidget {
       _ => entry.category,
     };
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: ClimateSpacing.space8,
-      ),
+      padding: const EdgeInsets.symmetric(vertical: ClimateSpacing.space8),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: 36,
-            height: 36,
-            decoration: BoxDecoration(
-              color: verdant.forestLight,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Icon(
-              Icons.bolt_rounded,
-              color: verdant.forestGreen,
-              size: 18,
-            ),
-          ),
-          const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
+                Wrap(
+                  spacing: ClimateSpacing.space8,
+                  runSpacing: ClimateSpacing.space8,
                   children: [
-                    Text(
-                      date,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: ClimateColors.textSecondary,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 6,
-                        vertical: 2,
-                      ),
-                      decoration: BoxDecoration(
-                        color: verdant.tagBackground,
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Text(
-                        category,
-                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                          color: verdant.forestGreen,
-                        ),
-                      ),
-                    ),
+                    Text(date, style: numberStyle),
+                    Text(category),
                   ],
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: ClimateSpacing.space8),
                 Wrap(
                   spacing: ClimateSpacing.space16,
-                  runSpacing: 4,
+                  runSpacing: ClimateSpacing.space8,
                   children: [
                     Text(
                       '${entry.amount.toStringAsFixed(2)} ${entry.unit}',
@@ -457,9 +337,7 @@ class _ActivityRow extends StatelessWidget {
                     ),
                     Text(
                       '${entry.emissionsKg.toStringAsFixed(3)} kg CO2',
-                      style: numberStyle.copyWith(
-                        color: ClimateColors.emissions,
-                      ),
+                      style: numberStyle,
                     ),
                   ],
                 ),
@@ -470,7 +348,6 @@ class _ActivityRow extends StatelessWidget {
             tooltip: l10n.trackerDeleteEntry,
             onPressed: onDelete,
             icon: const Icon(Icons.delete_outline),
-            color: ClimateColors.textSecondary,
           ),
         ],
       ),
