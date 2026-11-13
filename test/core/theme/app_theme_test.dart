@@ -11,16 +11,19 @@ void main() {
   });
 
   group('AppTheme', () {
-    test('uses the Climate Instrument light palette', () {
+    test('uses the cream and verdant light palette', () {
       final colorScheme = AppTheme.light.colorScheme;
 
       expect(colorScheme.brightness, Brightness.light);
-      expect(colorScheme.primary, ClimateColors.cobalt);
-      expect(colorScheme.onPrimary, ClimateColors.surfacePrimary);
+      expect(colorScheme.primary, ClimateColors.verdant);
+      expect(colorScheme.onPrimary, ClimateColors.surfaceCard);
       expect(colorScheme.surface, ClimateColors.surfacePrimary);
       expect(colorScheme.onSurface, ClimateColors.textPrimary);
       expect(colorScheme.error, ClimateColors.warning);
-      expect(AppTheme.light.scaffoldBackgroundColor, Colors.white);
+      expect(
+        AppTheme.light.scaffoldBackgroundColor,
+        ClimateColors.surfacePrimary,
+      );
     });
 
     test('uses IBM Plex Sans for headings and body text', () {
@@ -58,11 +61,12 @@ void main() {
       const surfaces = [
         ClimateColors.surfacePrimary,
         ClimateColors.surfaceSecondary,
+        ClimateColors.surfaceCard,
       ];
       const textColors = [
         ClimateColors.textPrimary,
         ClimateColors.textSecondary,
-        ClimateColors.cobalt,
+        ClimateColors.verdant,
         ClimateColors.positiveSaved,
         ClimateColors.emissions,
         ClimateColors.warning,
@@ -79,18 +83,18 @@ void main() {
       }
 
       expect(
-        _contrastRatio(ClimateColors.surfacePrimary, ClimateColors.cobalt),
+        _contrastRatio(ClimateColors.surfaceCard, ClimateColors.verdant),
         greaterThanOrEqualTo(4.5),
       );
       expect(colors.divider, ClimateColors.divider);
     });
 
-    test('provides hairline dividers, flat surfaces, and compact shapes', () {
+    test('provides subtle cards, clear dividers, and rounded controls', () {
       final theme = AppTheme.light;
 
       expect(theme.dividerTheme.thickness, 1);
-      expect(theme.dividerTheme.color, ClimateColors.divider);
-      expect(theme.cardTheme.elevation, 0);
+      expect(theme.cardTheme.elevation, 1);
+      expect(theme.cardTheme.shape, isA<RoundedRectangleBorder>());
       expect(
         theme.filledButtonTheme.style!.shape!.resolve({}),
         isA<RoundedRectangleBorder>(),
@@ -98,10 +102,10 @@ void main() {
       final buttonShape =
           theme.filledButtonTheme.style!.shape!.resolve({})
               as RoundedRectangleBorder;
-      expect(buttonShape.borderRadius, BorderRadius.circular(4));
+      expect(buttonShape.borderRadius, BorderRadius.circular(12));
       expect(ClimateSpacing.values, [8, 16, 24, 32, 40, 48]);
-      expect(ClimateSpacing.radiusSmall, 4);
-      expect(ClimateSpacing.radiusLarge, 8);
+      expect(ClimateSpacing.radiusSmall, 12);
+      expect(ClimateSpacing.radiusLarge, 20);
     });
 
     test('loads bundled IBM Plex assets with runtime fetching disabled', () async {
