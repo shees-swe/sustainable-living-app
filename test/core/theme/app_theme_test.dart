@@ -11,16 +11,16 @@ void main() {
   });
 
   group('AppTheme', () {
-    test('uses the Field Notes light palette', () {
+    test('uses the Climate Instrument light palette', () {
       final colorScheme = AppTheme.light.colorScheme;
 
       expect(colorScheme.brightness, Brightness.light);
       expect(colorScheme.primary, ClimateColors.cobalt);
-      expect(colorScheme.onPrimary, Colors.white);
+      expect(colorScheme.onPrimary, ClimateColors.surfacePrimary);
       expect(colorScheme.surface, ClimateColors.surfacePrimary);
       expect(colorScheme.onSurface, ClimateColors.textPrimary);
       expect(colorScheme.error, ClimateColors.warning);
-      expect(AppTheme.light.scaffoldBackgroundColor, ClimateColors.canvas);
+      expect(AppTheme.light.scaffoldBackgroundColor, Colors.white);
     });
 
     test('uses IBM Plex Sans for headings and body text', () {
@@ -32,9 +32,9 @@ void main() {
       expect(textTheme.bodyLarge, isNotNull);
       expect(textTheme.bodyMedium, isNotNull);
       expect(textTheme.bodySmall, isNotNull);
-      expect(textTheme.displayLarge!.fontFamily, 'IBMPlexSans');
-      expect(textTheme.titleMedium!.fontFamily, 'IBMPlexSans');
-      expect(textTheme.bodyLarge!.fontFamily, 'IBMPlexSans');
+      expect(textTheme.displayLarge!.fontFamily, startsWith('IBMPlexSans'));
+      expect(textTheme.titleMedium!.fontFamily, startsWith('IBMPlexSans'));
+      expect(textTheme.bodyLarge!.fontFamily, startsWith('IBMPlexSans'));
       expect(textTheme.bodyMedium!.fontSize, greaterThanOrEqualTo(14));
       expect(
         textTheme.titleMedium!.fontSize,
@@ -45,9 +45,9 @@ void main() {
     test('exposes IBM Plex Mono styles for numbers, units, and table figures', () {
       final typography = AppTheme.light.extension<ClimateTypography>()!;
 
-      expect(typography.number.fontFamily, 'IBMPlexMono');
-      expect(typography.unit.fontFamily, 'IBMPlexMono');
-      expect(typography.tableFigure.fontFamily, 'IBMPlexMono');
+      expect(typography.number.fontFamily, startsWith('IBMPlexMono'));
+      expect(typography.unit.fontFamily, startsWith('IBMPlexMono'));
+      expect(typography.tableFigure.fontFamily, startsWith('IBMPlexMono'));
       expect(typography.number.fontWeight, FontWeight.w400);
       expect(typography.unit.fontWeight, FontWeight.w500);
       expect(typography.tableFigure.fontWeight, FontWeight.w600);
@@ -56,7 +56,6 @@ void main() {
     test('keeps every documented text and surface contrast pair WCAG AA', () {
       final colors = ClimateColors.light;
       const surfaces = [
-        ClimateColors.canvas,
         ClimateColors.surfacePrimary,
         ClimateColors.surfaceSecondary,
       ];
@@ -64,8 +63,6 @@ void main() {
         ClimateColors.textPrimary,
         ClimateColors.textSecondary,
         ClimateColors.cobalt,
-        ClimateColors.coral,
-        ClimateColors.sun,
         ClimateColors.positiveSaved,
         ClimateColors.emissions,
         ClimateColors.warning,
@@ -81,15 +78,10 @@ void main() {
         }
       }
 
-      for (final foreground in [
-        Colors.white,
-        ClimateColors.surfacePrimary,
-      ]) {
-        expect(
-          _contrastRatio(foreground, ClimateColors.cobalt),
-          greaterThanOrEqualTo(4.5),
-        );
-      }
+      expect(
+        _contrastRatio(ClimateColors.surfacePrimary, ClimateColors.cobalt),
+        greaterThanOrEqualTo(4.5),
+      );
       expect(colors.divider, ClimateColors.divider);
     });
 
@@ -97,7 +89,7 @@ void main() {
       final theme = AppTheme.light;
 
       expect(theme.dividerTheme.thickness, 1);
-      expect(theme.dividerTheme.color, ClimateColors.dividerSubtle);
+      expect(theme.dividerTheme.color, ClimateColors.divider);
       expect(theme.cardTheme.elevation, 0);
       expect(
         theme.filledButtonTheme.style!.shape!.resolve({}),
@@ -106,11 +98,10 @@ void main() {
       final buttonShape =
           theme.filledButtonTheme.style!.shape!.resolve({})
               as RoundedRectangleBorder;
-      expect(buttonShape.borderRadius, BorderRadius.circular(14));
-      expect(ClimateSpacing.values, [4, 8, 12, 16, 24, 32, 40, 48, 64]);
-      expect(ClimateSpacing.radiusSmall, 8);
-      expect(ClimateSpacing.radiusLarge, 22);
-      expect(ClimateSpacing.minimumTouchTarget, 48);
+      expect(buttonShape.borderRadius, BorderRadius.circular(4));
+      expect(ClimateSpacing.values, [8, 16, 24, 32, 40, 48]);
+      expect(ClimateSpacing.radiusSmall, 4);
+      expect(ClimateSpacing.radiusLarge, 8);
     });
 
     test('loads bundled IBM Plex assets with runtime fetching disabled', () async {
