@@ -207,12 +207,12 @@ class _CommunityJournalBody extends StatelessWidget {
           )
         else
           for (final post in posts) ...[
-            const Divider(height: 1),
             _CommunityPostRow(
               post: post,
               onEdit: () => onEdit(post),
               onDelete: () => onDelete(post.postId),
             ),
+            const Divider(height: 1),
           ],
         const Divider(height: 1),
         const SizedBox(height: ClimateSpacing.space24),
@@ -246,9 +246,14 @@ class _CommunityPostRow extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final numberStyle = theme.extension<ClimateTypography>()!.number;
-    return Padding(
+    return Container(
       key: ValueKey('communityPost-${post.postId}'),
-      padding: const EdgeInsets.symmetric(vertical: ClimateSpacing.space16),
+      padding: const EdgeInsets.all(ClimateSpacing.space16),
+      decoration: BoxDecoration(
+        color: ClimateColors.surfaceSecondary,
+        borderRadius: BorderRadius.circular(ClimateSpacing.radiusLarge),
+        border: Border.all(color: theme.dividerColor),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

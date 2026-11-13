@@ -92,7 +92,7 @@ class _RecipesMealPlanningScreenState extends State<RecipesMealPlanningScreen> {
           controller: _searchController,
           onChanged: (value) => setState(() => _query = value),
           decoration: InputDecoration(
-            labelText: l10n.recipeSearchLabel,
+            label: Text(l10n.recipeSearchLabel, maxLines: 2),
             suffixIcon: _query.isEmpty
                 ? null
                 : IconButton(
@@ -147,12 +147,15 @@ class _RecipesMealPlanningScreenState extends State<RecipesMealPlanningScreen> {
           ),
         ] else ...[
           for (var index = 0; index < recipes.length; index++) ...[
-            _RecipeRow(
-              recipe: recipes[index],
-              numberStyle: numberStyle,
-              onTap: () => _openDetails(context, recipes[index]),
+            Card(
+              child: _RecipeRow(
+                recipe: recipes[index],
+                numberStyle: numberStyle,
+                onTap: () => _openDetails(context, recipes[index]),
+              ),
             ),
-            if (index < recipes.length - 1) const Divider(height: 1),
+            if (index < recipes.length - 1)
+              const SizedBox(height: ClimateSpacing.space8),
           ],
         ],
       ],
@@ -210,26 +213,47 @@ class _RecipeRow extends StatelessWidget {
       key: ValueKey('recipe-${recipe.name}'),
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: ClimateSpacing.space16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        padding: const EdgeInsets.all(ClimateSpacing.space16),
+        child: Row(
           children: [
-            Text(recipe.name, style: theme.textTheme.titleMedium),
-            const SizedBox(height: ClimateSpacing.space8),
-            Wrap(
-              spacing: ClimateSpacing.space16,
-              runSpacing: ClimateSpacing.space8,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: [
-                Text(recipe.preparationTime, style: numberStyle),
-                Text(
-                  recipe.season,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: ClimateColors.textSecondary,
-                  ),
-                ),
-              ],
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: ClimateColors.surfaceSecondary,
+                borderRadius: BorderRadius.circular(ClimateSpacing.radiusSmall),
+              ),
+              child: const Icon(
+                Icons.restaurant_menu_outlined,
+                color: ClimateColors.verdant,
+              ),
             ),
+            const SizedBox(width: ClimateSpacing.space16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(recipe.name, style: theme.textTheme.titleMedium),
+                  const SizedBox(height: ClimateSpacing.space8),
+                  Wrap(
+                    spacing: ClimateSpacing.space16,
+                    runSpacing: ClimateSpacing.space8,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Text(recipe.preparationTime, style: numberStyle),
+                      Text(
+                        recipe.season,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: ClimateColors.textSecondary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: ClimateSpacing.space8),
+            const Icon(Icons.chevron_right),
           ],
         ),
       ),

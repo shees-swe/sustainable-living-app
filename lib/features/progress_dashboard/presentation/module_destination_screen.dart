@@ -380,17 +380,23 @@ class _DashboardSection extends StatelessWidget {
   final List<Widget> children;
 
   @override
-  Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.symmetric(vertical: ClimateSpacing.space16),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(title, style: Theme.of(context).textTheme.titleMedium),
-        const SizedBox(height: ClimateSpacing.space8),
-        ...children,
-      ],
-    ),
-  );
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Card(
+      color: ClimateColors.surfacePrimary,
+      child: Padding(
+        padding: const EdgeInsets.all(ClimateSpacing.space16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(title, style: theme.textTheme.titleMedium),
+            const SizedBox(height: ClimateSpacing.space16),
+            ...children,
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 class _Metric extends StatelessWidget {
