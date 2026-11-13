@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../../core/accessibility/motion_aware_progress_indicator.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/design_tokens.dart';
-import '../../../core/widgets/design_components.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../data/energy_tip_catalog.dart';
 
@@ -89,90 +87,73 @@ class _EnergyConservationTipsScreenState
         vertical: ClimateSpacing.space16,
       ),
       children: [
-        AppPanel(
-          color: DesignTokens.surfaceBlue,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TextField(
-                key: const ValueKey('energyTipSearchField'),
-                controller: _searchController,
-                onChanged: (value) => setState(() => _query = value),
-                decoration: InputDecoration(
-                  label: Text(l10n.energyTipSearchLabel, softWrap: true),
-                  suffixIcon: _query.isEmpty
-                      ? null
-                      : IconButton(
-                          tooltip: l10n.energyTipClearSearch,
-                          onPressed: () {
-                            _searchController.clear();
-                            setState(() => _query = '');
-                          },
-                          icon: const Icon(Icons.clear),
-                        ),
-                ),
-              ),
-              const SizedBox(height: DesignTokens.space16),
-              Text(
-                l10n.energyTipCategoryFilter,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: ClimateColors.textSecondary,
-                ),
-              ),
-              const SizedBox(height: DesignTokens.space8),
-              DropdownButtonFormField<String>(
-                key: const ValueKey('energyTipCategoryFilter'),
-                initialValue: _category ?? _allCategoriesValue,
-                isExpanded: true,
-                decoration: const InputDecoration(),
-                items: [
-                  DropdownMenuItem(
-                    value: _allCategoriesValue,
-                    child: Text(l10n.energyTipAllCategories, maxLines: 2),
+        TextField(
+          key: const ValueKey('energyTipSearchField'),
+          controller: _searchController,
+          onChanged: (value) => setState(() => _query = value),
+          decoration: InputDecoration(
+            labelText: l10n.energyTipSearchLabel,
+            suffixIcon: _query.isEmpty
+                ? null
+                : IconButton(
+                    tooltip: l10n.energyTipClearSearch,
+                    onPressed: () {
+                      _searchController.clear();
+                      setState(() => _query = '');
+                    },
+                    icon: const Icon(Icons.clear),
                   ),
-                  for (final category in catalog.categories)
-                    DropdownMenuItem(
-                      value: category,
-                      child: Text(category, maxLines: 2),
-                    ),
-                ],
-                onChanged: (value) => setState(
-                  () => _category = value == _allCategoriesValue ? null : value,
-                ),
-              ),
-            ],
           ),
         ),
-        const SizedBox(height: DesignTokens.space24),
-        if (tips.isEmpty) ...[
-          AppPanel(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(l10n.energyTipNoMatches),
-                const SizedBox(height: DesignTokens.space8),
-                Align(
-                  alignment: AlignmentDirectional.centerStart,
-                  child: TextButton(
-                    onPressed: _clearFilters,
-                    child: Text(l10n.energyTipClearFilters),
-                  ),
+        const SizedBox(height: ClimateSpacing.space16),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              l10n.energyTipCategoryFilter,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: ClimateColors.textSecondary,
+              ),
+            ),
+            const SizedBox(height: ClimateSpacing.space8),
+            DropdownButtonFormField<String>(
+              key: const ValueKey('energyTipCategoryFilter'),
+              initialValue: _category ?? _allCategoriesValue,
+              isExpanded: true,
+              decoration: const InputDecoration(),
+              items: [
+                DropdownMenuItem(
+                  value: _allCategoriesValue,
+                  child: Text(l10n.energyTipAllCategories, maxLines: 2),
                 ),
+                for (final category in catalog.categories)
+                  DropdownMenuItem(
+                    value: category,
+                    child: Text(category, maxLines: 2),
+                  ),
               ],
+              onChanged: (value) => setState(
+                () => _category = value == _allCategoriesValue ? null : value,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: ClimateSpacing.space16),
+        if (tips.isEmpty) ...[
+          Text(l10n.energyTipNoMatches),
+          const SizedBox(height: ClimateSpacing.space8),
+          Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: TextButton(
+              onPressed: _clearFilters,
+              child: Text(l10n.energyTipClearFilters),
             ),
           ),
         ] else ...[
-          AppPanel(
-            padding: EdgeInsets.zero,
-            child: Column(
-              children: [
-                for (var index = 0; index < tips.length; index++) ...[
-                  _EnergyTipRow(tip: tips[index]),
-                  if (index < tips.length - 1) const Divider(height: 1),
-                ],
-              ],
-            ),
-          ),
+          for (var index = 0; index < tips.length; index++) ...[
+            _EnergyTipRow(tip: tips[index]),
+            if (index < tips.length - 1) const Divider(height: 1),
+          ],
         ],
       ],
     );
