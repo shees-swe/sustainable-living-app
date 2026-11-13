@@ -226,13 +226,15 @@ class _TravelPlannerBody extends StatelessWidget {
           )
         else
           for (final trip in trips) ...[
-            _TravelTripRow(
-              trip: trip,
-              guidance: _guidanceFor(catalog, trip.transportMode).guidance,
-              onEdit: () => onEdit(trip),
-              onDelete: () => onDelete(trip.tripId),
+            Card(
+              child: _TravelTripRow(
+                trip: trip,
+                guidance: _guidanceFor(catalog, trip.transportMode).guidance,
+                onEdit: () => onEdit(trip),
+                onDelete: () => onDelete(trip.tripId),
+              ),
             ),
-            const Divider(height: 1),
+            const SizedBox(height: ClimateSpacing.space8),
           ],
         const SizedBox(height: ClimateSpacing.space16),
         FilledButton.icon(
@@ -251,10 +253,9 @@ class _TravelPlannerBody extends StatelessWidget {
           ),
         ),
         for (final tip in catalog.tips) ...[
-          const Divider(height: 1),
-          _TravelTipRow(tip: tip),
+          Card(child: _TravelTipRow(tip: tip)),
+          const SizedBox(height: ClimateSpacing.space8),
         ],
-        const Divider(height: 1),
       ],
     );
   }
@@ -280,7 +281,7 @@ class _TravelTripRow extends StatelessWidget {
     final numberStyle = theme.extension<ClimateTypography>()!.number;
     return Padding(
       key: ValueKey('travelTrip-${trip.tripId}'),
-      padding: const EdgeInsets.symmetric(vertical: ClimateSpacing.space16),
+      padding: const EdgeInsets.all(ClimateSpacing.space16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -346,7 +347,7 @@ class _TravelTipRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: ClimateSpacing.space16),
+      padding: const EdgeInsets.all(ClimateSpacing.space16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

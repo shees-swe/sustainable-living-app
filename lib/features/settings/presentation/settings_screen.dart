@@ -220,9 +220,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
         children: [
           if (widget.preferences != null && widget.regionCatalog != null) ...[
-            RegionPicker(
-              preferences: widget.preferences!,
-              catalog: widget.regionCatalog!,
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(ClimateSpacing.space16),
+                child: RegionPicker(
+                  preferences: widget.preferences!,
+                  catalog: widget.regionCatalog!,
+                ),
+              ),
             ),
             const Padding(
               padding: EdgeInsets.symmetric(vertical: ClimateSpacing.space16),
@@ -238,73 +243,83 @@ class _SettingsScreenState extends State<SettingsScreen> {
               style: Theme.of(context).textTheme.titleMedium,
             ),
           ),
-          const Divider(height: 1),
-          ListTile(
-            contentPadding: EdgeInsets.zero,
-            leading: const Icon(Icons.file_download_outlined),
-            title: Text(l10n.importMyData),
-            subtitle: Text(l10n.importDataDescription),
-            trailing: _isImporting
-                ? MotionAwareProgressIndicator(
-                    semanticsLabel: l10n.loading,
-                    size: 24,
-                    strokeWidth: 2,
-                  )
-                : const Icon(Icons.chevron_right),
-            onTap: busy ? null : _importData,
-          ),
-          const Divider(height: 1),
-          ListTile(
-            contentPadding: EdgeInsets.zero,
-            leading: const Icon(Icons.policy_outlined),
-            title: Text(l10n.privacyPolicy),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: busy ? null : () => context.push(AppRoutes.privacyPolicy),
-          ),
-          const Divider(height: 1),
-          ListTile(
-            contentPadding: EdgeInsets.zero,
-            leading: const Icon(Icons.file_upload_outlined),
-            title: Text(l10n.exportMyData),
-            subtitle: Text(l10n.exportDataDescription),
-            trailing: _isExporting
-                ? MotionAwareProgressIndicator(
-                    semanticsLabel: l10n.loading,
-                    size: 24,
-                    strokeWidth: 2,
-                  )
-                : const Icon(Icons.chevron_right),
-            onTap: busy ? null : _exportData,
-          ),
-          const Divider(height: 1),
-          ListTile(
-            contentPadding: EdgeInsets.zero,
-            leading: const Icon(Icons.delete_outline),
-            title: Text(l10n.deleteLocalData),
-            subtitle: Text(l10n.deleteDataDescription),
-            trailing: _isDeleting
-                ? MotionAwareProgressIndicator(
-                    semanticsLabel: l10n.loading,
-                    size: 24,
-                    strokeWidth: 2,
-                  )
-                : const Icon(Icons.chevron_right),
-            onTap: busy ? null : _requestDeletion,
-          ),
-          if (_status case final status?) ...[
-            const SizedBox(height: ClimateSpacing.space16),
-            Semantics(
-              liveRegion: true,
-              child: Text(
-                status,
-                style: TextStyle(
-                  color: _statusIsError
-                      ? Theme.of(context).colorScheme.error
-                      : Theme.of(context).colorScheme.primary,
-                ),
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(ClimateSpacing.space16),
+              child: Column(
+                children: [
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: const Icon(Icons.file_download_outlined),
+                    title: Text(l10n.importMyData),
+                    subtitle: Text(l10n.importDataDescription),
+                    trailing: _isImporting
+                        ? MotionAwareProgressIndicator(
+                            semanticsLabel: l10n.loading,
+                            size: 24,
+                            strokeWidth: 2,
+                          )
+                        : const Icon(Icons.chevron_right),
+                    onTap: busy ? null : _importData,
+                  ),
+                  const Divider(height: 1),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: const Icon(Icons.policy_outlined),
+                    title: Text(l10n.privacyPolicy),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: busy
+                        ? null
+                        : () => context.push(AppRoutes.privacyPolicy),
+                  ),
+                  const Divider(height: 1),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: const Icon(Icons.file_upload_outlined),
+                    title: Text(l10n.exportMyData),
+                    subtitle: Text(l10n.exportDataDescription),
+                    trailing: _isExporting
+                        ? MotionAwareProgressIndicator(
+                            semanticsLabel: l10n.loading,
+                            size: 24,
+                            strokeWidth: 2,
+                          )
+                        : const Icon(Icons.chevron_right),
+                    onTap: busy ? null : _exportData,
+                  ),
+                  const Divider(height: 1),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: const Icon(Icons.delete_outline),
+                    title: Text(l10n.deleteLocalData),
+                    subtitle: Text(l10n.deleteDataDescription),
+                    trailing: _isDeleting
+                        ? MotionAwareProgressIndicator(
+                            semanticsLabel: l10n.loading,
+                            size: 24,
+                            strokeWidth: 2,
+                          )
+                        : const Icon(Icons.chevron_right),
+                    onTap: busy ? null : _requestDeletion,
+                  ),
+                  if (_status case final status?) ...[
+                    const SizedBox(height: ClimateSpacing.space16),
+                    Semantics(
+                      liveRegion: true,
+                      child: Text(
+                        status,
+                        style: TextStyle(
+                          color: _statusIsError
+                              ? Theme.of(context).colorScheme.error
+                              : Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
               ),
             ),
-          ],
+          ),
         ],
       ),
     );

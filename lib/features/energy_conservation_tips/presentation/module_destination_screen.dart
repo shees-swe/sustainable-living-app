@@ -92,7 +92,7 @@ class _EnergyConservationTipsScreenState
           controller: _searchController,
           onChanged: (value) => setState(() => _query = value),
           decoration: InputDecoration(
-            labelText: l10n.energyTipSearchLabel,
+            label: Text(l10n.energyTipSearchLabel, maxLines: 2),
             suffixIcon: _query.isEmpty
                 ? null
                 : IconButton(
@@ -151,8 +151,9 @@ class _EnergyConservationTipsScreenState
           ),
         ] else ...[
           for (var index = 0; index < tips.length; index++) ...[
-            _EnergyTipRow(tip: tips[index]),
-            if (index < tips.length - 1) const Divider(height: 1),
+            Card(child: _EnergyTipRow(tip: tips[index])),
+            if (index < tips.length - 1)
+              const SizedBox(height: ClimateSpacing.space8),
           ],
         ],
       ],
@@ -178,20 +179,39 @@ class _EnergyTipRow extends StatelessWidget {
     final theme = Theme.of(context);
     return Padding(
       key: ValueKey('energyTip-${tip.title}'),
-      padding: const EdgeInsets.symmetric(vertical: ClimateSpacing.space16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      padding: const EdgeInsets.all(ClimateSpacing.space16),
+      child: Row(
         children: [
-          Text(tip.title, style: theme.textTheme.titleMedium),
-          const SizedBox(height: ClimateSpacing.space8),
-          Text(
-            tip.category,
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: ClimateColors.textSecondary,
+          Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              color: ClimateColors.surfaceSecondary,
+              borderRadius: BorderRadius.circular(ClimateSpacing.radiusSmall),
+            ),
+            child: const Icon(
+              Icons.bolt_outlined,
+              color: ClimateColors.verdant,
             ),
           ),
-          const SizedBox(height: ClimateSpacing.space8),
-          _EnergyTipText(tip.text),
+          const SizedBox(width: ClimateSpacing.space8),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(tip.title, style: theme.textTheme.titleMedium),
+                const SizedBox(height: ClimateSpacing.space8),
+                Text(
+                  tip.category,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: ClimateColors.textSecondary,
+                  ),
+                ),
+                const SizedBox(height: ClimateSpacing.space8),
+                _EnergyTipText(tip.text),
+              ],
+            ),
+          ),
         ],
       ),
     );
