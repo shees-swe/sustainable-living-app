@@ -259,20 +259,9 @@ void main() {
     await tester.scrollUntilVisible(
       find.text(finalGuidePoint.text),
       200,
-      scrollable: find
-          .descendant(
-            of: find.byKey(const ValueKey('certificationDirectoryList')),
-            matching: find.byType(Scrollable),
-          )
-          .first,
+      scrollable: find.byType(Scrollable).first,
     );
-    await tester.ensureVisible(find.text(finalGuidePoint.text));
-    await tester.pumpAndSettle();
-    expectNoTextOverlapOrClipping(
-      tester,
-      'certifications guide',
-      within: find.byKey(const ValueKey('certificationDirectoryList')),
-    );
+    expectNoTextOverlapOrClipping(tester, 'certifications guide');
     expect(tester.takeException(), isNull);
   });
 }

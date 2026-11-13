@@ -6,8 +6,6 @@ import '../../../core/accessibility/motion_aware_progress_indicator.dart';
 import '../../../core/accessibility/reduced_motion.dart';
 import '../../../core/motion/motion_spec.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/design_tokens.dart';
-import '../../../core/widgets/design_components.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../data/challenge_catalog.dart';
 import '../data/challenge_progress_repository.dart';
@@ -71,19 +69,14 @@ class _SustainableLivingChallengesScreenState
                 index < widget.catalog.challenges.length;
                 index++
               ) ...[
-                AppPanel(
-                  padding: EdgeInsets.zero,
-                  child: _ChallengeRow(
-                    challenge: widget.catalog.challenges[index],
-                    progress: byId[widget.catalog.challenges[index].id],
-                    onTap: () => _openChallenge(
-                      context,
-                      widget.catalog.challenges[index],
-                    ),
-                  ),
+                _ChallengeRow(
+                  challenge: widget.catalog.challenges[index],
+                  progress: byId[widget.catalog.challenges[index].id],
+                  onTap: () =>
+                      _openChallenge(context, widget.catalog.challenges[index]),
                 ),
                 if (index < widget.catalog.challenges.length - 1)
-                  const SizedBox(height: DesignTokens.space12),
+                  const Divider(height: 1),
               ],
             ],
           );
@@ -135,46 +128,24 @@ class _ChallengeRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
-    final borderRadius = BorderRadius.circular(DesignTokens.radiusCard);
     return InkWell(
       onTap: onTap,
-      borderRadius: borderRadius,
       child: Padding(
-        padding: const EdgeInsets.all(DesignTokens.space16),
-        child: Row(
+        padding: const EdgeInsets.symmetric(vertical: ClimateSpacing.space16),
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const AppIconBadge(
-              icon: Icons.flag_outlined,
-              backgroundColor: DesignTokens.surfaceSun,
-              foregroundColor: DesignTokens.sun,
-              size: 52,
-            ),
-            const SizedBox(width: DesignTokens.space16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(challenge.title, style: theme.textTheme.titleMedium),
-                  const SizedBox(height: DesignTokens.space8),
-                  _ChallengeText('${challenge.theme} · ${challenge.days} days'),
-                  if (progress != null) ...[
-                    const SizedBox(height: DesignTokens.space12),
-                    _ProgressSummary(
-                      progress: progress!,
-                      totalDays: challenge.days,
-                      l10n: l10n,
-                    ),
-                  ],
-                ],
+            Text(challenge.title, style: theme.textTheme.titleMedium),
+            const SizedBox(height: ClimateSpacing.space8),
+            _ChallengeText('${challenge.theme} · ${challenge.days} days'),
+            if (progress != null) ...[
+              const SizedBox(height: ClimateSpacing.space8),
+              _ProgressSummary(
+                progress: progress!,
+                totalDays: challenge.days,
+                l10n: l10n,
               ),
-            ),
-            const SizedBox(width: DesignTokens.space8),
-            Icon(
-              Icons.arrow_forward,
-              size: DesignTokens.iconSmall,
-              color: theme.colorScheme.onSurfaceVariant,
-            ),
+            ],
           ],
         ),
       ),
@@ -252,32 +223,20 @@ class _ChallengeDetailBody extends StatelessWidget {
         vertical: ClimateSpacing.space16,
       ),
       children: [
-        AppPanel(
-          color: DesignTokens.surfaceSun,
-          padding: const EdgeInsets.all(DesignTokens.space24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(challenge.title, style: theme.textTheme.headlineSmall),
-              const SizedBox(height: DesignTokens.space12),
-              Wrap(
-                spacing: DesignTokens.space16,
-                runSpacing: DesignTokens.space8,
-                children: [
-                  _ChallengeText(
-                    '${l10n.challengeThemeLabel}: ${challenge.theme}',
-                  ),
-                  _ChallengeText(
-                    '${l10n.challengeDurationLabel}: ${challenge.days} days',
-                  ),
-                ],
-              ),
-              const SizedBox(height: DesignTokens.space16),
-              Text(challenge.description),
-            ],
-          ),
+        Text(challenge.title, style: theme.textTheme.headlineSmall),
+        const SizedBox(height: ClimateSpacing.space16),
+        const Divider(height: 1),
+        const SizedBox(height: ClimateSpacing.space16),
+        Text('${l10n.challengeThemeLabel}: ${challenge.theme}'),
+        const SizedBox(height: ClimateSpacing.space8),
+        _ChallengeText(
+          '${l10n.challengeDurationLabel}: ${challenge.days} days',
         ),
-        const SizedBox(height: DesignTokens.space24),
+        const SizedBox(height: ClimateSpacing.space16),
+        Text(challenge.description),
+        const SizedBox(height: ClimateSpacing.space16),
+        const Divider(height: 1),
+        const SizedBox(height: ClimateSpacing.space16),
         if (progress == null)
           Align(
             alignment: AlignmentDirectional.centerStart,
@@ -292,30 +251,23 @@ class _ChallengeDetailBody extends StatelessWidget {
             ),
           )
         else ...[
-          AppPanel(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _ProgressSummary(
-                  progress: progress!,
-                  totalDays: challenge.days,
-                  l10n: l10n,
-                ),
-                if (progress!.isCompleteFor(challenge.days)) ...[
-                  const SizedBox(height: DesignTokens.space12),
-                  Text(
-                    l10n.challengeCompleted,
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      color: ClimateColors.positiveSaved,
-                    ),
-                  ),
-                ],
-              ],
-            ),
+          _ProgressSummary(
+            progress: progress!,
+            totalDays: challenge.days,
+            l10n: l10n,
           ),
-          const SizedBox(height: DesignTokens.space16),
+          if (progress!.isCompleteFor(challenge.days)) ...[
+            const SizedBox(height: ClimateSpacing.space8),
+            Text(
+              l10n.challengeCompleted,
+              style: theme.textTheme.titleMedium?.copyWith(
+                color: ClimateColors.positiveSaved,
+              ),
+            ),
+          ],
+          const SizedBox(height: ClimateSpacing.space16),
           ..._dayRows(context, progress!),
-          const SizedBox(height: DesignTokens.space16),
+          const SizedBox(height: ClimateSpacing.space16),
           Align(
             alignment: AlignmentDirectional.centerStart,
             child: TextButton(

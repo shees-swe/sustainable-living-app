@@ -4,8 +4,6 @@ import 'package:intl/intl.dart';
 import '../../../core/data/database/app_database.dart';
 import '../../../core/data/regions/foundation_references.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/design_tokens.dart';
-import '../../../core/widgets/design_components.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../onboarding/domain/footprint_estimate.dart';
 import '../../onboarding/presentation/estimate_factor_disclosure.dart';
@@ -122,118 +120,65 @@ class _ActivityLogRecommendationsBody extends StatelessWidget {
         vertical: ClimateSpacing.space16,
       ),
       children: [
-        if (recommendations.isEmpty)
-          AppPanel(
-            color: DesignTokens.surfaceBlue,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+        Text(l10n.trackerRecommendationsCoverage),
+        if (recommendations.isEmpty) ...[
+          const SizedBox(height: ClimateSpacing.space24),
+          Text(l10n.trackerNoActivities),
+        ] else ...[
+          const SizedBox(height: ClimateSpacing.space24),
+          Text(
+            l10n.trackerRecommendationScenarioLabel,
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          const SizedBox(height: ClimateSpacing.space8),
+          Text(l10n.trackerRecommendationPeakMonth(monthName)),
+          const SizedBox(height: ClimateSpacing.space8),
+          Text.rich(
+            TextSpan(
               children: [
-                AppIconBadge(
-                  icon: Icons.tips_and_updates_outlined,
-                  backgroundColor: DesignTokens.surface,
-                  foregroundColor: DesignTokens.blue,
-                ),
-                const SizedBox(height: DesignTokens.space16),
-                Text(l10n.trackerRecommendationsCoverage),
-                const SizedBox(height: DesignTokens.space16),
-                Text(l10n.trackerNoActivities),
-              ],
-            ),
-          )
-        else ...[
-          AppPanel(
-            color: DesignTokens.surfaceCoral,
-            padding: const EdgeInsets.all(DesignTokens.space24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(l10n.trackerRecommendationsCoverage),
-                const SizedBox(height: DesignTokens.space16),
-                AppSectionHeading(
-                  title: l10n.trackerRecommendationScenarioLabel,
-                ),
-                const SizedBox(height: DesignTokens.space12),
-                Text(l10n.trackerRecommendationPeakMonth(monthName)),
-                const SizedBox(height: DesignTokens.space8),
-                Text.rich(
-                  TextSpan(
-                    children: [
-                      TextSpan(text: l10n.trackerRecommendationCutPrefix),
-                      TextSpan(text: '10', style: numberStyle),
-                      TextSpan(
-                        text: l10n.trackerRecommendationCutSuffix(monthName),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: DesignTokens.space8),
-                MonoNumericText(
-                  text:
-                      '${recommendations.scenarioSavingsKg!.toStringAsFixed(2)} '
-                      'kg CO2',
-                ),
+                TextSpan(text: l10n.trackerRecommendationCutPrefix),
+                TextSpan(text: '10', style: numberStyle),
+                TextSpan(text: l10n.trackerRecommendationCutSuffix(monthName)),
               ],
             ),
           ),
+          const SizedBox(height: ClimateSpacing.space8),
+          MonoNumericText(
+            text:
+                '${recommendations.scenarioSavingsKg!.toStringAsFixed(2)} '
+                'kg CO2',
+          ),
+          const Divider(height: ClimateSpacing.space24),
           if (recommendations.averageMonthKg case final average?) ...[
-            const SizedBox(height: DesignTokens.space16),
-            AppPanel(
-              padding: EdgeInsets.zero,
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: DesignTokens.space16,
-                    ),
-                    child: _RecommendationMetric(
-                      label: l10n.trackerRecommendationAverageMonth,
-                      value: '${average.toStringAsFixed(2)} kg CO2',
-                    ),
-                  ),
-                  const Divider(height: 1),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: DesignTokens.space16,
-                    ),
-                    child: _RecommendationMetric(
-                      label: l10n.trackerRecommendationLowestMonth(
-                        DateFormat.MMMM(l10n.localeName).format(
-                          DateTime(
-                            recommendations.year,
-                            recommendations.lowestMonth!,
-                          ),
-                        ),
-                      ),
-                      value:
-                          '${recommendations.lowestMonthKg!.toStringAsFixed(2)} '
-                          'kg CO2',
-                    ),
-                  ),
-                  const Divider(height: 1),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: DesignTokens.space16,
-                    ),
-                    child: _RecommendationMetric(
-                      label: l10n.trackerRecommendationMonthlyGap,
-                      value:
-                          '${recommendations.monthlyGapKg!.toStringAsFixed(2)} '
-                          'kg CO2',
-                    ),
-                  ),
-                ],
-              ),
+            _RecommendationMetric(
+              label: l10n.trackerRecommendationAverageMonth,
+              value: '${average.toStringAsFixed(2)} kg CO2',
             ),
+            const Divider(height: 1),
+            _RecommendationMetric(
+              label: l10n.trackerRecommendationLowestMonth(
+                DateFormat.MMMM(l10n.localeName).format(
+                  DateTime(recommendations.year, recommendations.lowestMonth!),
+                ),
+              ),
+              value:
+                  '${recommendations.lowestMonthKg!.toStringAsFixed(2)} '
+                  'kg CO2',
+            ),
+            const Divider(height: 1),
+            _RecommendationMetric(
+              label: l10n.trackerRecommendationMonthlyGap,
+              value:
+                  '${recommendations.monthlyGapKg!.toStringAsFixed(2)} '
+                  'kg CO2',
+            ),
+            const Divider(height: ClimateSpacing.space24),
           ],
           if (recommendations.budgetShare case final share?) ...[
-            const SizedBox(height: DesignTokens.space16),
-            AppPanel(
-              color: DesignTokens.surfaceBlue,
-              child: _BudgetRecommendation(
-                share: share,
-                references: references,
-                numberStyle: numberStyle,
-              ),
+            _BudgetRecommendation(
+              share: share,
+              references: references,
+              numberStyle: numberStyle,
             ),
           ],
         ],
