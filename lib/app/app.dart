@@ -10,7 +10,7 @@ import '../core/data/regions/foundation_references.dart';
 import '../core/data/regions/region_catalog.dart';
 import '../core/data/regions/region_repository.dart';
 import '../core/accessibility/motion_aware_progress_indicator.dart';
-import '../core/theme/app_theme.dart';
+import '../core/theme/living_theme.dart';
 import '../features/account/data/account_repository.dart';
 import '../features/account/data/password_hasher.dart';
 import '../features/carbon_footprint_tracker/data/activity_log_repository.dart';
@@ -163,6 +163,7 @@ class _SustainableLivingAppState extends State<SustainableLivingApp> {
       onImportComplete: _refreshRouterAfterImport,
       shareUserData: const UserDataFileSharer().shareExport,
       hasSavedEstimate: savedEstimate != null,
+      useTabShell: true,
     );
     if (!mounted) {
       router.dispose();
@@ -209,7 +210,7 @@ class _SustainableLivingAppState extends State<SustainableLivingApp> {
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return MaterialApp(
-              theme: AppTheme.light,
+              theme: LivingTheme.light,
               localizationsDelegates: const [
                 AppLocalizations.delegate,
                 GlobalMaterialLocalizations.delegate,
@@ -233,7 +234,7 @@ class _SustainableLivingAppState extends State<SustainableLivingApp> {
           final router = snapshot.data;
           if (router == null) {
             return MaterialApp(
-              theme: AppTheme.light,
+              theme: LivingTheme.light,
               localizationsDelegates: const [
                 AppLocalizations.delegate,
                 GlobalMaterialLocalizations.delegate,
@@ -255,7 +256,7 @@ class _SustainableLivingAppState extends State<SustainableLivingApp> {
           return MaterialApp.router(
             onGenerateTitle: (context) =>
                 AppLocalizations.of(context)!.appTitle,
-            theme: AppTheme.light,
+            theme: LivingTheme.light,
             routerConfig: router,
             localizationsDelegates: const [
               AppLocalizations.delegate,

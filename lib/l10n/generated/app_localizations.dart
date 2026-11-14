@@ -2252,6 +2252,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Contact information is not available in this foundation version.'**
   String get contactUnavailable;
+
+  /// No description provided for @navHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get navHome;
+
+  /// No description provided for @navTrack.
+  ///
+  /// In en, this message translates to:
+  /// **'Track'**
+  String get navTrack;
+
+  /// No description provided for @navGoals.
+  ///
+  /// In en, this message translates to:
+  /// **'Goals'**
+  String get navGoals;
+
+  /// No description provided for @navExplore.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore'**
+  String get navExplore;
+
+  /// No description provided for @navYou.
+  ///
+  /// In en, this message translates to:
+  /// **'You'**
+  String get navYou;
+
+  /// No description provided for @homeYourWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'Your week'**
+  String get homeYourWeek;
+
+  /// No description provided for @homeQuickRecipes.
+  ///
+  /// In en, this message translates to:
+  /// **'Recipes'**
+  String get homeQuickRecipes;
 }
 
 class _AppLocalizationsDelegate

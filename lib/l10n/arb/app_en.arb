@@ -570,5 +570,12 @@
   "moduleDetailsComingSoon": "Detailed features will be available in a future update.",
   "aboutDescription": "Sustainable Living Guide helps people explore practical sustainability topics. This foundation version provides offline navigation to each module.",
   "galleryEmpty": "No gallery images are available yet.",
-  "contactUnavailable": "Contact information is not available in this foundation version."
+  "contactUnavailable": "Contact information is not available in this foundation version.",
+  "navHome": "Home",
+  "navTrack": "Track",
+  "navGoals": "Goals",
+  "navExplore": "Explore",
+  "navYou": "You",
+  "homeYourWeek": "Your week",
+  "homeQuickRecipes": "Recipes"
 }

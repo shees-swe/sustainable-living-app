@@ -31,7 +31,11 @@ import '../features/energy_conservation_tips/presentation/module_destination_scr
     as energy;
 import '../features/gallery/presentation/gallery_screen.dart';
 import '../features/home/domain/module_destination.dart';
+import '../features/explore/presentation/explore_hub_screen.dart';
+import '../features/home/presentation/home_dashboard_screen.dart';
 import '../features/home/presentation/home_screen.dart';
+import '../features/you/presentation/you_screen.dart';
+import 'app_shell.dart';
 import '../features/onboarding/presentation/onboarding_screen.dart';
 import '../features/onboarding/data/footprint_estimate_repository.dart';
 import '../features/onboarding/data/estimate_demo_fixtures.dart';
@@ -70,6 +74,8 @@ abstract final class AppRoutes {
   static const String about = ModuleDestination.aboutUsPath;
   static const String gallery = '/gallery';
   static const String contact = '/contact';
+  static const String explore = '/explore';
+  static const String you = '/you';
 }
 
 GoRouter createAppRouter({
@@ -99,10 +105,9 @@ GoRouter createAppRouter({
   Future<void> Function()? onImportComplete,
   Future<ShareResult> Function(Map<String, Object?> export)? shareUserData,
   bool hasSavedEstimate = false,
+  bool useTabShell = false,
 }) {
-  return GoRouter(
-    initialLocation: initialLocation,
-    routes: [
+  final onboardingRoutes = <RouteBase>[
       _appRoute(
         path: AppRoutes.onboarding,
         builder: (context, state) => OnboardingScreen(
@@ -138,13 +143,29 @@ GoRouter createAppRouter({
           );
         },
       ),
+    ];
+  final appRoutes = <RouteBase>[
       _appRoute(
         path: AppRoutes.home,
-        builder: (context, state) => HomeScreen(
-          onViewEstimate: hasSavedEstimate && estimateRepository != null
+        builder: (context, state) {
+          final onViewEstimate = hasSavedEstimate && estimateRepository != null
               ? () => context.push(AppRoutes.estimateResult)
-              : null,
-        ),
+              : null;
+          return useTabShell
+              ? HomeDashboardScreen(
+                  onViewEstimate: onViewEstimate,
+                  activityLogRepository: activityLogRepository,
+                )
+              : HomeScreen(onViewEstimate: onViewEstimate);
+        },
+      ),
+      _appRoute(
+        path: AppRoutes.explore,
+        builder: (context, state) => const ExploreHubScreen(),
+      ),
+      _appRoute(
+        path: AppRoutes.you,
+        builder: (context, state) => const YouScreen(),
       ),
       _appRoute(
         path: AppRoutes.account,
@@ -211,6 +232,19 @@ GoRouter createAppRouter({
                 : emissionFactorsFromRegionPack(selectedRegionPack),
           ),
         ),
+  ];
+  return GoRouter(
+    initialLocation: initialLocation,
+    routes: [
+      ...onboardingRoutes,
+      if (useTabShell)
+        ShellRoute(
+          builder: (context, state, child) =>
+              AppShell(location: state.uri.path, child: child),
+          routes: appRoutes,
+        )
+      else
+        ...appRoutes,
     ],
   );
 }

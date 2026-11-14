@@ -58,6 +58,11 @@ void main() {
   testWidgets('startup restores a saved guest estimate without an account', (
     tester,
   ) async {
+    // Realistic 400x800 dp phone; the default 266x200 dp test surface leaves
+    // under 120 dp above the tab bar, so content below the hero is unreachable.
+    tester.view.physicalSize = const Size(1200, 2400);
+    tester.view.devicePixelRatio = 3;
+    addTearDown(tester.view.reset);
     final database = AppDatabase.forTesting(NativeDatabase.memory());
     final repository = FootprintEstimateRepository(database: database);
     final region = foundationEstimateDemoRegions.single;
@@ -111,6 +116,14 @@ void main() {
     );
     expect(find.text('Factors used in this estimate'), findsOneWidget);
     expect(find.textContaining('Publication year: 2026'), findsWidgets);
+
+    // Unmount inside the test body, then pump once more. Cancelling the Home
+    // dashboard's drift stream subscription makes drift's
+    // StreamQueryStore.markAsClosed schedule a zero-duration timer; it must
+    // fire before the test ends, because fake-async rejects timers that are
+    // created during teardown. Test-only: the app itself is unaffected.
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pump(const Duration(milliseconds: 1));
   });
 }
 

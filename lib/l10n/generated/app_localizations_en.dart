@@ -1217,4 +1217,25 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get contactUnavailable =>
       'Contact information is not available in this foundation version.';
+
+  @override
+  String get navHome => 'Home';
+
+  @override
+  String get navTrack => 'Track';
+
+  @override
+  String get navGoals => 'Goals';
+
+  @override
+  String get navExplore => 'Explore';
+
+  @override
+  String get navYou => 'You';
+
+  @override
+  String get homeYourWeek => 'Your week';
+
+  @override
+  String get homeQuickRecipes => 'Recipes';
 }
